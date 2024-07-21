@@ -1,7 +1,7 @@
 import Button from "../components/atoms/Button";
 import ActionButton from "../components/atoms/ActionButton";
 import { FaEdit, FaTrash } from "react-icons/fa";
-
+import LoginForm from "../components/organism/LoginForm";
 export default function Slicing() {
   return (
     <div className="p-16 flex flex-col gap-10">
@@ -18,6 +18,9 @@ export default function Slicing() {
           <FaTrash className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Delete</p>
         </ActionButton>
+      </div>
+      <div className="w-1/2">
+        <LoginForm />
       </div>
     </div>
   );
