@@ -2,6 +2,43 @@ import Button from "../components/atoms/Button";
 import ActionButton from "../components/atoms/ActionButton";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import LoginForm from "../components/organism/LoginForm";
+import Table from "../components/organism/Table";
+
+const tableHeaders = ["No", "Nama Hotel", "Total Tagihan", "Status Tagihan"];
+
+const tableData = [
+  {
+    No: "1",
+    "Nama Hotel": "Hotel Indonesia",
+    "Total Tagihan": 5000000,
+    "Status Tagihan": "Belum Lunas",
+  },
+  {
+    No: "2",
+    "Nama Hotel": "Hotel Bali",
+    "Total Tagihan": 0,
+    "Status Tagihan": "Lunas",
+  },
+  {
+    No: "3",
+    "Nama Hotel": "Hotel Lombok",
+    "Total Tagihan": 7500000,
+    "Status Tagihan": "Belum Lunas",
+  },
+  {
+    No: "4",
+    "Nama Hotel": "Hotel Surabaya",
+    "Total Tagihan": 2500000,
+    "Status Tagihan": "Belum Lunas",
+  },
+  {
+    No: "5",
+    "Nama Hotel": "Hotel Bandung",
+    "Total Tagihan": 0,
+    "Status Tagihan": "Lunas",
+  },
+];
+
 export default function Slicing() {
   return (
     <div className="p-16 flex flex-col gap-10">
@@ -22,6 +59,7 @@ export default function Slicing() {
       <div className="w-1/2">
         <LoginForm />
       </div>
+      <Table headers={tableHeaders} data={tableData} />
     </div>
   );
 }

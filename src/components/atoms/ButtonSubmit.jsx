@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
 
-export default function ButtonSubmit({ text, onClick, backgroundColor }) {
+export default function ButtonSubmit({
+  text,
+  onClick,
+  backgroundColor = "white",
+}) {
   return (
     <button
       type="submit"
@@ -17,7 +21,3 @@ ButtonSubmit.propTypes = {
   onClick: PropTypes.func.isRequired,
   backgroundColor: PropTypes.string.isRequired,
 };
-
-ButtonSubmit.defaultProps = {
-  backgroundColor: "white",
-}
