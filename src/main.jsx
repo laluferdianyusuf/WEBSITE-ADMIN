@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Product from "./pages/Product.jsx";
 import Bills from "./pages/Bills.jsx";
 import Hotel from "./pages/Hotel.jsx";
+import Slicing from "./pages/Slicing.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/bills" element={<Bills />} />
           <Route path="/student" element={<Product />} />
           <Route path="/hotel" element={<Hotel />} />
+          <Route path="/slicing" element={<Slicing />} />
         </Routes>
       </Router>
     </Provider>
