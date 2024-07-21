@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-export default function ActionButton({ backgroundColor, children, onClick }) {
+export default function ActionButton({ backgroundColor = "white", children, onClick }) {
   return (
     <button
       className={`border-slate-900 border w-[78px] h-8 px-2 py-2 rounded-lg ${backgroundColor} flex items-center justify-center`}
@@ -14,8 +14,4 @@ ActionButton.propTypes = {
   backgroundColor: PropTypes.string,
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
-};
-
-ActionButton.defaultProps = {
-  backgroundColor: "white",
 };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InputField from "../molecules.jsx/InputField";
+import InputField from "../molecules/InputField";
 import ButtonSubmit from "../atoms/ButtonSubmit";
 
 export default function LoginForm() {
@@ -37,7 +37,11 @@ export default function LoginForm() {
         onChange={handleChange}
         name="password"
       />
-      <ButtonSubmit text="Login" backgroundColor="bg-custom-green-2" onClick={handleSubmit} />
+      <ButtonSubmit
+        text="Login"
+        backgroundColor="bg-custom-green-2"
+        onClick={handleSubmit}
+      />
     </form>
   );
 }
