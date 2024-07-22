@@ -1,9 +1,13 @@
 import Button from "../components/atoms/Button";
 import ActionButton from "../components/atoms/ActionButton";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEdit2 } from "react-icons/fi";
+import { GrAddCircle } from "react-icons/gr";
+import { GiReceiveMoney } from "react-icons/gi";
 import LoginForm from "../components/organism/LoginForm";
 import Table from "../components/organism/Table";
 import TableWithActions from "../components/organism/TableWithActions";
+import SearchBar from "../components/atoms/SearchBar";
 
 const tableHeaders = ["No", "Nama Hotel", "Total Tagihan", "Status Tagihan"];
 
@@ -90,34 +94,47 @@ const handleDelete = (row) => {
   alert(`Delete clicked for: ${row[1]}`);
 };
 
+const handleSearch = (query) => {
+  console.log("Search query:", query);
+};
+
 export default function Slicing() {
   return (
     <div className="p-16 flex flex-col gap-10">
+      <SearchBar onSearch={handleSearch} />
       <div className="w-1/2 grid grid-cols-2">
         <Button text="Kembali" />
         <Button text="Logout" backgroundColor="bg-custom-green-1" />
       </div>
-      <div className="w-1/2 grid grid-cols-2">
+      <div className="w-1/2 grid grid-cols-2 gap-y-10">
         <ActionButton onClick={() => alert("Update button clicked")}>
-          <FaEdit className="mr-[6px]" size={16} />
+          <FiEdit2 className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Update</p>
         </ActionButton>
         <ActionButton onClick={() => alert("Delete button clicked")}>
-          <FaTrash className="mr-[6px]" size={16} />
+          <RiDeleteBin6Line className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Delete</p>
+        </ActionButton>
+        <ActionButton onClick={() => alert("Add button clicked")}>
+          <GrAddCircle className="mr-[6px]" size={16} />
+          <p className="text-slate-900 font-semibold text-xs">Tambah produk</p>
+        </ActionButton>
+        <ActionButton onClick={() => alert("Pay button clicked")}>
+          <GiReceiveMoney className="mr-[6px]" size={16} />
+          <p className="text-slate-900 font-semibold text-xs">Bayar tagihan</p>
         </ActionButton>
       </div>
       <div className="w-1/2">
         <LoginForm />
       </div>
-      <Table headers={tableHeaders} data={tableData} />
-      <Table headers={tableHeaders2} data={tableData2} />
       <TableWithActions
         headers={tableHeaders3}
         data={tableDataActions}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
       />
+      <Table headers={tableHeaders} data={tableData} />
+      <Table headers={tableHeaders2} data={tableData2} />
     </div>
   );
 }
