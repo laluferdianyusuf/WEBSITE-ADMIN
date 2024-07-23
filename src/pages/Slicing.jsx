@@ -11,6 +11,7 @@ import SearchBar from "../components/atoms/SearchBar";
 import ModalCrud from "../components/molecules/ModalCrud";
 import { useState } from "react";
 import ModalConfirmation from "../components/molecules/ModalConfirmation";
+import SuccessNotification from "../components/atoms/SuccessNotification";
 
 const tableHeaders = [
   "No",
@@ -175,6 +176,9 @@ export default function Slicing() {
 
   return (
     <div className="p-16 flex flex-col gap-10">
+      <div className="self-center">
+        <SuccessNotification text="Pembayaran Sukses"/>
+      </div>
       <div className="grid grid-cols-2 gap-10">
         <ModalCrud
           title="Tambah Produk"
