@@ -9,35 +9,46 @@ import Table from "../components/organism/Table";
 import TableWithActions from "../components/organism/TableWithActions";
 import SearchBar from "../components/atoms/SearchBar";
 
-const tableHeaders = ["No", "Nama Hotel", "Total Tagihan", "Status Tagihan"];
+const tableHeaders = [
+  "No",
+  "Tanggal",
+  "Nama Hotel",
+  "Total Tagihan",
+  "Status Tagihan",
+];
 
 const tableData = [
   {
     No: "1",
+    Tanggal: "12/07/2022",
     "Nama Hotel": "Hotel Indonesia",
     "Total Tagihan": 5000000,
     "Status Tagihan": "Belum Lunas",
   },
   {
     No: "2",
+    Tanggal: "09/12/2024",
     "Nama Hotel": "Hotel Bali",
     "Total Tagihan": 0,
     "Status Tagihan": "Lunas",
   },
   {
     No: "3",
+    Tanggal: "10/01/2025",
     "Nama Hotel": "Hotel Lombok",
     "Total Tagihan": 7500000,
     "Status Tagihan": "Belum Lunas",
   },
   {
     No: "4",
+    Tanggal: "28/03/2021",
     "Nama Hotel": "Hotel Surabaya",
     "Total Tagihan": 2500000,
     "Status Tagihan": "Belum Lunas",
   },
   {
     No: "5",
+    Tanggal: "29/04/2022",
     "Nama Hotel": "Hotel Bandung",
     "Total Tagihan": 0,
     "Status Tagihan": "Lunas",
@@ -76,6 +87,11 @@ const tableData2 = [
   },
 ];
 
+const totalTagihan2 = tableData2.reduce(
+  (total, row) => total + row["Jumlah Harga"],
+  0
+);
+
 const tableHeaders3 = ["No", "Nama Hotel/Produk", "Actions"];
 
 const tableDataActions = [
@@ -85,6 +101,51 @@ const tableDataActions = [
   ["4", "Hotel Surabaya"],
   ["5", "Hotel Bandung"],
 ];
+
+const tableHeaders4 = ["Tanggal", "Total Tagihan", "Sisa Tagihan", "Status"];
+
+const tableData4 = [
+  {
+    Tanggal: "12/07/2022",
+    "Total Tagihan": 5000000,
+    "Sisa Tagihan": 0,
+    Status: "Lunas",
+  },
+  {
+    Tanggal: "09/12/2024",
+    "Total Tagihan": 100000,
+    "Sisa Tagihan": 100000,
+    Status: "Belum Lunas",
+  },
+  {
+    Tanggal: "10/01/2025",
+    "Total Tagihan": 7500000,
+    "Sisa Tagihan": 0,
+    Status: "Lunas",
+  },
+  {
+    Tanggal: "28/03/2021",
+    "Total Tagihan": 2500000,
+    "Sisa Tagihan": 2500000,
+    Status: "Belum Lunas",
+  },
+  {
+    Tanggal: "29/04/2022",
+    "Total Tagihan": 700000,
+    "Sisa Tagihan": 700000,
+    Status: "Lunas",
+  },
+];
+
+const totalTagihan4 = tableData4.reduce(
+  (total, row) => total + row["Total Tagihan"],
+  0
+);
+
+const sisaTagihan4 = tableData4.reduce(
+  (total, row) => total + row["Sisa Tagihan"],
+  0
+);
 
 const handleUpdate = (row) => {
   alert(`Update clicked for: ${row[1]}`);
@@ -101,7 +162,9 @@ const handleSearch = (query) => {
 export default function Slicing() {
   return (
     <div className="p-16 flex flex-col gap-10">
-      <SearchBar onSearch={handleSearch} />
+      <div className="w-1/2">
+        <SearchBar onSearch={handleSearch} />
+      </div>
       <div className="w-1/2 grid grid-cols-2">
         <Button text="Kembali" />
         <Button text="Logout" backgroundColor="bg-custom-green-1" />
@@ -127,14 +190,45 @@ export default function Slicing() {
       <div className="w-1/2">
         <LoginForm />
       </div>
-      <TableWithActions
-        headers={tableHeaders3}
-        data={tableDataActions}
-        onUpdate={handleUpdate}
-        onDelete={handleDelete}
-      />
-      <Table headers={tableHeaders} data={tableData} />
-      <Table headers={tableHeaders2} data={tableData2} />
+      <div>
+        <h3 className="text-slate-900 font-semibold text-xl mb-4">
+          Table CRUD Hotel / Produk
+        </h3>
+        <TableWithActions
+          headers={tableHeaders3}
+          data={tableDataActions}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+        />
+      </div>
+      <div>
+        <h3 className="text-slate-900 font-semibold text-xl mb-4">
+          Table List Nota Homepage
+        </h3>
+        <Table headers={tableHeaders} data={tableData} />
+      </div>
+      <div>
+        <h3 className="text-slate-900 font-semibold text-xl mb-4">
+          Table Detail Nota
+        </h3>
+        <Table
+          headers={tableHeaders2}
+          data={tableData2}
+          total={totalTagihan2}
+          sisa={totalTagihan2}
+        />
+      </div>
+      <div>
+        <h3 className="text-slate-900 font-semibold text-xl mb-4">
+          Table List Nota Pada Detail Hotel
+        </h3>
+        <Table
+          headers={tableHeaders4}
+          data={tableData4}
+          total={totalTagihan4}
+          sisa={sisaTagihan4}
+        />
+      </div>
     </div>
   );
 }

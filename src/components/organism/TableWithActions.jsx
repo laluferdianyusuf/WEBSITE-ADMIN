@@ -7,7 +7,7 @@ export default function TableWithActions({
   onDelete,
 }) {
   return (
-    <table className="border shadow-md border-slate-200 rounded-lg">
+    <table className="border shadow-md border-slate-200 rounded-lg w-full">
       <thead>
         <tr>
           {headers.map((header, index) => (
