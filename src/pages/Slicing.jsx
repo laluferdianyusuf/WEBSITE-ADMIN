@@ -10,6 +10,7 @@ import TableWithActions from "../components/organism/TableWithActions";
 import SearchBar from "../components/atoms/SearchBar";
 import ModalCrud from "../components/molecules/ModalCrud";
 import { useState } from "react";
+import ModalConfirmation from "../components/molecules/ModalConfirmation";
 
 const tableHeaders = [
   "No",
@@ -199,6 +200,20 @@ export default function Slicing() {
           textCancel="Kembali"
           inputType="text"
           functionCancel={() => alert("Cancel button clicked")}
+          functionOk={() => alert("Ok button clicked")}
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-10">
+        <ModalConfirmation
+          title="Apakah anda yakin ingin logout?"
+          textCancel="Cancel"
+          textOk="Logout"
+          functionCancel={() => alert("Cancel button clicked")}
+          functionOk={() => alert("Ok button clicked")}
+        />
+        <ModalConfirmation
+          title="Periksa Username / Password Anda"
+          textOk="Coba Lagi"
           functionOk={() => alert("Ok button clicked")}
         />
       </div>
