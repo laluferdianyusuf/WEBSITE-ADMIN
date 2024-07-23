@@ -20,7 +20,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form className="flex flex-col">
+    <form className="flex flex-col gap-4">
       <InputField
         label="Username"
         type="text"

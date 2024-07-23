@@ -8,19 +8,18 @@ export default function InputField({
   value,
   onChange,
   name,
+  isModal = false,
 }) {
   return (
-    <div className="mb-4">
-      <Label label={label}>
-        <Input
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          name={name}
-        />
-      </Label>
-    </div>
+    <Label label={label} isModal={isModal}>
+      <Input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        name={name}
+      />
+    </Label>
   );
 }
 
@@ -31,4 +30,5 @@ InputField.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  isModal: PropTypes.bool,
 };

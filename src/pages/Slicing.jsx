@@ -8,6 +8,8 @@ import LoginForm from "../components/organism/LoginForm";
 import Table from "../components/organism/Table";
 import TableWithActions from "../components/organism/TableWithActions";
 import SearchBar from "../components/atoms/SearchBar";
+import ModalCrud from "../components/molecules/ModalCrud";
+import { useState } from "react";
 
 const tableHeaders = [
   "No",
@@ -160,8 +162,46 @@ const handleSearch = (query) => {
 };
 
 export default function Slicing() {
+  const [inputProduk, setInputProduk] = useState("Hand Sanitizer");
+  const [inputHotel, setInputHotel] = useState("Hotel Aston");
+  const handleChangeProduk = (e) => {
+    setInputProduk(e.target.value);
+  };
+
+  const handleChangeHotel = (e) => {
+    setInputHotel(e.target.value);
+  };
+
   return (
     <div className="p-16 flex flex-col gap-10">
+      <div className="grid grid-cols-2 gap-10">
+        <ModalCrud
+          title="Tambah Produk"
+          inputLabel="Nama Produk"
+          inputPlaceholder="Masukkan nama produk"
+          inputName="productName"
+          inputValue={inputProduk}
+          onChange={handleChangeProduk}
+          textOk="Tambah"
+          textCancel="Kembali"
+          inputType="text"
+          functionCancel={() => alert("Cancel button clicked")}
+          functionOk={() => alert("Ok button clicked")}
+        />
+        <ModalCrud
+          title="Tambah Hotel"
+          inputLabel="Nama Hotel"
+          inputPlaceholder="Masukkan nama hotel"
+          inputName="hotelName"
+          inputValue={inputHotel}
+          onChange={handleChangeHotel}
+          textOk="Tambah"
+          textCancel="Kembali"
+          inputType="text"
+          functionCancel={() => alert("Cancel button clicked")}
+          functionOk={() => alert("Ok button clicked")}
+        />
+      </div>
       <div className="w-1/2">
         <SearchBar onSearch={handleSearch} />
       </div>
