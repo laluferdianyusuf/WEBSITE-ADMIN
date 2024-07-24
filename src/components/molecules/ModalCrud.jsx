@@ -14,9 +14,11 @@ export default function ModalCrud({
   inputPlaceholder,
   inputType,
   inputLabel,
+  isOpen,
 }) {
   return (
     <Modal
+      isOpen={isOpen}
       title={title}
       functionCancel={functionCancel}
       functionOk={functionOk}
@@ -37,6 +39,7 @@ export default function ModalCrud({
 }
 
 ModalCrud.propTypes = {
+  isOpen: PropTypes.bool,
   title: PropTypes.string,
   functionCancel: PropTypes.func,
   functionOk: PropTypes.func,

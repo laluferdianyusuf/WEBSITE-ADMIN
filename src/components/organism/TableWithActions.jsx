@@ -25,7 +25,7 @@ export default function TableWithActions({
           <TableRowWithActions
             key={index}
             data={row}
-            onUpdate={() => onUpdate(row)}
+            onUpdate={() => onUpdate(row[0] - 1)}
             onDelete={() => onDelete(row)}
             index={index}
           />

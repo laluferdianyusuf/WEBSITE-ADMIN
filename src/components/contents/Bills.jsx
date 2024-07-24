@@ -1,9 +1,10 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import SearchBar from "../atoms/SearchBar";
 import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import Table from "../organism/Table";
+import { useState } from "react";
+import InputProduct from "../molecules/InputProduct";
+import PropTypes from "prop-types";
 
 const tableHeaders = [
   "No",
@@ -52,33 +53,22 @@ const tableData = [
 ];
 
 export default function Bills({ handleBillSelect }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
   const handleRowClick = (billId) => {
     handleBillSelect(billId);
   };
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
-      {/* <div className="breadcrumbs text-sm">
-        <ul>
-          <li>
-            <a>
-              <IoHomeOutline />
-              Home
-            </a>
-          </li>
-          <li>
-            <a>
-              <IoDocumentOutline />
-              Documents
-            </a>
-          </li>
-          <li>
-            <span className="inline-flex items-center gap-2">
-              <HiOutlineDocumentAdd />
-              Add Document
-            </span>
-          </li>
-        </ul>
-      </div> */}
       <div>
         <h3 className="font-semibold text-xl mb-1">Manajemen Nota</h3>
         <p className="text-xs text-slate-500">
@@ -93,7 +83,7 @@ export default function Bills({ handleBillSelect }) {
             placeholder="Cari dari total 255 data..."
           />
         </div>
-        <ActionButton onClick={() => alert("Add button clicked")}>
+        <ActionButton onClick={openModal}>
           <GrAddCircle className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Tambah produk</p>
         </ActionButton>
@@ -103,6 +93,11 @@ export default function Bills({ handleBillSelect }) {
         data={tableData}
         onRowClick={handleRowClick}
       />
+      <InputProduct isOpen={isOpen} closeModal={closeModal} />
     </div>
   );
 }
+
+Bills.propTypes = {
+  handleBillSelect: PropTypes.func.isRequired,
+};
