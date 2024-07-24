@@ -8,7 +8,7 @@ import Bills from "./contents/Bills";
 import Product from "./contents/Product";
 
 const Admin = () => {
-  const [activeMenu, setActiveMenu] = useState("Dashboard");
+  const [activeMenu, setActiveMenu] = useState("Product");
 
   const handleMenuClick = (menuName) => {
     setActiveMenu(menuName);
@@ -16,8 +16,6 @@ const Admin = () => {
 
   const renderContent = () => {
     switch (activeMenu) {
-      case "Dashboard":
-        return <Home />;
       case "Product":
         return <Product />;
       case "Hotel":
@@ -25,7 +23,7 @@ const Admin = () => {
       case "Bills":
         return <Bills />;
       default:
-        return <Home />;
+        return <Product />;
     }
   };
   return (
@@ -33,7 +31,7 @@ const Admin = () => {
       {/* <div className="bg-blue-100 ">
         <Navbar />
       </div> */}
-      <div className="w-full min-h-screen bg-gray-800 flex flex-row">
+      <div className="w-full min-h-screen bg-custom-black-1 flex flex-row">
         <Sidebar activeMenu={activeMenu} handleMenuClick={handleMenuClick} />
         <div className="flex-grow">{renderContent()}</div>
       </div>
