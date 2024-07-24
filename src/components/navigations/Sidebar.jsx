@@ -3,8 +3,9 @@
 import React from "react";
 import { BiHomeAlt, BiGridAlt, BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { PiStudentFill, PiChalkboardTeacherDuotone } from "react-icons/pi";
-import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
+import { FaHotel } from "react-icons/fa";
+import { AiFillProduct } from "react-icons/ai";
 import PropTypes from "prop-types";
 
 export default function Sidebar({ activeMenu, handleMenuClick }) {
@@ -12,17 +13,17 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
   const menu = [
     {
       name: "Nota",
-      icon: <PiStudentFill />,
+      icon: <FaRegMoneyBillAlt />,
       handler: () => handleMenuClick("Nota"),
     },
     {
       name: "Hotel",
-      icon: <PiChalkboardTeacherDuotone />,
+      icon: <FaHotel />,
       handler: () => handleMenuClick("Hotel"),
     },
     {
       name: "Produk",
-      icon: <HiOutlineClipboardDocumentList />,
+      icon: <AiFillProduct />,
       handler: () => handleMenuClick("Produk"),
     },
   ];
