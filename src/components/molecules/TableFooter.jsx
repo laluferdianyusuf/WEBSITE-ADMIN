@@ -6,7 +6,7 @@ export default function TableFooter({ total, colSpan, text }) {
       <tr>
         <td
           colSpan={colSpan}
-          className="border-b border-t-0 border-slate-400 px-4 py-2 text-center font-semibold text-slate-900"
+          className="border-b border-t-0 border-slate-400 px-4 py-2 text-center font-semibold text-slate-900 bg-white"
         >
           {text} : Rp. {total.toLocaleString()}
         </td>

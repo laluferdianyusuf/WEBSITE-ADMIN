@@ -3,12 +3,16 @@ import TableBody from "../molecules/TableBody";
 import TableHeader from "../molecules/TableHeader";
 import TableFooter from "../molecules/TableFooter";
 
-// eslint-disable-next-line no-unused-vars
-export default function Table({ headers, data, total, sisa }) {
+export default function Table({ headers, data, total, sisa, onRowClick }) {
+
   return (
-    <table className="border shadow-md border-slate-200 rounded-lg w-full">
+    <table className="border shadow-md border-slate-200 w-full">
       <TableHeader headers={headers} />
-      <TableBody data={data} columns={headers} />
+      <TableBody
+        data={data}
+        columns={headers}
+        onRowClick={onRowClick}
+      />
       {sisa && total && (
         <TableFooter
           total={sisa}
@@ -32,4 +36,5 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   total: PropTypes.number,
   sisa: PropTypes.number,
+  onRowClick: PropTypes.func,
 };

@@ -51,7 +51,10 @@ const tableData = [
   },
 ];
 
-export default function Bills() {
+export default function Bills({ handleBillSelect }) {
+  const handleRowClick = (billId) => {
+    handleBillSelect(billId);
+  };
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
       {/* <div className="breadcrumbs text-sm">
@@ -95,9 +98,11 @@ export default function Bills() {
           <p className="text-slate-900 font-semibold text-xs">Tambah produk</p>
         </ActionButton>
       </div>
-
-      {/* table */}
-      <Table headers={tableHeaders} data={tableData} />
+      <Table
+        headers={tableHeaders}
+        data={tableData}
+        onRowClick={handleRowClick}
+      />
     </div>
   );
 }
