@@ -4,30 +4,27 @@ import TableHeader from "../molecules/TableHeader";
 import TableFooter from "../molecules/TableFooter";
 
 export default function Table({ headers, data, total, sisa, onRowClick }) {
-
   return (
-    <table className="border shadow-md border-slate-200 w-full">
-      <TableHeader headers={headers} />
-      <TableBody
-        data={data}
-        columns={headers}
-        onRowClick={onRowClick}
-      />
-      {sisa && total && (
-        <TableFooter
-          total={sisa}
-          colSpan={headers.length}
-          text="Sisa Tagihan"
-        />
-      )}
-      {total && (
-        <TableFooter
-          total={total}
-          colSpan={headers.length}
-          text="Total Tagihan"
-        />
-      )}
-    </table>
+    <div className="overflow-hidden rounded-lg shadow-lg border border-slate-200  w-full">
+      <table className="w-full">
+        <TableHeader headers={headers} />
+        <TableBody data={data} columns={headers} onRowClick={onRowClick} />
+        {sisa && total && (
+          <TableFooter
+            total={sisa}
+            colSpan={headers.length}
+            text="Sisa Tagihan"
+          />
+        )}
+        {total && (
+          <TableFooter
+            total={total}
+            colSpan={headers.length}
+            text="Total Tagihan"
+          />
+        )}
+      </table>
+    </div>
   );
 }
 

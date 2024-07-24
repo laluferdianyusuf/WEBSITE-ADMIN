@@ -13,12 +13,10 @@ export default function TableCell({ children, isHeader = false }) {
   };
 
   return isHeader ? (
-    <th className="border-b-0 border-slate-400 px-4 py-2 text-left text-slate-900">
-      {children || "-"}
-    </th>
+    <th className=" p-4 text-left text-slate-900">{children || "-"}</th>
   ) : (
     <td
-      className={`border-b border-t-0 border-slate-400 px-4 py-2 ${
+      className={` p-4 ${
         typeof children === "string" ? getStatusClass(children) : ""
       }`}
     >

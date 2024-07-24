@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import TableRowWithActions from "../atoms/TableRowWithActions";
+
 export default function TableWithActions({
   headers,
   data,
@@ -7,31 +8,30 @@ export default function TableWithActions({
   onDelete,
 }) {
   return (
-    <table className="border shadow-md border-slate-200 rounded-lg w-full">
-      <thead>
-        <tr>
-          {headers.map((header, index) => (
-            <th
+    <div className="overflow-hidden border border-slate-200 rounded-lg shadow-lg w-full">
+      <table className="w-full">
+        <thead className="bg-custom-blue-1">
+          <tr>
+            {headers.map((header, index) => (
+              <th key={index} className="px-4 py-4 text-left">
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <TableRowWithActions
               key={index}
-              className="border-b-0 border-slate-400 px-4 py-2 text-left bg-custom-blue-1"
-            >
-              {header}
-            </th>
+              data={row}
+              onUpdate={() => onUpdate(row)}
+              onDelete={() => onDelete(row)}
+              index={index}
+            />
           ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, index) => (
-          <TableRowWithActions
-            key={index}
-            data={row}
-            onUpdate={() => onUpdate(row)}
-            onDelete={() => onDelete(row)}
-            index={index}
-          />
-        ))}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   );
 }
 

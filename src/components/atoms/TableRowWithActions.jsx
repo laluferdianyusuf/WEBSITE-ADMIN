@@ -8,18 +8,15 @@ export default function TableRowWithAction({
   onDelete,
   index,
 }) {
-  const rowClass = index % 2 === 0 ? "bg-white" : "bg-custom-blue-1";
+  const rowClass = index % 2 === 0 ? " bg-white" : "bg-custom-blue-1";
   return (
     <tr className={rowClass}>
       {data.map((item, index) => (
-        <td
-          key={index}
-          className="border-b border-slate-400 px-4 py-2"
-        >
+        <td key={index} className=" px-4 py-3">
           {item}
         </td>
       ))}
-      <td className="border-b border-slate-400 px-4 py-2">
+      <td className=" px-4 py-3">
         <div className="flex gap-2 items-center">
           <ActionButton onClick={onUpdate}>
             <FaEdit className="mr-[6px]" size={16} />

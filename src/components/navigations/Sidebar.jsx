@@ -1,12 +1,13 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { BiHomeAlt, BiGridAlt, BiLogOut } from "react-icons/bi";
+import { TbLogout } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { FaHotel } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai";
 import PropTypes from "prop-types";
+import ButtonLogout from "../atoms/ButtonLogout";
 
 export default function Sidebar({ activeMenu, handleMenuClick }) {
   const navigate = useNavigate();
@@ -49,34 +50,35 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
             </div>
             {menu.map((val, index) => {
               return (
-                <button
-                  key={index}
-                  className={`flex flex-row items-center rounded-[12px] w-full p-3 ${
-                    activeMenu === val.name
-                      ? "bg-custom-green-2 text-white font-semibold shadow-lg"
-                      : "text-white"
-                  }`}
-                  onClick={val.handler}
-                >
-                  <div className="mr-5">{val.icon}</div>
-                  <div>{val.name}</div>
-                </button>
+                <>
+                  <div className="flex flex-row justify-center ease-in-out duration-300 ">
+                    <span
+                      className={`self-center ease-in-out duration-300 ${
+                        activeMenu === val.name
+                          ? "w-[5px] h-[20px] bg-custom-green-2"
+                          : "w-[0px] h-[0px]"
+                      }  rounded-full`}
+                    ></span>
+                    <button
+                      key={index}
+                      className={`ease-in-out duration-300 font-semibold text-white flex flex-row items-center w-full p-2 ${
+                        activeMenu === val.name ? "ps-3" : ""
+                      }`}
+                      onClick={val.handler}
+                    >
+                      <div>{val.name}</div>
+                    </button>
+                  </div>
+                </>
               );
             })}
           </ul>
         </div>
       </div>
-      <button
-        className={
-          "p-2 rounded-[12px] flex items-center w-full bg-transparent text-white font-bold border border-custom-white-1"
-        }
-        onClick={handleLogout}
-      >
-        <div className="mr-5">
-          <BiLogOut />
-        </div>
+      <ButtonLogout handle={handleLogout}>
+        <TbLogout />
         Logout
-      </button>
+      </ButtonLogout>
     </div>
   );
 }
