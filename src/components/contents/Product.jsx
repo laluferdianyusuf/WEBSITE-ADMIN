@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 import SearchBar from "../atoms/SearchBar";
 import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
+import ModalCrud from "../molecules/ModalCrud";
 
 const tableHeaders3 = ["No", "Nama Produk", "Actions"];
 
-const tableDataActions = [
+const initialTableData = [
   ["1", "Hand Towell"],
   ["2", "Hand Sanitizer"],
   ["3", "Fruit Tea"],
@@ -16,15 +17,53 @@ const tableDataActions = [
   ["5", "Cup"],
 ];
 
-const handleUpdate = (row) => {
-  alert(`Update clicked for: ${row[1]}`);
-};
-
-const handleDelete = (row) => {
-  alert(`Delete clicked for: ${row[1]}`);
-};
-
 export default function Product() {
+  const [tableData, setTableData] = useState(initialTableData);
+  const [inputProduct, setInputProduct] = useState("");
+  const [currentProductIndex, setCurrentProductIndex] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleAdd = () => {
+    setIsAdding(true);
+    setInputProduct("");
+  };
+
+  const handleChangeInput = (e) => {
+    setInputProduct(e.target.value);
+  };
+
+  const handleCloseAdd = () => {
+    setIsAdding(false);
+  };
+
+  const handleCloseEdit = () => {
+    setIsEditing(false);
+  };
+
+  const handleEdit = (index) => {
+    setCurrentProductIndex(index);
+    setInputProduct(tableData[index][1]);
+    setIsEditing(true);
+  };
+
+  const handleDelete = (index) => {
+    alert(`Delete clicked for: ${tableData[index][1]}`);
+  };
+
+  const handleSaveEdit = () => {
+    const updatedData = [...tableData];
+    updatedData[currentProductIndex][1] = inputProduct;
+    setTableData(updatedData);
+    handleCloseEdit();
+  };
+
+  const handleSaveAdd = () => {
+    const newProduct = [String(tableData.length + 1), inputProduct];
+    setTableData([...tableData, newProduct]);
+    handleCloseAdd();
+  };
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
       <div>
@@ -41,16 +80,44 @@ export default function Product() {
             placeholder="Cari dari total 8 data..."
           />
         </div>
-        <ActionButton onClick={() => alert("Add button clicked")}>
+        <ActionButton onClick={handleAdd}>
           <GrAddCircle className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">Tambah Product</p>
+          <p className="text-slate-900 font-semibold text-xs">Tambah Produk</p>
         </ActionButton>
       </div>
       <TableWithActions
         headers={tableHeaders3}
-        data={tableDataActions}
-        onUpdate={handleUpdate}
+        data={tableData}
+        onUpdate={handleEdit}
         onDelete={handleDelete}
+      />
+      <ModalCrud
+        title="Tambah Produk"
+        isOpen={isAdding}
+        inputLabel="Nama Produk"
+        inputPlaceholder="Masukkan nama produk"
+        inputName="produkName"
+        inputValue={inputProduct}
+        onChange={handleChangeInput}
+        textOk="Tambah"
+        textCancel="Kembali"
+        inputType="text"
+        functionCancel={handleCloseAdd}
+        functionOk={handleSaveAdd}
+      />
+      <ModalCrud
+        title="Edit Produk"
+        isOpen={isEditing}
+        inputLabel="Nama Produk"
+        inputPlaceholder="Masukkan nama produk"
+        inputName="produkName"
+        inputValue={inputProduct}
+        onChange={handleChangeInput}
+        textOk="Simpan"
+        textCancel="Batal"
+        inputType="text"
+        functionCancel={handleCloseEdit}
+        functionOk={handleSaveEdit}
       />
     </div>
   );

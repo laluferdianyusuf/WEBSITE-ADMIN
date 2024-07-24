@@ -4,8 +4,9 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { FiMinusCircle } from "react-icons/fi";
 import InputField from "./InputField";
 import Button from "../atoms/Button";
+import PropTypes from "prop-types";
 
-export default function InputProduct() {
+export default function InputProduct({ closeModal, isOpen }) {
   const [inputs, setInputs] = useState([
     { item: "", quantity: "", harga_unit: "", total_harga: "" },
   ]);
@@ -50,97 +51,132 @@ export default function InputProduct() {
     calculateTotalHarga();
   }, [inputs]);
 
-  return (
-    <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 w-fit py-6 px-14">
-      <div className="font-semibold text-center">
-        <h4 className="text-slate-300 text-[10px] mb-1">UD TIMUR JAYA RAYA</h4>
-        <h3 className="text-slate-900 text-lg">Buat Nota Baru</h3>
-      </div>
-      <form action="">
-        <div className="w-11/12 mb-3">
-          <InputField
-            label="Nama Hotel"
-            placeholder="Masukkan nama hotel"
-            name="nama_hotel"
-            onChange={handleNamaHotel}
-            isModal={true}
-            value={namaHotel}
-            type="text"
-          />
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscapeKey);
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen, closeModal]);
+
+  const handleClickOutside = (event) => {
+    if (event.target.classList.contains("modal-backdrop")) {
+      closeModal();
+    }
+  };
+
+  return isOpen ? (
+    <div
+      className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40"
+      onClick={handleClickOutside}
+    >
+      <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-3/4 max-h-[90vh] overflow-y-auto">
+        <div className="font-semibold text-center">
+          <h4 className="text-slate-300 text-[10px] mb-1">
+            UD TIMUR JAYA RAYA
+          </h4>
+          <h3 className="text-slate-900 text-lg">Buat Nota Baru</h3>
         </div>
-        {inputs.map((input, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-4 gap-3 mb-3 items-center relative w-11/12"
-          >
-            <InputNotaField
-              label="Nama Item"
-              name="item"
+        <form action="">
+          <div className="w-11/12 mb-3">
+            <InputField
+              label="Nama Hotel"
+              placeholder="Masukkan nama hotel"
+              name="nama_hotel"
+              onChange={handleNamaHotel}
+              isModal={true}
+              value={namaHotel}
               type="text"
-              placeholder="Masukkan nama produk"
-              value={input.item}
-              onChange={(e) => handleInputChange(index, e)}
-              isModal={true}
             />
-            <InputNotaField
-              label="Quantity"
-              name="quantity"
-              type="number"
-              placeholder="Jumlah"
-              value={input.quantity}
-              onChange={(e) => handleInputChange(index, e)}
-              isModal={true}
-            />
-            <InputNotaField
-              label="Harga / Unit"
-              name="harga_unit"
-              type="number"
-              placeholder="Harga"
-              value={input.harga_unit}
-              onChange={(e) => handleInputChange(index, e)}
-              isModal={true}
-            />
-            <InputNotaField
-              label="Total Harga Barang"
-              name="total_harga"
-              type="number"
-              placeholder="Total Harga"
-              value={input.total_harga}
-              onChange={(e) => handleInputChange(index, e)}
-              isModal={true}
-            />
-            <div className="absolute right-[-3rem] top-[10px] flex justify-center items-center h-full">
-              {inputs.length > 1 && (
-                <button
-                  className="text-custom-green-1 p-2"
-                  onClick={(event) => handleRemoveInput(index, event)}
-                >
-                  <FiMinusCircle size={32} />
-                </button>
-              )}
-            </div>
           </div>
-        ))}
-        <div className="flex justify-center mt-6 mb-6">
-          <button
-            className="text-custom-green-1 p-2 rounded"
-            onClick={handleAddInput}
-          >
-            <IoMdAddCircleOutline size={32} />
-          </button>
-        </div>
-        <p className="text-xs text-slate-900">
-          Total tagihan: {totalHarga.toLocaleString()}
-        </p>
-        <div className="mt-[18px] flex gap-[18px]">
-          <Button text="Cancel" backgroundColor="white"/>
-          <Button
-            text="Buat nota"
-            type={"submit"}
-            backgroundColor="custom-green-1"
-          />
-        </div>
-      </form>
+          {inputs.map((input, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-4 gap-3 mb-3 items-center relative w-11/12"
+            >
+              <InputNotaField
+                label="Nama Item"
+                name="item"
+                type="text"
+                placeholder="Masukkan nama produk"
+                value={input.item}
+                onChange={(e) => handleInputChange(index, e)}
+                isModal={true}
+              />
+              <InputNotaField
+                label="Quantity"
+                name="quantity"
+                type="number"
+                placeholder="Jumlah"
+                value={input.quantity}
+                onChange={(e) => handleInputChange(index, e)}
+                isModal={true}
+              />
+              <InputNotaField
+                label="Harga / Unit"
+                name="harga_unit"
+                type="number"
+                placeholder="Harga"
+                value={input.harga_unit}
+                onChange={(e) => handleInputChange(index, e)}
+                isModal={true}
+              />
+              <InputNotaField
+                label="Total Harga Barang"
+                name="total_harga"
+                type="number"
+                placeholder="Total Harga"
+                value={input.total_harga}
+                onChange={(e) => handleInputChange(index, e)}
+                isModal={true}
+              />
+              <div className="absolute right-[-3rem] top-[10px] flex justify-center items-center h-full">
+                {inputs.length > 1 && (
+                  <button
+                    className="text-custom-green-1 p-2"
+                    onClick={(event) => handleRemoveInput(index, event)}
+                  >
+                    <FiMinusCircle size={32} />
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+          <div className="flex justify-center mt-6 mb-6">
+            <button
+              className="text-custom-green-1 p-2 rounded"
+              onClick={handleAddInput}
+            >
+              <IoMdAddCircleOutline size={32} />
+            </button>
+          </div>
+          <p className="text-xs text-slate-900">
+            Total tagihan: {totalHarga.toLocaleString()}
+          </p>
+          <div className="mt-[18px] flex gap-[18px]">
+            <Button onClick={closeModal} text="Batal" />
+            <Button
+              backgroundColor="custom-green-1"
+              type="submit"
+              text="Buat Nota Baru"
+              onClick={() => alert("Buat Nota Baru")}
+            />
+          </div>
+        </form>
+      </div>
     </div>
-  );
+  ) : null;
 }
+
+InputProduct.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+};
