@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 export default function ButtonSubmit({
   text,
   onClick,
-  backgroundColor = "white",
+  backgroundColor = "bg-white",
 }) {
   return (
     <button

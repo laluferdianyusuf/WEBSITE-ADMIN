@@ -49,13 +49,13 @@ function Modal({
         <div className="flex justify-center gap-5 mt-2">
           {functionCancel && textCancel && (
             <Button
-              backgroundColor="white"
+              backgroundColor="bg-white"
               text={textCancel}
               onClick={functionCancel}
             />
           )}
           <Button
-            backgroundColor="custom-green-1"
+            backgroundColor="bg-custom-green-1"
             text={textOk}
             onClick={functionOk}
           />

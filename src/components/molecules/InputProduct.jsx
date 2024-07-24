@@ -164,7 +164,7 @@ export default function InputProduct({ closeModal, isOpen }) {
           <div className="mt-[18px] flex gap-[18px]">
             <Button onClick={closeModal} text="Batal" />
             <Button
-              backgroundColor="custom-green-1"
+              backgroundColor="bg-custom-green-1"
               type="submit"
               text="Buat Nota Baru"
               onClick={() => alert("Buat Nota Baru")}

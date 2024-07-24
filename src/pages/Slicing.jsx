@@ -230,7 +230,7 @@ export default function Slicing() {
       </div>
       <div className="w-1/2 grid grid-cols-2">
         <Button text="Kembali" />
-        <Button text="Logout" backgroundColor="custom-green-1" />
+        <Button text="Logout" backgroundColor="bg-custom-green-1" />
       </div>
       <div className="w-1/2 grid grid-cols-2 gap-y-10">
         <ActionButton onClick={() => alert("Update button clicked")}>
