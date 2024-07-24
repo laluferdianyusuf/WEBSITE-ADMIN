@@ -26,7 +26,7 @@ function Modal({
           />
         )}
         <Button
-          backgroundColor="bg-custom-green-1"
+          backgroundColor="custom-green-1"
           text={textOk}
           onClick={functionOk}
         />

@@ -12,6 +12,7 @@ import ModalCrud from "../components/molecules/ModalCrud";
 import { useState } from "react";
 import ModalConfirmation from "../components/molecules/ModalConfirmation";
 import SuccessNotification from "../components/atoms/SuccessNotification";
+import InputProduct from "../components/molecules/InputProduct";
 
 const tableHeaders = [
   "No",
@@ -179,6 +180,9 @@ export default function Slicing() {
       <div className="self-center">
         <SuccessNotification text="Pembayaran Sukses"/>
       </div>
+      <div>
+        <InputProduct />
+      </div>
       <div className="grid grid-cols-2 gap-10">
         <ModalCrud
           title="Tambah Produk"
@@ -226,7 +230,7 @@ export default function Slicing() {
       </div>
       <div className="w-1/2 grid grid-cols-2">
         <Button text="Kembali" />
-        <Button text="Logout" backgroundColor="bg-custom-green-1" />
+        <Button text="Logout" backgroundColor="custom-green-1" />
       </div>
       <div className="w-1/2 grid grid-cols-2 gap-y-10">
         <ActionButton onClick={() => alert("Update button clicked")}>

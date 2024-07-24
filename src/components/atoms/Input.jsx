@@ -15,12 +15,12 @@ export default function Input({ type, placeholder, value, onChange, name }) {
   };
 
   useEffect(() => {
-    if (type === "number") {
+    if (type === "number" && onChange) {
       setDisplayValue(formatNumber(value.toString()));
     } else {
       setDisplayValue(value);
     }
-  }, [value, type]);
+  }, [value, type, onChange]);
 
   const handleChange = (e) => {
     let val = e.target.value;
@@ -68,7 +68,7 @@ export default function Input({ type, placeholder, value, onChange, name }) {
 Input.propTypes = {
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
 };
