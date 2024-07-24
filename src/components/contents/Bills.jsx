@@ -1,15 +1,60 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { Link } from "react-router-dom";
-import { MdSearch } from "react-icons/md";
-import { IoHomeOutline, IoDocumentOutline } from "react-icons/io5";
-import { HiOutlineDocumentAdd } from "react-icons/hi";
+import SearchBar from "../atoms/SearchBar";
+import ActionButton from "../atoms/ActionButton";
+import { GrAddCircle } from "react-icons/gr";
+import Table from "../organism/Table";
+
+const tableHeaders = [
+  "No",
+  "Tanggal",
+  "Nama Hotel",
+  "Total Tagihan",
+  "Status Tagihan",
+];
+
+const tableData = [
+  {
+    No: "1",
+    Tanggal: "12/07/2022",
+    "Nama Hotel": "Hotel Indonesia",
+    "Total Tagihan": 5000000,
+    "Status Tagihan": "Belum Lunas",
+  },
+  {
+    No: "2",
+    Tanggal: "09/12/2024",
+    "Nama Hotel": "Hotel Bali",
+    "Total Tagihan": 0,
+    "Status Tagihan": "Lunas",
+  },
+  {
+    No: "3",
+    Tanggal: "10/01/2025",
+    "Nama Hotel": "Hotel Lombok",
+    "Total Tagihan": 7500000,
+    "Status Tagihan": "Belum Lunas",
+  },
+  {
+    No: "4",
+    Tanggal: "28/03/2021",
+    "Nama Hotel": "Hotel Surabaya",
+    "Total Tagihan": 2500000,
+    "Status Tagihan": "Belum Lunas",
+  },
+  {
+    No: "5",
+    Tanggal: "29/04/2022",
+    "Nama Hotel": "Hotel Bandung",
+    "Total Tagihan": 0,
+    "Status Tagihan": "Lunas",
+  },
+];
 
 export default function Bills() {
   return (
-    <div className="overflow-auto px-10 py-7 h-[93vh] bg-white mt-5 mr-5 ml-5 rounded-lg">
-      <div className="breadcrumbs text-sm">
+    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
+      {/* <div className="breadcrumbs text-sm">
         <ul>
           <li>
             <a>
@@ -30,167 +75,29 @@ export default function Bills() {
             </span>
           </li>
         </ul>
+      </div> */}
+      <div>
+        <h3 className="font-semibold text-xl mb-1">Manajemen Nota</h3>
+        <p className="text-xs text-slate-500">
+          Terakhir di Update 1 Jam 24 Menit yang lalu
+        </p>
       </div>
-      <h1 className="font-bold text-[36px]">Bills</h1>
+
+      <div className="flex justify-between items-center">
+        <div className="w-1/3">
+          <SearchBar
+            onSearch={(e) => console.log(e.target.value)}
+            placeholder="Cari dari total 255 data..."
+          />
+        </div>
+        <ActionButton onClick={() => alert("Add button clicked")}>
+          <GrAddCircle className="mr-[6px]" size={16} />
+          <p className="text-slate-900 font-semibold text-xs">Tambah produk</p>
+        </ActionButton>
+      </div>
 
       {/* table */}
-      <div>
-        <div className=" p-7 bg-white shadow-lg rounded-md">
-          <div className="pb-3 flex justify-between">
-            <Link
-              to="/teacher"
-              className="bg-blue-500 p-2 rounded-lg font-bold text-white"
-            >
-              Tambah
-            </Link>
-            <label className="input input-bordered flex items-center gap-2">
-              <input type="text" className="grow" placeholder="Search" />
-              <MdSearch />
-            </label>
-          </div>
-          <table className="table =">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>No. HP Orang Tua</th>
-                <th>Kelas</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* row 1 */}
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <Table headers={tableHeaders} data={tableData} />
     </div>
   );
 }

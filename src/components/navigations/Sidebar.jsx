@@ -12,9 +12,9 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
   const navigate = useNavigate();
   const menu = [
     {
-      name: "Nota",
+      name: "Bills",
       icon: <FaRegMoneyBillAlt />,
-      handler: () => handleMenuClick("Nota"),
+      handler: () => handleMenuClick("Bills"),
     },
     {
       name: "Hotel",
@@ -22,9 +22,9 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
       handler: () => handleMenuClick("Hotel"),
     },
     {
-      name: "Produk",
+      name: "Product",
       icon: <AiFillProduct />,
-      handler: () => handleMenuClick("Produk"),
+      handler: () => handleMenuClick("Product"),
     },
   ];
 

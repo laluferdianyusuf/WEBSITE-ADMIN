@@ -1,87 +1,56 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { Link } from "react-router-dom";
-import { MdSearch } from "react-icons/md";
-import { IoHomeOutline, IoDocumentOutline } from "react-icons/io5";
-import { HiOutlineDocumentAdd } from "react-icons/hi";
+import SearchBar from "../atoms/SearchBar";
+import ActionButton from "../atoms/ActionButton";
+import { GrAddCircle } from "react-icons/gr";
+import TableWithActions from "../organism/TableWithActions";
+
+const tableHeaders3 = ["No", "Nama Hotel", "Actions"];
+
+const tableDataActions = [
+  ["1", "Hotel Indonesia"],
+  ["2", "Hotel Bali"],
+  ["3", "Hotel Lombok"],
+  ["4", "Hotel Surabaya"],
+  ["5", "Hotel Bandung"],
+];
+
+const handleUpdate = (row) => {
+  alert(`Update clicked for: ${row[1]}`);
+};
+
+const handleDelete = (row) => {
+  alert(`Delete clicked for: ${row[1]}`);
+};
 
 export default function Hotel() {
   return (
-    <div className="overflow-auto px-10 py-7 h-[93vh] bg-white mt-5 mr-5 ml-5 rounded-lg">
-      <div className="breadcrumbs text-sm">
-        <ul>
-          <li>
-            <a>
-              <IoHomeOutline />
-              Home
-            </a>
-          </li>
-          <li>
-            <a>
-              <IoDocumentOutline />
-              Documents
-            </a>
-          </li>
-          <li>
-            <span className="inline-flex items-center gap-2">
-              <HiOutlineDocumentAdd />
-              Add Document
-            </span>
-          </li>
-        </ul>
-      </div>
-      <h1 className="font-bold text-[36px]">Hotel</h1>
-
-      {/* table */}
+    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
       <div>
-        <div className="overflow-x-auto p-7 shadow-lg rounded-md bg-white">
-          <div className="pb-3 flex justify-between">
-            <Link
-              to="/student"
-              className="bg-blue-500 p-2 rounded-lg font-bold text-white"
-            >
-              Tambah
-            </Link>
-            <label className="input input-bordered flex items-center gap-2">
-              <input type="text" className="grow" placeholder="Search" />
-              <MdSearch />
-            </label>
-          </div>
-          <table className="table =">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>No. HP Orang Tua</th>
-                <th>Kelas</th>
-                <th className="text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* row 1 */}
-              <tr>
-                <th className="">1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-                <td className="flex gap-3 justify-center">
-                  <button className="bg-green-600 p-2 rounded-lg font-bold text-white">
-                    Edit
-                  </button>
-                  <button className="bg-red-500 p-2 rounded-lg font-bold text-white">
-                    Delete
-                  </button>
-                  <button className="bg-blue-300 p-2 rounded-lg font-bold text-white">
-                    More
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <h3 className="font-semibold text-xl mb-1">Manajemen Hotel</h3>
+        <p className="text-xs text-slate-500">
+          Terakhir di Update 1 Jam 24 Menit yang lalu
+        </p>
       </div>
+
+      <div className="flex justify-between items-center">
+        <div className="w-1/3">
+          <SearchBar
+            onSearch={(e) => console.log(e.target.value)}
+            placeholder="Cari dari total 6 data..."
+          />
+        </div>
+        <ActionButton onClick={() => alert("Add button clicked")}>
+          <GrAddCircle className="mr-[6px]" size={16} />
+          <p className="text-slate-900 font-semibold text-xs">Tambah Hotel</p>
+        </ActionButton>
+      </div>
+      <TableWithActions
+        headers={tableHeaders3}
+        data={tableDataActions}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

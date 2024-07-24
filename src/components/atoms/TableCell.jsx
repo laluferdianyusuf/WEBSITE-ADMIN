@@ -9,7 +9,7 @@ export default function TableCell({ children, isHeader = false }) {
   const getStatusClass = (status) => {
     if (status === "Lunas") return "text-green-500";
     if (status === "Belum Lunas") return "text-red-500";
-    return "";
+    return "text-slate-900";
   };
 
   return isHeader ? (
@@ -18,7 +18,7 @@ export default function TableCell({ children, isHeader = false }) {
     </th>
   ) : (
     <td
-      className={`border-b border-t-0 border-slate-400 px-4 py-2 text-slate-900 ${
+      className={`border-b border-t-0 border-slate-400 px-4 py-2 ${
         typeof children === "string" ? getStatusClass(children) : ""
       }`}
     >
