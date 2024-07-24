@@ -62,7 +62,9 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
                     <button
                       key={index}
                       className={`ease-in-out duration-300 font-semibold text-white flex flex-row items-center w-full p-2 ${
-                        activeMenu === val.name ? "ps-3" : ""
+                        activeMenu === val.name
+                          ? "ps-3 text-custom-green-2"
+                          : ""
                       }`}
                       onClick={val.handler}
                     >

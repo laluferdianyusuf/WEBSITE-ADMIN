@@ -14,7 +14,7 @@ export default function ButtonLogout({ children, handle }) {
   );
 }
 
-ButtonSubmit.propTypes = {
+ButtonLogout.propTypes = {
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
