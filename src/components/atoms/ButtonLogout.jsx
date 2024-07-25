@@ -15,6 +15,6 @@ export default function ButtonLogout({ children, handle }) {
 }
 
 ButtonLogout.propTypes = {
-  text: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  handle: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };

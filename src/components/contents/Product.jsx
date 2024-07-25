@@ -23,6 +23,7 @@ export default function Product() {
   const [currentProductIndex, setCurrentProductIndex] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleAdd = () => {
     setIsAdding(true);
@@ -37,6 +38,10 @@ export default function Product() {
     setIsAdding(false);
   };
 
+  const handleCloseDelete = () => {
+    setIsDeleting(false);
+  };
+
   const handleCloseEdit = () => {
     setIsEditing(false);
   };
@@ -48,7 +53,16 @@ export default function Product() {
   };
 
   const handleDelete = (index) => {
-    alert(`Delete clicked for: ${tableData[index][1]}`);
+    setCurrentProductIndex(index);
+    setInputProduct(tableData[index][1]);
+    setIsDeleting(true);
+  };
+
+  const handleSaveDelete = () => {
+    const updatedData = [...tableData];
+    updatedData.splice(currentProductIndex, 1);
+    setTableData(updatedData);
+    handleCloseDelete();
   };
 
   const handleSaveEdit = () => {
@@ -118,6 +132,19 @@ export default function Product() {
         inputType="text"
         functionCancel={handleCloseEdit}
         functionOk={handleSaveEdit}
+      />
+      <ModalCrud
+        title="Hapus Produk"
+        isOpen={isDeleting}
+        inputLabel="Hapus Produk"
+        isDisabled={true}
+        inputName="produkName"
+        inputValue={inputProduct}
+        textOk="Hapus"
+        textCancel="Batal"
+        inputType="text"
+        functionCancel={() => setIsDeleting(false)}
+        functionOk={handleSaveDelete}
       />
     </div>
   );

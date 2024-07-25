@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import password from "/icons/password.svg";
 
-export default function Input({ type, placeholder, value, onChange, name }) {
+export default function Input({
+  type,
+  placeholder,
+  value,
+  onChange,
+  name,
+  isDisabled = false,
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const [displayValue, setDisplayValue] = useState(value);
 
@@ -51,6 +58,7 @@ export default function Input({ type, placeholder, value, onChange, name }) {
         onChange={handleChange}
         name={name}
         className="px-[10px] py-[7px] border rounded-lg border-slate-400 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-400 text-xs font-medium w-full"
+        disabled={isDisabled}
       />
       {type === "password" && (
         <button
@@ -71,4 +79,5 @@ Input.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool,
 };

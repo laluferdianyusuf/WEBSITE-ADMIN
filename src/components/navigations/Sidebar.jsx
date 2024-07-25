@@ -50,8 +50,8 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
             </div>
             {menu.map((val, index) => {
               return (
-                <>
-                  <div className="flex flex-row justify-center ease-in-out duration-300 ">
+                <div key={index}>
+                  <div className="flex flex-row justify-center ease-in-out duration-300">
                     <span
                       className={`self-center ease-in-out duration-300 ${
                         activeMenu === val.name
@@ -71,7 +71,7 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
                       <div>{val.name}</div>
                     </button>
                   </div>
-                </>
+                </div>
               );
             })}
           </ul>

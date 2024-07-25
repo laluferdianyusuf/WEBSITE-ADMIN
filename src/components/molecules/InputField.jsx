@@ -9,6 +9,7 @@ export default function InputField({
   onChange,
   name,
   isModal = false,
+  isDisabled,
 }) {
   return (
     <Label label={label} isModal={isModal}>
@@ -18,6 +19,7 @@ export default function InputField({
         value={value}
         onChange={onChange}
         name={name}
+        isDisabled={isDisabled}
       />
     </Label>
   );
@@ -28,7 +30,8 @@ InputField.propTypes = {
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
   isModal: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };

@@ -15,6 +15,7 @@ export default function ModalCrud({
   inputType,
   inputLabel,
   isOpen,
+  isDisabled
 }) {
   return (
     <Modal
@@ -33,6 +34,7 @@ export default function ModalCrud({
         type={inputType}
         label={inputLabel}
         isModal={true}
+        isDisabled={isDisabled}
       />
     </Modal>
   );
@@ -51,4 +53,5 @@ ModalCrud.propTypes = {
   inputPlaceholder: PropTypes.string,
   inputType: PropTypes.string,
   inputLabel: PropTypes.string,
+  isDisabled: PropTypes.bool
 };

@@ -42,6 +42,10 @@ export default function Hotel() {
     setIsEditing(false);
   };
 
+  const handleCloseDelete = () => {
+    setIsDeleting(false);
+  };
+
   const handleEdit = (index) => {
     setCurrentHotelIndex(index);
     setInputHotel(tableData[index][1]);
@@ -49,7 +53,16 @@ export default function Hotel() {
   };
 
   const handleDelete = (index) => {
+    setCurrentHotelIndex(index);
+    setInputHotel(tableData[index][1]);
     setIsDeleting(true);
+  };
+
+  const handleSaveDelete = () => {
+    const updatedData = [...tableData];
+    updatedData.splice(currentHotelIndex, 1);
+    setTableData(updatedData);
+    handleCloseDelete();
   };
 
   const handleSaveEdit = () => {
@@ -109,7 +122,7 @@ export default function Hotel() {
       <ModalCrud
         title="Edit Hotel"
         isOpen={isEditing}
-        inputLabel="Nama Hotel"
+        inputLabel="Edit Hotel"
         inputPlaceholder="Masukkan nama hotel"
         inputName="hotelName"
         inputValue={inputHotel}
@@ -119,6 +132,19 @@ export default function Hotel() {
         inputType="text"
         functionCancel={handleCloseEdit}
         functionOk={handleSaveEdit}
+      />
+      <ModalCrud
+        title="Hapus Hotel"
+        isOpen={isDeleting}
+        inputLabel="Hapus Hotel"
+        isDisabled={true}
+        inputName="hotelName"
+        inputValue={inputHotel}
+        textOk="Hapus"
+        textCancel="Batal"
+        inputType="text"
+        functionCancel={() => setIsDeleting(false)}
+        functionOk={handleSaveDelete}
       />
     </div>
   );
