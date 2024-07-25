@@ -7,19 +7,21 @@ export default function TableRowWithAction({
   onUpdate,
   onDelete,
   index,
-  onRowClick,
+  onRowClick = null,
 }) {
   const rowClass = index % 2 === 0 ? " bg-white" : "bg-custom-blue-1";
   return (
-    <tr
-      className={`${rowClass}`}
-    >
+    <tr className={`${rowClass}`}>
       {Object.values(data).map((item, idx) => (
-        <td key={idx} className="px-4 py-3 cursor-pointer hover:bg-gray-200" onClick={onRowClick}>
+        <td
+          key={idx}
+          className={`px-4 py-3 ${onRowClick ? "cursor-pointer hover:bg-gray-200" : ""}`}
+          onClick={onRowClick ? onRowClick : null}
+        >
           {item}
         </td>
       ))}
-      <td className=" px-4 py-3">
+      <td className="px-4 py-3">
         <div className="flex gap-2 items-center">
           <ActionButton onClick={onUpdate}>
             <FaEdit className="mr-[6px]" size={16} />
@@ -39,7 +41,6 @@ TableRowWithAction.propTypes = {
   data: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  isHeader: PropTypes.bool,
-  index: PropTypes.number,
+  index: PropTypes.number.isRequired,
   onRowClick: PropTypes.func,
 };

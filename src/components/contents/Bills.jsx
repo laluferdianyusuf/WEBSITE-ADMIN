@@ -7,7 +7,6 @@ import InputProduct from "../molecules/InputProduct";
 import PropTypes from "prop-types";
 
 const tableHeaders = [
-  "No",
   "Tanggal",
   "Nama Hotel",
   "Total Tagihan",
@@ -16,35 +15,30 @@ const tableHeaders = [
 
 const tableData = [
   {
-    No: "1",
     Tanggal: "12/07/2022",
     "Nama Hotel": "Hotel Indonesia",
     "Total Tagihan": 5000000,
     "Status Tagihan": "Belum Lunas",
   },
   {
-    No: "2",
     Tanggal: "09/12/2024",
     "Nama Hotel": "Hotel Bali",
     "Total Tagihan": 0,
     "Status Tagihan": "Lunas",
   },
   {
-    No: "3",
     Tanggal: "10/01/2025",
     "Nama Hotel": "Hotel Lombok",
     "Total Tagihan": 7500000,
     "Status Tagihan": "Belum Lunas",
   },
   {
-    No: "4",
     Tanggal: "28/03/2021",
     "Nama Hotel": "Hotel Surabaya",
     "Total Tagihan": 2500000,
     "Status Tagihan": "Belum Lunas",
   },
   {
-    No: "5",
     Tanggal: "29/04/2022",
     "Nama Hotel": "Hotel Bandung",
     "Total Tagihan": 0,

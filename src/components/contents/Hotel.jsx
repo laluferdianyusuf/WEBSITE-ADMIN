@@ -84,7 +84,6 @@ export default function Hotel({ handleHotelSelect }) {
 
   const handleSaveAdd = () => {
     const newHotel = {
-      No: String(tableData.length + 1),
       "Nama Hotel": inputHotel,
     };
     setTableData([...tableData, newHotel]);

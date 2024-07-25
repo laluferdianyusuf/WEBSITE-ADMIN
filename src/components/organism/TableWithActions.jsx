@@ -6,7 +6,7 @@ export default function TableWithActions({
   data,
   onUpdate,
   onDelete,
-  onRowClick,
+  onRowClick = null,
 }) {
   return (
     <div className="overflow-hidden border border-slate-200 rounded-lg shadow-lg w-full">
@@ -31,7 +31,7 @@ export default function TableWithActions({
               onUpdate={() => onUpdate(index)}
               onDelete={() => onDelete(index)}
               index={index}
-              onRowClick={() => onRowClick(row)}
+              onRowClick={onRowClick ? () => onRowClick(row) : null}
             />
           ))}
         </tbody>

@@ -7,24 +7,20 @@ import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import ModalCrud from "../molecules/ModalCrud";
 
-const tableHeaders3 = ["No", "Nama Produk", "Actions"];
+const tableHeaders3 = ["Nama Produk", "Actions"];
 
 const initialTableData = [
   {
-    No: "1",
-    "Produk Produk": "Pulpen",
+    "Nama Produk": "Pulpen",
   },
   {
-    No: "2",
-    "Produk Produk": "Penggaris",
+    "Nama Produk": "Penggaris",
   },
   {
-    No: "3",
-    "Produk Produk": "Penghapus",
+    "Nama Produk": "Penghapus",
   },
   {
-    No: "4",
-    "Produk Produk": "Penggaris",
+    "Nama Produk": "Penggaris",
   },
 ];
 
@@ -59,13 +55,13 @@ export default function Product() {
 
   const handleEdit = (index) => {
     setCurrentProductIndex(index);
-    setInputProduct(tableData[index][1]);
+    setInputProduct(tableData[index]["Nama Produk"]);
     setIsEditing(true);
   };
 
   const handleDelete = (index) => {
     setCurrentProductIndex(index);
-    setInputProduct(tableData[index][1]);
+    setInputProduct(tableData[index]["Nama Produk"]);
     setIsDeleting(true);
   };
 
@@ -78,13 +74,15 @@ export default function Product() {
 
   const handleSaveEdit = () => {
     const updatedData = [...tableData];
-    updatedData[currentProductIndex][1] = inputProduct;
+    updatedData[currentProductIndex]["Nama Produk"] = inputProduct;
     setTableData(updatedData);
     handleCloseEdit();
   };
 
   const handleSaveAdd = () => {
-    const newProduct = [String(tableData.length + 1), inputProduct];
+    const newProduct = {
+      "Nama Produk": inputProduct,
+    };
     setTableData([...tableData, newProduct]);
     handleCloseAdd();
   };
