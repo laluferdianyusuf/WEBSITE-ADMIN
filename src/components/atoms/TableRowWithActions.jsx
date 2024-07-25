@@ -7,12 +7,15 @@ export default function TableRowWithAction({
   onUpdate,
   onDelete,
   index,
+  onRowClick,
 }) {
   const rowClass = index % 2 === 0 ? " bg-white" : "bg-custom-blue-1";
   return (
-    <tr className={rowClass}>
-      {data.map((item, index) => (
-        <td key={index} className=" px-4 py-3">
+    <tr
+      className={`${rowClass}`}
+    >
+      {Object.values(data).map((item, idx) => (
+        <td key={idx} className="px-4 py-3 cursor-pointer hover:bg-gray-200" onClick={onRowClick}>
           {item}
         </td>
       ))}
@@ -33,9 +36,10 @@ export default function TableRowWithAction({
 }
 
 TableRowWithAction.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.node).isRequired,
+  data: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   isHeader: PropTypes.bool,
   index: PropTypes.number,
+  onRowClick: PropTypes.func,
 };

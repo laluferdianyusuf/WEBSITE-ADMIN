@@ -6,18 +6,29 @@ import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import { useState } from "react";
 import ModalCrud from "../molecules/ModalCrud";
+import PropTypes from "prop-types";
 
-const tableHeaders3 = ["No", "Nama Hotel", "Actions"];
+const tableHeaders3 = ["Nama Hotel", "Actions"];
 
 const initialTableData = [
-  ["1", "Hotel Indonesia"],
-  ["2", "Hotel Bali"],
-  ["3", "Hotel Lombok"],
-  ["4", "Hotel Surabaya"],
-  ["5", "Hotel Bandung"],
+  {
+    "Nama Hotel": "Hotel Indonesia",
+  },
+  {
+    "Nama Hotel": "Hotel Bali",
+  },
+  {
+    "Nama Hotel": "Hotel Lombok",
+  },
+  {
+    "Nama Hotel": "Hotel Surabaya",
+  },
+  {
+    "Nama Hotel": "Hotel Bandung",
+  },
 ];
 
-export default function Hotel() {
+export default function Hotel({ handleHotelSelect }) {
   const [tableData, setTableData] = useState(initialTableData);
   const [inputHotel, setInputHotel] = useState("");
   const [currentHotelIndex, setCurrentHotelIndex] = useState(null);
@@ -27,7 +38,7 @@ export default function Hotel() {
 
   const handleAdd = () => {
     setIsAdding(true);
-    setInputHotel(""); // Clear input field
+    setInputHotel(""); // Bersihkan input field
   };
 
   const handleChangeHotel = (e) => {
@@ -48,34 +59,40 @@ export default function Hotel() {
 
   const handleEdit = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(tableData[index][1]);
+    setInputHotel(tableData[index]["Nama Hotel"]);
     setIsEditing(true);
   };
 
   const handleDelete = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(tableData[index][1]);
+    setInputHotel(tableData[index]["Nama Hotel"]);
     setIsDeleting(true);
   };
 
   const handleSaveDelete = () => {
-    const updatedData = [...tableData];
-    updatedData.splice(currentHotelIndex, 1);
+    const updatedData = tableData.filter((_, idx) => idx !== currentHotelIndex);
     setTableData(updatedData);
     handleCloseDelete();
   };
 
   const handleSaveEdit = () => {
     const updatedData = [...tableData];
-    updatedData[currentHotelIndex][1] = inputHotel;
+    updatedData[currentHotelIndex]["Nama Hotel"] = inputHotel;
     setTableData(updatedData);
     handleCloseEdit();
   };
 
   const handleSaveAdd = () => {
-    const newHotel = [String(tableData.length + 1), inputHotel];
+    const newHotel = {
+      No: String(tableData.length + 1),
+      "Nama Hotel": inputHotel,
+    };
     setTableData([...tableData, newHotel]);
     handleCloseAdd();
+  };
+
+  const handleRowClick = (hotelId) => {
+    handleHotelSelect(hotelId);
   };
 
   return (
@@ -104,6 +121,7 @@ export default function Hotel() {
         data={tableData}
         onUpdate={handleEdit}
         onDelete={handleDelete}
+        onRowClick={handleRowClick}
       />
       <ModalCrud
         title="Tambah Hotel"
@@ -149,3 +167,7 @@ export default function Hotel() {
     </div>
   );
 }
+
+Hotel.propTypes = {
+  handleHotelSelect: PropTypes.func,
+};

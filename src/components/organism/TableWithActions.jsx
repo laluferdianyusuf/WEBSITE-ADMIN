@@ -1,10 +1,12 @@
 import PropTypes from "prop-types";
 import TableRowWithActions from "../atoms/TableRowWithActions";
+
 export default function TableWithActions({
   headers,
   data,
   onUpdate,
   onDelete,
+  onRowClick,
 }) {
   return (
     <div className="overflow-hidden border border-slate-200 rounded-lg shadow-lg w-full">
@@ -26,9 +28,10 @@ export default function TableWithActions({
             <TableRowWithActions
               key={index}
               data={row}
-              onUpdate={() => onUpdate(row[0] - 1)}
-              onDelete={() => onDelete(row[0] - 1)}
+              onUpdate={() => onUpdate(index)}
+              onDelete={() => onDelete(index)}
               index={index}
+              onRowClick={() => onRowClick(row)}
             />
           ))}
         </tbody>
@@ -39,7 +42,8 @@ export default function TableWithActions({
 
 TableWithActions.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.string).isRequired,
-  data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.node)).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   onUpdate: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  onRowClick: PropTypes.func,
 };

@@ -5,10 +5,12 @@ import Hotel from "./contents/Hotel";
 import Bills from "./contents/Bills";
 import Product from "./contents/Product";
 import BillDetail from "./contents/BillDetail";
+import HotelDetail from "./contents/HotelDetail";
 
 const Admin = () => {
   const [activeMenu, setActiveMenu] = useState("Bills");
   const [selectedBill, setSelectedBill] = useState(null);
+  const [selectedHotel, setSelectedHotel] = useState(null);
 
   const handleMenuClick = (menuName) => {
     setActiveMenu(menuName);
@@ -16,12 +18,22 @@ const Admin = () => {
 
   const handleBillSelect = (bill) => {
     setSelectedBill(bill);
-    setActiveMenu("BillDetail");
+    setActiveMenu("BillsDetail");
   };
 
   const handleBackToBills = () => {
     setSelectedBill(null);
     setActiveMenu("Bills");
+  };
+
+  const handleHotelSelect = (hotel) => {
+    setSelectedHotel(hotel);
+    setActiveMenu("HotelDetail");
+  };
+
+  const handleBackToHotel = () => {
+    setSelectedHotel(null);
+    setActiveMenu("Hotel");
   };
 
   const renderContent = () => {
@@ -31,9 +43,11 @@ const Admin = () => {
       case "Product":
         return <Product />;
       case "Hotel":
-        return <Hotel />;
-      case "BillDetail":
+        return <Hotel handleHotelSelect={handleHotelSelect} />;
+      case "BillsDetail":
         return <BillDetail bill={selectedBill} onBack={handleBackToBills} />;
+      case "HotelDetail":
+        return <HotelDetail hotel={selectedHotel} onBack={handleBackToHotel} />;
       default:
         return <Bills handleBillSelect={handleBillSelect} />;
     }

@@ -10,11 +10,22 @@ import ModalCrud from "../molecules/ModalCrud";
 const tableHeaders3 = ["No", "Nama Produk", "Actions"];
 
 const initialTableData = [
-  ["1", "Hand Towell"],
-  ["2", "Hand Sanitizer"],
-  ["3", "Fruit Tea"],
-  ["4", "Soap"],
-  ["5", "Cup"],
+  {
+    No: "1",
+    "Produk Produk": "Pulpen",
+  },
+  {
+    No: "2",
+    "Produk Produk": "Penggaris",
+  },
+  {
+    No: "3",
+    "Produk Produk": "Penghapus",
+  },
+  {
+    No: "4",
+    "Produk Produk": "Penggaris",
+  },
 ];
 
 export default function Product() {
