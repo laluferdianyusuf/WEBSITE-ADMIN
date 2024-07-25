@@ -5,7 +5,7 @@ import TableFooter from "../molecules/TableFooter";
 
 export default function Table({ headers, data, total, sisa, onRowClick }) {
   return (
-    <div className="overflow-hidden rounded-lg shadow-lg border border-slate-200  w-full">
+    <div className="overflow-hidden rounded-lg shadow-sm border w-full">
       <table className="w-full">
         <TableHeader headers={headers} />
         <TableBody data={data} columns={headers} onRowClick={onRowClick} />

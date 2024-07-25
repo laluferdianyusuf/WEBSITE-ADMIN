@@ -6,20 +6,10 @@ export default function TableCell({ children, isHeader = false }) {
     return number ? `Rp. ${number.toLocaleString()}` : "-";
   };
 
-  const getStatusClass = (status) => {
-    if (status === "Lunas") return "text-green-500";
-    if (status === "Belum Lunas") return "text-red-500";
-    return "text-slate-900";
-  };
-
   return isHeader ? (
-    <th className=" p-4 text-left text-slate-900">{children || "-"}</th>
+    <th className="p-4 text-left text-slate-900 text-xs">{children || "-"}</th>
   ) : (
-    <td
-      className={` p-4 ${
-        typeof children === "string" ? getStatusClass(children) : ""
-      }`}
-    >
+    <td className={`text-xs p-4`}>
       {typeof children === "number" ? formatNumber(children) : children || "-"}
     </td>
   );

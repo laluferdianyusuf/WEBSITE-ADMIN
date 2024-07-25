@@ -9,6 +9,7 @@ export default {
         "custom-green-2": "#0D9485",
         "custom-blue-1": "#F1F5F9",
         "custom-white-1": "#F2F2F2",
+        "custom-white-2": "#CECECE",
         "custom-black-1": "#23272E",
       },
     },

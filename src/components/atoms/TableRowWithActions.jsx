@@ -1,6 +1,7 @@
 import ActionButton from "./ActionButton";
 import PropTypes from "prop-types";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { GoTrash } from "react-icons/go";
+import { FiEdit2 } from "react-icons/fi";
 
 export default function TableRowWithAction({
   data,
@@ -15,7 +16,7 @@ export default function TableRowWithAction({
       {Object.values(data).map((item, idx) => (
         <td
           key={idx}
-          className={`px-4 py-3 ${onRowClick ? "cursor-pointer hover:bg-gray-200" : ""}`}
+          className={`w-full px-4 py-3 ${onRowClick ? "cursor-pointer hover:bg-gray-200" : ""}`}
           onClick={onRowClick ? onRowClick : null}
         >
           {item}
@@ -24,12 +25,12 @@ export default function TableRowWithAction({
       <td className="px-4 py-3">
         <div className="flex gap-2 items-center">
           <ActionButton onClick={onUpdate}>
-            <FaEdit className="mr-[6px]" size={16} />
-            <p className="text-slate-900 font-semibold text-xs">Update</p>
+            <FiEdit2 className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">Edit</p>
           </ActionButton>
           <ActionButton onClick={onDelete}>
-            <FaTrash className="mr-[6px]" size={16} />
-            <p className="text-slate-900 font-semibold text-xs">Delete</p>
+            <GoTrash className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">Hapus</p>
           </ActionButton>
         </div>
       </td>

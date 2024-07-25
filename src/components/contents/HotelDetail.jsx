@@ -1,5 +1,11 @@
 import PropTypes from "prop-types";
 import Table from "../organism/Table";
+import { GoDownload } from "react-icons/go";
+import { PiHandCoinsLight } from "react-icons/pi";
+import ActionButton from "../atoms/ActionButton";
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { useEffect, useState } from "react";
 
 const tableHeaders = ["Tanggal", "Total Tagihan"];
 
@@ -28,11 +34,18 @@ const totalHarga = tableData.reduce(
 );
 
 export default function HotelDetail({ onBack, hotel }) {
+  const [sisa, setSisa] = useState(0);
+
+  useEffect(() => {
+    const isPaid = Math.random() > 0.5;
+    setSisa(isPaid ? 0 : 50000000 - totalHarga);
+  }, []);
+
   return (
-    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-8">
-      <div>
+    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
+      <div className="mb-6">
         <h3 className="font-semibold text-xl mb-1">{hotel["Nama Hotel"]}</h3>
-        <div className="breadcrumbs text-sm mb-4">
+        <div className="breadcrumbs text-sm">
           <ul className="flex gap-2">
             <li>
               <button
@@ -47,6 +60,51 @@ export default function HotelDetail({ onBack, hotel }) {
             </li>
           </ul>
         </div>
+      </div>
+      <div className="flex justify-between mb-5">
+        <div
+          className={`w-fit px-2 py-2 rounded-lg text-white ${
+            sisa === 0 ? "bg-custom-green-1" : "bg-red-500"}`}
+        >
+          {sisa === 0 ? (
+            <div className="flex items-center justify-center">
+              <IoIosCheckmarkCircleOutline className="mr-[6px]" size={16} />
+              <p className="text-xs">Sudah Lunas</p>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <IoCloseCircleOutline className="mr-[6px]" size={16} />
+              <p className="text-xs">Belum Lunas</p>
+            </div>
+          )}
+        </div>
+        <div className="flex gap-[18px]">
+          <ActionButton onClick={() => alert("Paying...")}>
+            <PiHandCoinsLight className="mr-[6px]" size={16} />
+            <p className="text-slate-900 text-xs">Bayar Tagihan</p>
+          </ActionButton>
+          <ActionButton onClick={() => alert("Exporting...")}>
+            <GoDownload className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">
+              Export Invoice
+            </p>
+          </ActionButton>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 w-1/2 text-xs text-slate-900 mb-5">
+        <p>Total Tagihan</p>
+        <p>:</p>
+        <p>
+          {totalHarga.toLocaleString("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          })}
+        </p>
+        <p>Sisa</p>
+        <p>:</p>
+        <p>
+          {sisa.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}
+        </p>
       </div>
       <Table headers={tableHeaders} data={tableData} total={totalHarga} />
     </div>

@@ -1,14 +1,26 @@
 import PropTypes from "prop-types";
 
-export default function TableFooter({ total, colSpan, text }) {
+export default function TableFooter({ total, colSpan }) {
   return (
     <tfoot>
-      <tr>
-        <td
-          colSpan={colSpan}
-          className="border-b border-t-0 border-slate-400 px-4 py-2 text-center font-semibold text-slate-900 bg-white"
+      <tr className="bg-custom-white-2 font-semibold text-slate-900 text-left text-xs">
+        <td 
+          colSpan={1}
+          className="border-t-0 px-4 py-4"
         >
-          {text} : Rp. {total.toLocaleString()}
+          Total
+        </td>
+        {colSpan > 2 && (
+          <td
+            colSpan={colSpan - 2}
+            className="border-t-0 px-4 py-4"
+          ></td>
+        )}
+        <td
+          colSpan={1}
+          className="border-t-0 px-4 py-4"
+        >
+          Rp. {total.toLocaleString()}
         </td>
       </tr>
     </tfoot>
@@ -16,7 +28,6 @@ export default function TableFooter({ total, colSpan, text }) {
 }
 
 TableFooter.propTypes = {
-  total: PropTypes.number,
+  total: PropTypes.number.isRequired,
   colSpan: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
 };

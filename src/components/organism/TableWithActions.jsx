@@ -9,14 +9,14 @@ export default function TableWithActions({
   onRowClick = null,
 }) {
   return (
-    <div className="overflow-hidden border border-slate-200 rounded-lg shadow-lg w-full">
+    <div className="overflow-hidden border border-slate-200 rounded-lg shadow-sm w-full text-xs">
       <table className="w-full">
         <thead className="bg-custom-blue-1">
           <tr>
             {headers.map((header, index) => (
               <th
                 key={index}
-                className="border-b-0 border-slate-400 px-4 py-2 text-left bg-custom-blue-1"
+                className="border-b-0 border-slate-400 px-4 py-4 text-left bg-custom-blue-1"
               >
                 {header}
               </th>

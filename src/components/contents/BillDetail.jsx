@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import Table from "../organism/Table";
-import { FaFileExport } from "react-icons/fa";
 import ActionButton from "../atoms/ActionButton";
+import { GoTrash, GoDownload } from "react-icons/go";
+import { FiEdit2 } from "react-icons/fi";
+
 
 const tableHeaders2 = [
   "No",
@@ -42,10 +44,10 @@ const totalHarga = tableData2.reduce(
 
 const BillDetail = ({ onBack, bill }) => {
   return (
-    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-8">
-      <div>
+    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
+      <div className="mb-2">
         <h3 className="font-semibold text-xl mb-1">{bill["Nama Hotel"]}</h3>
-        <div className="breadcrumbs text-sm mb-4">
+        <div className="breadcrumbs text-sm">
           <ul className="flex gap-2">
             <li>
               <button
@@ -61,13 +63,21 @@ const BillDetail = ({ onBack, bill }) => {
           </ul>
         </div>
       </div>
-      <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
-      <div className="self-end">
+      <div className="self-end mb-6 flex gap-[26px]">
         <ActionButton onClick={() => alert("Exporting...")}>
-          <FaFileExport className="mr-[6px]" size={16} />
+          <GoDownload className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
         </ActionButton>
+        <ActionButton onClick={() => alert("Editing...")}>
+          <FiEdit2 className="mr-[6px]" size={16} />
+          <p className="text-slate-900 font-semibold text-xs">Edit Nota</p>
+        </ActionButton>
+        <ActionButton onClick={() => alert("Deleting...")}>
+          <GoTrash className="mr-[6px]" size={16} />
+          <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>
+        </ActionButton>
       </div>
+      <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
     </div>
   );
 };
