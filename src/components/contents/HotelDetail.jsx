@@ -81,7 +81,7 @@ export default function HotelDetail({ onBack, hotel }) {
         <div className="flex gap-[18px]">
           <ActionButton onClick={() => alert("Paying...")}>
             <PiHandCoinsLight className="mr-[6px]" size={16} />
-            <p className="text-slate-900 text-xs">Bayar Tagihan</p>
+            <p className="text-slate-900 font-semibold text-xs">Bayar Tagihan</p>
           </ActionButton>
           <ActionButton onClick={() => alert("Exporting...")}>
             <GoDownload className="mr-[6px]" size={16} />
