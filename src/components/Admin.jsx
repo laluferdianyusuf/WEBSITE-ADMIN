@@ -1,4 +1,11 @@
-import { useState } from "react";
+/* eslint-disable react/jsx-key */
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
+import { TbLogout, TbLogin } from "react-icons/tb";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
+import { FaHotel } from "react-icons/fa";
+import { AiFillProduct } from "react-icons/ai";
+import PropTypes from "prop-types";
 import Sidebar from "./navigations/Sidebar";
 import Hotel from "./contents/Hotel";
 import Bills from "./contents/Bills";
@@ -6,6 +13,7 @@ import Product from "./contents/Product";
 import BillDetail from "./contents/BillDetail";
 import HotelDetail from "./contents/HotelDetail";
 import Login from "./contents/Login";
+import ModalConfirmation from "./molecules/ModalConfirmation";
 import animation from "/icons/login-animation.svg";
 
 const Admin = () => {
@@ -13,6 +21,7 @@ const Admin = () => {
   const [selectedBill, setSelectedBill] = useState(null);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleMenuClick = (menuName) => {
     setActiveMenu(menuName);
@@ -44,8 +53,17 @@ const Admin = () => {
   };
 
   const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogout = () => {
     setIsLoggedIn(false);
+    setIsLogoutModalOpen(false);
     setActiveMenu("Home");
+  };
+
+  const cancelLogout = () => {
+    setIsLogoutModalOpen(false);
   };
 
   const renderContent = () => {
@@ -57,7 +75,9 @@ const Admin = () => {
       return (
         <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col items-center justify-center">
           <img src={animation} alt="" width={295} height={295} />
-          <h4 className="text-slate-600 text-lg mt-8">Silahkan Login untuk Melihat Nota Database</h4>
+          <h4 className="text-slate-600 text-lg mt-8">
+            Silahkan Login untuk Melihat Nota Database
+          </h4>
         </div>
       );
     }
@@ -88,6 +108,14 @@ const Admin = () => {
         onLogin={handleLogin}
       />
       <div className="flex-grow">{renderContent()}</div>
+      <ModalConfirmation
+        title="Konfirmasi Logout"
+        textCancel="Kembali"
+        textOk="Logout"
+        functionCancel={cancelLogout}
+        functionOk={confirmLogout}
+        isOpen={isLogoutModalOpen}
+      />
     </div>
   );
 };

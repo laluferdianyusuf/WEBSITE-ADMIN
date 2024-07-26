@@ -9,6 +9,7 @@ function Modal({
   functionOk,
   textCancel,
   textOk,
+  headText = "UD TIMUR JAYA RAYA",
   isOpen,
 }) {
   useEffect(() => {
@@ -37,11 +38,9 @@ function Modal({
       className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40"
       onClick={handleClickOutside}
     >
-      <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-1/3 max-h-[90vh] overflow-y-auto">
+      <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-[40%] max-h-[90vh] overflow-y-auto">
         <div className="font-semibold text-center">
-          <h4 className="text-slate-300 text-[10px] mb-1">
-            UD TIMUR JAYA RAYA
-          </h4>
+          <h4 className="text-slate-300 text-[10px] mb-1">{headText}</h4>
           <h3 className="text-slate-900 text-lg">{title}</h3>
         </div>
         {children}
@@ -73,6 +72,7 @@ Modal.propTypes = {
   textCancel: PropTypes.string,
   textOk: PropTypes.string,
   isOpen: PropTypes.bool,
+  headText: PropTypes.string,
 };
 
 export default Modal;

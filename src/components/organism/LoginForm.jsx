@@ -3,7 +3,7 @@ import InputField from "../molecules/InputField";
 import ButtonSubmit from "../atoms/ButtonSubmit";
 import PropTypes from "prop-types";
 
-export default function LoginForm({handleSubmit}) {
+export default function LoginForm({ handleSubmit }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,8 +15,13 @@ export default function LoginForm({handleSubmit}) {
     }
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSubmit(username, password);
+  };
+
   return (
-    <form className="flex flex-col gap-4">
+    <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
       <InputField
         label="Username"
         type="text"
@@ -36,12 +41,12 @@ export default function LoginForm({handleSubmit}) {
       <ButtonSubmit
         text="Login"
         backgroundColor="bg-custom-green-2"
-        onClick={handleSubmit}
+        onClick={handleFormSubmit}
       />
     </form>
   );
 }
 
 LoginForm.propTypes = {
-  handleSubmit: PropTypes.func
-}
+  handleSubmit: PropTypes.func.isRequired,
+};

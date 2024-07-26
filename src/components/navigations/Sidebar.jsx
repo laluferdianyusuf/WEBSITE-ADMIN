@@ -8,7 +8,12 @@ import { AiFillProduct } from "react-icons/ai";
 import PropTypes from "prop-types";
 import ButtonAuth from "../atoms/ButtonAuth";
 
-export default function Sidebar({ activeMenu, handleMenuClick, isLoggedIn, onLogout }) {
+export default function Sidebar({
+  activeMenu,
+  handleMenuClick,
+  isLoggedIn,
+  onLogout,
+}) {
   const menu = [
     {
       name: "Bills",
@@ -76,7 +81,7 @@ export default function Sidebar({ activeMenu, handleMenuClick, isLoggedIn, onLog
               );
             })}
             {!isLoggedIn && (
-              <ButtonAuth handle={handleLogin} isLogin = {true}>
+              <ButtonAuth handle={handleLogin} isLogin={true}>
                 <TbLogin />
                 Login
               </ButtonAuth>
@@ -98,5 +103,5 @@ Sidebar.propTypes = {
   activeMenu: PropTypes.string,
   handleMenuClick: PropTypes.func,
   isLoggedIn: PropTypes.bool,
-  onLogout: PropTypes.func
+  onLogout: PropTypes.func,
 };
