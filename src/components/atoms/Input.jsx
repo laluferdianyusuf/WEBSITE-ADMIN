@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import password from "/icons/password.svg";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 export default function Input({
   type,
@@ -52,7 +52,7 @@ export default function Input({
   return (
     <div className="relative">
       <input
-        type={showPassword && type === "password" ? "text" : "text"}
+        type={showPassword && type === "password" ? "text" : type}
         placeholder={placeholder}
         value={displayValue}
         onChange={handleChange}
@@ -66,7 +66,11 @@ export default function Input({
           onClick={togglePasswordVisibility}
           className="absolute right-0 top-[0.4rem] px-2"
         >
-          <img src={password} alt="show" />
+          {showPassword ? (
+            <IoEyeOffOutline size={20} />
+          ) : (
+            <IoEyeOutline size={20} />
+          )}
         </button>
       )}
     </div>

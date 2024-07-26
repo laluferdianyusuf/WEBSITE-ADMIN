@@ -1,16 +1,14 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { TbLogout } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
+import { TbLogout, TbLogin } from "react-icons/tb";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { FaHotel } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai";
 import PropTypes from "prop-types";
-import ButtonLogout from "../atoms/ButtonLogout";
+import ButtonAuth from "../atoms/ButtonAuth";
 
-export default function Sidebar({ activeMenu, handleMenuClick }) {
-  const navigate = useNavigate();
+export default function Sidebar({ activeMenu, handleMenuClick, isLoggedIn, onLogout }) {
   const menu = [
     {
       name: "Bills",
@@ -29,8 +27,8 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
     },
   ];
 
-  const handleLogout = () => {
-    navigate("/", { replace: true });
+  const handleLogin = () => {
+    handleMenuClick("Login");
   };
 
   return (
@@ -63,11 +61,13 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
                     <button
                       key={index}
                       className={`ease-in-out duration-300 font-semibold text-white flex flex-row items-center w-full p-2 ${
-                        activeMenu === val.name || activeMenu === `${val.name}Detail`
+                        activeMenu === val.name ||
+                        activeMenu === `${val.name}Detail`
                           ? "ps-3 text-custom-green-2"
                           : ""
                       }`}
                       onClick={val.handler}
+                      disabled={!isLoggedIn}
                     >
                       <div>{val.name}</div>
                     </button>
@@ -75,13 +75,21 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
                 </div>
               );
             })}
+            {!isLoggedIn && (
+              <ButtonAuth handle={handleLogin} isLogin = {true}>
+                <TbLogin />
+                Login
+              </ButtonAuth>
+            )}
           </ul>
         </div>
       </div>
-      <ButtonLogout handle={handleLogout}>
-        <TbLogout />
-        Logout
-      </ButtonLogout>
+      {isLoggedIn && (
+        <ButtonAuth handle={onLogout}>
+          <TbLogout />
+          Logout
+        </ButtonAuth>
+      )}
     </div>
   );
 }
@@ -89,4 +97,6 @@ export default function Sidebar({ activeMenu, handleMenuClick }) {
 Sidebar.propTypes = {
   activeMenu: PropTypes.string,
   handleMenuClick: PropTypes.func,
+  isLoggedIn: PropTypes.bool,
+  onLogout: PropTypes.func
 };

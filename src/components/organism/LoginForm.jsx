@@ -1,8 +1,9 @@
 import { useState } from "react";
 import InputField from "../molecules/InputField";
 import ButtonSubmit from "../atoms/ButtonSubmit";
+import PropTypes from "prop-types";
 
-export default function LoginForm() {
+export default function LoginForm({handleSubmit}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,11 +13,6 @@ export default function LoginForm() {
     } else if (e.target.name === "password") {
       setPassword(e.target.value);
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Submitted");
   };
 
   return (
@@ -44,4 +40,8 @@ export default function LoginForm() {
       />
     </form>
   );
+}
+
+LoginForm.propTypes = {
+  handleSubmit: PropTypes.func
 }
