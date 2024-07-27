@@ -6,11 +6,11 @@ import InputField from "./InputField";
 import Button from "../atoms/Button";
 import PropTypes from "prop-types";
 
-export default function InputProduct({ closeModal, isOpen }) {
-  const [inputs, setInputs] = useState([
+export default function InputProduct({ closeModal, isOpen, initialData, isEdit }) {
+  const [inputs, setInputs] = useState(initialData?.pesanan || [
     { item: "", quantity: "", harga_unit: "", total_harga: "" },
   ]);
-  const [namaHotel, setNamaHotel] = useState("");
+  const [namaHotel, setNamaHotel] = useState(initialData?.namaHotel || "");
   const [totalHarga, setTotalHarga] = useState(0);
 
   const handleAddInput = (event) => {
@@ -73,6 +73,17 @@ export default function InputProduct({ closeModal, isOpen }) {
     }
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = {
+      namaHotel,
+      pesanan: inputs,
+      totalHarga,
+    };
+    console.log("Submitted data:", data);
+    closeModal();
+  };
+
   return isOpen ? (
     <div
       className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40"
@@ -83,9 +94,11 @@ export default function InputProduct({ closeModal, isOpen }) {
           <h4 className="text-slate-300 text-[10px] mb-1">
             UD TIMUR JAYA RAYA
           </h4>
-          <h3 className="text-slate-900 text-lg">Buat Nota Baru</h3>
+          <h3 className="text-slate-900 text-lg">
+            {isEdit ? "Edit Nota" : "Buat Nota Baru"}
+          </h3>
         </div>
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="w-11/12 mb-3">
             <InputField
               label="Nama Hotel"
@@ -114,7 +127,7 @@ export default function InputProduct({ closeModal, isOpen }) {
               <InputNotaField
                 label="Quantity"
                 name="quantity"
-                type="number"
+                type="text"
                 placeholder="Jumlah"
                 value={input.quantity}
                 onChange={(e) => handleInputChange(index, e)}
@@ -166,8 +179,7 @@ export default function InputProduct({ closeModal, isOpen }) {
             <Button
               backgroundColor="bg-custom-green-1"
               type="submit"
-              text="Buat Nota Baru"
-              onClick={() => alert("Buat Nota Baru")}
+              text={isEdit ? "Simpan Perubahan" : "Buat Nota Baru"}
             />
           </div>
         </form>
@@ -179,4 +191,6 @@ export default function InputProduct({ closeModal, isOpen }) {
 InputProduct.propTypes = {
   closeModal: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  initialData: PropTypes.object,
+  isEdit: PropTypes.bool,
 };

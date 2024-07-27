@@ -1,9 +1,11 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Table from "../organism/Table";
 import ActionButton from "../atoms/ActionButton";
 import { GoTrash, GoDownload } from "react-icons/go";
 import { FiEdit2 } from "react-icons/fi";
-
+import InputProduct from "../molecules/InputProduct";
+import ModalCrud from "../molecules/ModalCrud";
 
 const tableHeaders2 = [
   "No",
@@ -43,6 +45,43 @@ const totalHarga = tableData2.reduce(
 );
 
 const BillDetail = ({ onBack, bill }) => {
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedBill, setSelectedBill] = useState(null);
+
+  const handleEditClick = () => {
+    setEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteModalOpen(true);
+    setSelectedBill(bill);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+    setSelectedBill(null);
+  };
+
+  const confirmDelete = () => {
+    console.log("Deleting bill:", selectedBill);
+    handleCloseDeleteModal();
+  };
+
+  const initialData = {
+    namaHotel: bill["Nama Hotel"],
+    pesanan: tableData2.map((item) => ({
+      item: item.Item,
+      quantity: item.Quantity,
+      harga_unit: item["Harga / Unit"],
+      total_harga: item["Jumlah Harga"],
+    })),
+  };
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
       <div className="mb-2">
@@ -68,16 +107,37 @@ const BillDetail = ({ onBack, bill }) => {
           <GoDownload className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
         </ActionButton>
-        <ActionButton onClick={() => alert("Editing...")}>
+        <ActionButton onClick={handleEditClick}>
           <FiEdit2 className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Edit Nota</p>
         </ActionButton>
-        <ActionButton onClick={() => alert("Deleting...")}>
+        <ActionButton onClick={handleDeleteClick}>
           <GoTrash className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>
         </ActionButton>
       </div>
       <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
+      <InputProduct
+        isOpen={isEditModalOpen}
+        closeModal={handleCloseEditModal}
+        initialData={initialData}
+        isEdit={true}
+      />
+      <ModalCrud
+        isOpen={isDeleteModalOpen}
+        title="Hapus Nota"
+        functionCancel={handleCloseDeleteModal}
+        functionOk={confirmDelete}
+        textCancel="Batal"
+        textOk="Hapus"
+        inputValue={bill["Nama Hotel"]}
+        onChange={() => {}}
+        inputName="nama_hotel"
+        inputPlaceholder="Nama Hotel"
+        inputType="text"
+        inputLabel="Nama Hotel"
+        isDisabled={true}
+      />
     </div>
   );
 };
