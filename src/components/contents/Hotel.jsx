@@ -38,7 +38,7 @@ export default function Hotel({ handleHotelSelect }) {
 
   const handleAdd = () => {
     setIsAdding(true);
-    setInputHotel(""); // Bersihkan input field
+    setInputHotel("");
   };
 
   const handleChangeHotel = (e) => {
