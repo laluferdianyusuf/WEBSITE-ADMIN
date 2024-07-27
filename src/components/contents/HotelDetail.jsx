@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
-import Table from "../organism/Table";
+import { useState, useEffect } from "react";
 import { GoDownload } from "react-icons/go";
 import { PiHandCoinsLight } from "react-icons/pi";
-import ActionButton from "../atoms/ActionButton";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { useEffect, useState } from "react";
+import Table from "../organism/Table";
+import ActionButton from "../atoms/ActionButton";
+import SuccessNotification from "../atoms/SuccessNotification";
+import InputNotaField from "../molecules/InputNotaField";
+import Button from "../atoms/Button";
 
 const tableHeaders = ["Tanggal", "Total Tagihan"];
 
@@ -35,11 +38,35 @@ const totalHarga = tableData.reduce(
 
 export default function HotelDetail({ onBack, hotel }) {
   const [sisa, setSisa] = useState(0);
+  const [isPaying, setIsPaying] = useState(false);
+  const [totalBayar, setTotalBayar] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const isPaid = Math.random() > 0.5;
     setSisa(isPaid ? 0 : 50000000 - totalHarga);
   }, []);
+
+  const handlePaying = () => {
+    setIsPaying(true);
+  };
+
+  const handleClosePay = () => {
+    setIsPaying(false);
+    setTotalBayar("");
+  };
+
+  const handleConfirmPay = () => {
+    const value = parseInt(totalBayar.replace(/\./g, ""));
+    setSisa((prevValue) => prevValue - value);
+    setIsPaying(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+  const onChangeInput = (event) => {
+    setTotalBayar(event.target.value);
+  };
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
@@ -64,7 +91,8 @@ export default function HotelDetail({ onBack, hotel }) {
       <div className="flex justify-between mb-5">
         <div
           className={`w-fit px-2 py-2 rounded-lg text-white ${
-            sisa === 0 ? "bg-custom-green-1" : "bg-red-500"}`}
+            sisa === 0 ? "bg-custom-green-1" : "bg-red-500"
+          }`}
         >
           {sisa === 0 ? (
             <div className="flex items-center justify-center">
@@ -79,9 +107,11 @@ export default function HotelDetail({ onBack, hotel }) {
           )}
         </div>
         <div className="flex gap-[18px]">
-          <ActionButton onClick={() => alert("Paying...")}>
+          <ActionButton onClick={handlePaying}>
             <PiHandCoinsLight className="mr-[6px]" size={16} />
-            <p className="text-slate-900 font-semibold text-xs">Bayar Tagihan</p>
+            <p className="text-slate-900 font-semibold text-xs">
+              Bayar Tagihan
+            </p>
           </ActionButton>
           <ActionButton onClick={() => alert("Exporting...")}>
             <GoDownload className="mr-[6px]" size={16} />
@@ -107,6 +137,42 @@ export default function HotelDetail({ onBack, hotel }) {
         </p>
       </div>
       <Table headers={tableHeaders} data={tableData} total={totalHarga} />
+      {isPaying && (
+        <div className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
+          <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-[40%] max-h-[90vh] overflow-y-auto">
+            <div className="font-semibold text-center">
+              <h4 className="text-slate-300 text-[10px] mb-1">
+                UD TIMUR JAYA RAYA
+              </h4>
+              <h3 className="text-slate-900 text-lg">
+                Bayar Tagihan {hotel["Nama Hotel"]}
+              </h3>
+            </div>
+            <InputNotaField
+              label="Jumlah Setoran"
+              name="jumlahSetoran"
+              type="number"
+              placeholder="Rp. 1.000.000"
+              value={totalBayar}
+              onChange={onChangeInput}
+              isModal={true}
+            />
+            <div className="flex justify-center mt-4 gap-4">
+              <Button
+                backgroundColor="bg-white"
+                text="Batalkan"
+                onClick={handleClosePay}
+              />
+              <Button
+                backgroundColor="bg-custom-green-1"
+                text="Bayar Tagihan"
+                onClick={handleConfirmPay}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      {showSuccess && <SuccessNotification text="Pembayaran Berhasil" />}
     </div>
   );
 }

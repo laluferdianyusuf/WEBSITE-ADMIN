@@ -9,7 +9,7 @@ export default function TableBody({ data, columns, onRowClick }) {
           key={index}
           rowData={columns.map((column) => row[column])}
           index={index}
-          onRowClick={() => onRowClick(row)}
+          onRowClick={() => onRowClick ? onRowClick(row) : null}
         />
       ))}
     </tbody>
