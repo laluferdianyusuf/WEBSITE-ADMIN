@@ -70,7 +70,7 @@ const ExportBill = () => {
       </div>
       <button
         onClick={handlePrint}
-        className="mt-4 mx-12 px-4 py-2 bg-custom-green-1 text-slate-900 rounded-lg flex items-center"
+        className="mt-4 mx-12 bg-white text-slate-900 px-4 py-2 rounded-md flex items-center justify-center border border-slate-400"
       >
         <GoDownload className="mr-2" size={16} />
         Unduh Nota
