@@ -5,39 +5,36 @@ import Table from "../organism/Table";
 import { useState } from "react";
 import InputProduct from "../molecules/InputProduct";
 import PropTypes from "prop-types";
+import NoBillData from "/icons/belum-ada-nota.svg";
 
-const tableHeaders = [
-  "Tanggal",
-  "Nama Hotel",
-  "Total Tagihan",
-];
+const tableHeaders = ["Tanggal", "Nama Hotel", "Total Tagihan"];
 
 const tableData = [
-  {
-    Tanggal: "12/07/2022",
-    "Nama Hotel": "Hotel Indonesia",
-    "Total Tagihan": 5000000,
-  },
-  {
-    Tanggal: "09/12/2024",
-    "Nama Hotel": "Hotel Bali",
-    "Total Tagihan": 0,
-  },
-  {
-    Tanggal: "10/01/2025",
-    "Nama Hotel": "Hotel Lombok",
-    "Total Tagihan": 7500000,
-  },
-  {
-    Tanggal: "28/03/2021",
-    "Nama Hotel": "Hotel Surabaya",
-    "Total Tagihan": 2500000,
-  },
-  {
-    Tanggal: "29/04/2022",
-    "Nama Hotel": "Hotel Bandung",
-    "Total Tagihan": 0,
-  },
+  // {
+  //   Tanggal: "12/07/2022",
+  //   "Nama Hotel": "Hotel Indonesia",
+  //   "Total Tagihan": 5000000,
+  // },
+  // {
+  //   Tanggal: "09/12/2024",
+  //   "Nama Hotel": "Hotel Bali",
+  //   "Total Tagihan": 0,
+  // },
+  // {
+  //   Tanggal: "10/01/2025",
+  //   "Nama Hotel": "Hotel Lombok",
+  //   "Total Tagihan": 7500000,
+  // },
+  // {
+  //   Tanggal: "28/03/2021",
+  //   "Nama Hotel": "Hotel Surabaya",
+  //   "Total Tagihan": 2500000,
+  // },
+  // {
+  //   Tanggal: "29/04/2022",
+  //   "Nama Hotel": "Hotel Bandung",
+  //   "Total Tagihan": 0,
+  // },
 ];
 
 export default function Bills({ handleBillSelect }) {
@@ -76,11 +73,22 @@ export default function Bills({ handleBillSelect }) {
           <p className="text-slate-900 font-semibold text-xs">Tambah produk</p>
         </ActionButton>
       </div>
-      <Table
-        headers={tableHeaders}
-        data={tableData}
-        onRowClick={handleRowClick}
-      />
+      {tableData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <img
+            src={NoBillData}
+            alt="Tidak ada hotel"
+            width={250}
+          />
+          <p className="text-gray-500 mt-2">Belum ada data nota</p>
+        </div>
+      ) : (
+        <Table
+          headers={tableHeaders}
+          data={tableData}
+          onRowClick={handleRowClick}
+        />
+      )}
       <InputProduct isOpen={isOpen} closeModal={closeModal} />
     </div>
   );
