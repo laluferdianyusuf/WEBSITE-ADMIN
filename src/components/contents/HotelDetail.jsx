@@ -31,6 +31,89 @@ const tableData = [
   },
 ];
 
+const tableData2 = {
+  id: 1,
+  nama_hotel: "Hotel A",
+  total_bill: 8000000,
+  total_bayar: 4000000,
+  bills: [
+    {
+      id: 1,
+      tanggal_nota: "2024-07-01",
+      total_pesanan: 2000000,
+      total_dibayar: 2000000,
+      orders: [
+        {
+          qty: 2,
+          nama_produk: "Hand Towel",
+          harga_produk: 500000,
+          total_harga: 1000000,
+        },
+        {
+          qty: 1,
+          nama_produk: "Hand Sanitizer",
+          harga_produk: 1000000,
+          total_harga: 1000000,
+        },
+      ],
+    },
+    {
+      id: 2,
+      tanggal_nota: "2024-07-05",
+      total_pesanan: 2000000,
+      total_dibayar: 1000000,
+      orders: [
+        {
+          qty: 10,
+          nama_produk: "Fruit Tea",
+          harga_produk: 100000,
+          total_harga: 1000000,
+        },
+        {
+          qty: 2,
+          nama_produk: "Hand Towel",
+          harga_produk: 500000,
+          total_harga: 1000000,
+        },
+      ],
+    },
+    {
+      id: 3,
+      tanggal_nota: "2024-07-10",
+      total_pesanan: 1000000,
+      total_dibayar: 0,
+      orders: [
+        {
+          qty: 20,
+          nama_produk: "Fruit Juice",
+          harga_produk: 50000,
+          total_harga: 1000000,
+        },
+      ],
+    },
+    {
+      id: 4,
+      tanggal_nota: "2024-07-15",
+      total_pesanan: 3000000,
+      total_dibayar: 1000000,
+      orders: [
+        {
+          qty: 5,
+          nama_produk: "Bath Towel",
+          harga_produk: 400000,
+          total_harga: 2000000,
+        },
+        {
+          qty: 2,
+          nama_produk: "Shampoo",
+          harga_produk: 500000,
+          total_harga: 1000000,
+        },
+      ],
+    },
+  ],
+};
+
 const totalHarga = tableData.reduce(
   (sum, item) => sum + item["Total Tagihan"],
   0
@@ -66,6 +149,18 @@ export default function HotelDetail({ onBack, hotel }) {
 
   const onChangeInput = (event) => {
     setTotalBayar(event.target.value);
+  };
+
+  const handleExportClick = () => {
+    const state = {
+      tableData2,
+    };
+    const stateString = encodeURIComponent(JSON.stringify(state));
+    window.open(
+      `/#/invoiceexport?state=${stateString}`,
+      "_blank",
+      `noopener,noreferrer`
+    );
   };
 
   return (
@@ -113,7 +208,7 @@ export default function HotelDetail({ onBack, hotel }) {
               Bayar Tagihan
             </p>
           </ActionButton>
-          <ActionButton onClick={() => alert("Exporting...")}>
+          <ActionButton onClick={handleExportClick}>
             <GoDownload className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">
               Export Invoice

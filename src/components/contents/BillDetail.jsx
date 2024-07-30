@@ -82,6 +82,19 @@ const BillDetail = ({ onBack, bill }) => {
     })),
   };
 
+  const handleExportClick = () => {
+    const state = {
+      bill,
+      tableData2,
+    };
+    const stateString = encodeURIComponent(JSON.stringify(state));
+    window.open(
+      `/#/billexport?state=${stateString}`,
+      "_blank",
+      `noopener,noreferrer`
+    );
+  };
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
       <div className="mb-2">
@@ -103,7 +116,7 @@ const BillDetail = ({ onBack, bill }) => {
         </div>
       </div>
       <div className="self-end mb-6 flex gap-[26px]">
-        <ActionButton onClick={() => alert("Exporting...")}>
+        <ActionButton onClick={handleExportClick}>
           <GoDownload className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
         </ActionButton>
