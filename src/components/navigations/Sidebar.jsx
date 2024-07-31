@@ -13,6 +13,7 @@ export default function Sidebar({
   handleMenuClick,
   isLoggedIn,
   onLogout,
+  user,
 }) {
   const menu = [
     {
@@ -68,31 +69,39 @@ export default function Sidebar({
                       className={`ease-in-out duration-300 font-semibold text-white flex flex-row items-center w-full p-2 ${
                         activeMenu === val.name ||
                         activeMenu === `${val.name}Detail`
-                          ? "ps-3 text-custom-green-2"
+                          ? "ps-3"
                           : ""
                       }`}
                       onClick={val.handler}
                       disabled={!isLoggedIn}
                     >
-                      <div>{val.name}</div>
+                      <div
+                        className={`${
+                          activeMenu === val.name ||
+                          activeMenu === `${val.name}Detail`
+                            ? "text-custom-green-2"
+                            : ""
+                        }`}
+                      >
+                        {val.name}
+                      </div>
                     </button>
                   </div>
                 </div>
               );
             })}
-            {!isLoggedIn && (
-              <ButtonAuth handle={handleLogin} isLogin={true}>
-                <TbLogin />
-                Login
-              </ButtonAuth>
-            )}
           </ul>
         </div>
       </div>
-      {isLoggedIn && (
+      {isLoggedIn ? (
         <ButtonAuth handle={onLogout}>
           <TbLogout />
-          Logout
+          <p className="lowercase">admin</p>
+        </ButtonAuth>
+      ) : (
+        <ButtonAuth handle={handleLogin} isLogin={true}>
+          <TbLogin />
+          <p className="capitalize"> Login</p>
         </ButtonAuth>
       )}
     </div>

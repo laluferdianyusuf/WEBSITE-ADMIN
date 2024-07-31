@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser, logout } from "../redux/slices/adminSlice";
 import { TbLogout, TbLogin } from "react-icons/tb";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { FaHotel } from "react-icons/fa";
@@ -17,11 +19,29 @@ import ModalConfirmation from "./molecules/ModalConfirmation";
 import animation from "/icons/login-animation.svg";
 
 const Admin = () => {
-  const [activeMenu, setActiveMenu] = useState("Home");
+  const [activeMenu, setActiveMenu] = useState("Bills");
   const [selectedBill, setSelectedBill] = useState(null);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { admin } = useSelector((state) => state.admin);
+
+  useEffect(() => {
+    dispatch(currentUser())
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      })
+      .catch((err) => {
+        console.log("No user logged in:", err);
+        setIsLoggedIn(false);
+      });
+  }, [dispatch]);
 
   const handleMenuClick = (menuName) => {
     setActiveMenu(menuName);
@@ -37,8 +57,8 @@ const Admin = () => {
     setActiveMenu("Bills");
   };
 
-  const handleHotelSelect = (hotel) => {
-    setSelectedHotel(hotel);
+  const handleHotelSelect = (index) => {
+    setSelectedHotel(index);
     setActiveMenu("HotelDetail");
   };
 
@@ -57,6 +77,7 @@ const Admin = () => {
   };
 
   const confirmLogout = () => {
+    dispatch(logout());
     setIsLoggedIn(false);
     setIsLogoutModalOpen(false);
     setActiveMenu("Home");
@@ -106,6 +127,7 @@ const Admin = () => {
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
         onLogin={handleLogin}
+        user={admin.user}
       />
       <div className="flex-grow">{renderContent()}</div>
       <ModalConfirmation

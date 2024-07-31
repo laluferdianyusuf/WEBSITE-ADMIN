@@ -1,36 +1,33 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../atoms/SearchBar";
 import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import ModalCrud from "../molecules/ModalCrud";
+import {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getProducts,
+} from "../../redux/slices/productSlice";
 
 const tableHeaders3 = ["Nama Produk", "Actions"];
 
-const initialTableData = [
-  {
-    "Nama Produk": "Pulpen",
-  },
-  {
-    "Nama Produk": "Penggaris",
-  },
-  {
-    "Nama Produk": "Penghapus",
-  },
-  {
-    "Nama Produk": "Penggaris",
-  },
-];
-
 export default function Product() {
-  const [tableData, setTableData] = useState(initialTableData);
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.product);
+
   const [inputProduct, setInputProduct] = useState("");
   const [currentProductIndex, setCurrentProductIndex] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
   const handleAdd = () => {
     setIsAdding(true);
@@ -55,37 +52,63 @@ export default function Product() {
 
   const handleEdit = (index) => {
     setCurrentProductIndex(index);
-    setInputProduct(tableData[index]["Nama Produk"]);
+    setInputProduct(products.product[index]["name"]);
     setIsEditing(true);
   };
 
   const handleDelete = (index) => {
     setCurrentProductIndex(index);
-    setInputProduct(tableData[index]["Nama Produk"]);
+    setInputProduct(products.product[index]["name"]);
     setIsDeleting(true);
   };
 
   const handleSaveDelete = () => {
-    const updatedData = [...tableData];
-    updatedData.splice(currentProductIndex, 1);
-    setTableData(updatedData);
-    handleCloseDelete();
+    const productId = products.product[currentProductIndex].id;
+    dispatch(deleteProduct(productId))
+      .unwrap()
+      .then(() => {
+        dispatch(getProducts());
+        handleCloseDelete();
+      })
+      .catch((error) => {
+        console.error("Delete failed:", error);
+      });
   };
 
   const handleSaveEdit = () => {
-    const updatedData = [...tableData];
-    updatedData[currentProductIndex]["Nama Produk"] = inputProduct;
-    setTableData(updatedData);
-    handleCloseEdit();
+    const productId = products.product[currentProductIndex].id;
+    dispatch(updateProduct({ name: inputProduct, id: productId }))
+      .unwrap()
+      .then(() => {
+        dispatch(getProducts());
+        handleCloseEdit();
+      })
+      .catch((error) => {
+        console.error("Update failed:", error);
+      });
   };
 
   const handleSaveAdd = () => {
-    const newProduct = {
-      "Nama Produk": inputProduct,
-    };
-    setTableData([...tableData, newProduct]);
-    handleCloseAdd();
+    dispatch(createProduct({ name: inputProduct }))
+      .unwrap()
+      .then(() => {
+        dispatch(getProducts());
+        handleCloseAdd();
+      })
+      .catch((error) => {
+        console.error("Add failed:", error);
+      });
   };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const productArray = Array.isArray(products.product) ? products.product : [];
+
+  const filteredProducts = productArray.filter((product) =>
+    product?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
@@ -99,8 +122,8 @@ export default function Product() {
       <div className="flex justify-between items-center">
         <div className="w-1/3">
           <SearchBar
-            onSearch={(e) => console.log(e.target.value)}
-            placeholder="Cari dari total 8 data..."
+            onSearch={handleSearch}
+            placeholder={`Cari dari total ${productArray.length} data...`}
           />
         </div>
         <ActionButton onClick={handleAdd}>
@@ -110,7 +133,9 @@ export default function Product() {
       </div>
       <TableWithActions
         headers={tableHeaders3}
-        data={tableData}
+        data={filteredProducts.map((product) => ({
+          ProductName: product.name,
+        }))}
         onUpdate={handleEdit}
         onDelete={handleDelete}
       />
@@ -119,7 +144,7 @@ export default function Product() {
         isOpen={isAdding}
         inputLabel="Nama Produk"
         inputPlaceholder="Masukkan nama produk"
-        inputName="produkName"
+        inputName="productName"
         inputValue={inputProduct}
         onChange={handleChangeInput}
         textOk="Tambah"
@@ -133,7 +158,7 @@ export default function Product() {
         isOpen={isEditing}
         inputLabel="Nama Produk"
         inputPlaceholder="Masukkan nama produk"
-        inputName="produkName"
+        inputName="productName"
         inputValue={inputProduct}
         onChange={handleChangeInput}
         textOk="Simpan"
@@ -147,12 +172,12 @@ export default function Product() {
         isOpen={isDeleting}
         inputLabel="Hapus Produk"
         isDisabled={true}
-        inputName="produkName"
+        inputName="productName"
         inputValue={inputProduct}
         textOk="Hapus"
         textCancel="Batal"
         inputType="text"
-        functionCancel={() => setIsDeleting(false)}
+        functionCancel={handleCloseDelete}
         functionOk={handleSaveDelete}
       />
     </div>

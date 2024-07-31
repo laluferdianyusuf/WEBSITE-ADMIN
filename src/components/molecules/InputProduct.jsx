@@ -2,16 +2,25 @@ import { useState, useEffect } from "react";
 import InputNotaField from "./InputNotaField";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { FiMinusCircle } from "react-icons/fi";
-import InputField from "./InputField";
 import Button from "../atoms/Button";
 import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { addBills } from "../../redux/slices/billSlice";
+import { getHotels } from "../../redux/slices/hotelSlice";
+import Select from "react-select";
 
 export default function InputProduct({ closeModal, isOpen }) {
+  const dispatch = useDispatch();
+  const { hotels } = useSelector((state) => state.hotel);
   const [inputs, setInputs] = useState([
     { item: "", quantity: "", harga_unit: "", total_harga: "" },
   ]);
-  const [namaHotel, setNamaHotel] = useState("");
+  const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
+
+  useEffect(() => {
+    dispatch(getHotels());
+  }, [dispatch]);
 
   const handleAddInput = (event) => {
     event.preventDefault();
@@ -35,14 +44,14 @@ export default function InputProduct({ closeModal, isOpen }) {
     setInputs(newInputs);
   };
 
-  const handleNamaHotel = (event) => {
-    setNamaHotel(event.target.value);
+  const handleHotelChange = (selectedOption) => {
+    setSelectedHotel(selectedOption);
   };
 
   useEffect(() => {
     const calculateTotalHarga = () => {
       const total = inputs.reduce((acc, input) => {
-        const totalHargaBarang = parseInt(input.total_harga) || 0;
+        const totalHargaBarang = parseInt(input.total_harga, 10) || 0;
         return acc + totalHargaBarang;
       }, 0);
       setTotalHarga(total);
@@ -73,6 +82,77 @@ export default function InputProduct({ closeModal, isOpen }) {
     }
   };
 
+  const handleSubmit = async (event) => {
+    if (!selectedHotel) {
+      alert("hotel not found");
+      return;
+    }
+
+    const products = inputs.map((input) => ({
+      productName: input.item,
+      quantity: parseInt(input.quantity, 10),
+      productPrice: parseFloat(input.harga_unit),
+      total: parseFloat(input.total_harga),
+    }));
+
+    const billData = {
+      hotelId: selectedHotel.value,
+      billData: products,
+    };
+
+    try {
+      const resultAction = await dispatch(addBills(billData));
+
+      if (addBills.fulfilled.match(resultAction)) {
+        dispatch(getHotels());
+        closeModal();
+      } else {
+        alert(resultAction.payload?.message || "failed to create bill");
+      }
+    } catch (error) {
+      console.error("error creating bill:", error);
+      alert("failed to create bill");
+    }
+  };
+
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      padding: "0px 0px",
+      border: state.isFocused ? "1px solid #48bb78" : "1px solid #94A3B8",
+      borderRadius: "0.5rem",
+      boxShadow: state.isFocused ? "0 0 0 2px #48bb78" : null,
+      "&:hover": {
+        borderColor: "#48bb78",
+      },
+      fontSize: "0.75rem",
+      color: "#94A3B8",
+      fontWeight: "500",
+      minHeight: "38px",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      maxHeight: "200px",
+      overflowY: "auto",
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      padding: "0px",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "#48bb78" : provided.backgroundColor,
+      color: state.isSelected ? "#fff" : "#48bb78",
+      fontSize: "0.75 rem",
+      lineHeight: "1rem",
+    }),
+  };
+
+  const handleSelectHotel = Array.isArray(hotels)
+    ? hotels.map((hotel) => ({ value: hotel.id, label: hotel.hotelName }))
+    : [];
+
   return isOpen ? (
     <div
       className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40"
@@ -85,16 +165,18 @@ export default function InputProduct({ closeModal, isOpen }) {
           </h4>
           <h3 className="text-slate-900 text-lg">Buat Nota Baru</h3>
         </div>
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="w-11/12 mb-3">
-            <InputField
-              label="Nama Hotel"
-              placeholder="Masukkan nama hotel"
-              name="nama_hotel"
-              onChange={handleNamaHotel}
-              isModal={true}
-              value={namaHotel}
-              type="text"
+            <label className="block mb-2 text-xs font-medium text-gray-700">
+              Nama Hotel
+            </label>
+            <Select
+              options={handleSelectHotel}
+              value={selectedHotel}
+              onChange={handleHotelChange}
+              placeholder="Masukkan Nama Hotel"
+              isClearable
+              styles={customStyles}
             />
           </div>
           {inputs.map((input, index) => (
@@ -167,7 +249,6 @@ export default function InputProduct({ closeModal, isOpen }) {
               backgroundColor="bg-custom-green-1"
               type="submit"
               text="Buat Nota Baru"
-              onClick={() => alert("Buat Nota Baru")}
             />
           </div>
         </form>

@@ -6,6 +6,8 @@ import ActionButton from "../atoms/ActionButton";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
+import { getDetailHotels } from "../../redux/slices/hotelSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const tableHeaders = ["Tanggal", "Total Tagihan"];
 
@@ -28,18 +30,53 @@ const tableData = [
   },
 ];
 
-const totalHarga = tableData.reduce(
-  (sum, item) => sum + item["Total Tagihan"],
-  0
-);
+// const totalHarga = tableData.reduce(
+//   (sum, item) => sum + item["Total Tagihan"],
+//   0
+// );
 
 export default function HotelDetail({ onBack, hotel }) {
+  const dispatch = useDispatch();
+  const { bills, loading, error } = useSelector((state) => state.bill);
+  const [dataHotel, setDataHotel] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await dispatch(getDetailHotels(hotel.id));
+        setDataHotel(result.payload.data.hotel);
+      } catch (err) {
+        console.error("Failed to fetch bill details:", err);
+      }
+    };
+
+    fetchData();
+  }, [dispatch, hotel]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading bill details.</p>;
+  const hotelsBill = dataHotel?.bills || [];
   const [sisa, setSisa] = useState(0);
 
   useEffect(() => {
     const isPaid = Math.random() > 0.5;
     setSisa(isPaid ? 0 : 50000000 - totalHarga);
   }, []);
+
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "2-digit", year: "2-digit" };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
+  };
+
+  const tableDataHotel = hotelsBill.map((hotel) => ({
+    Tanggal: formatDate(hotel.createdAt),
+    "Total Tagihan": hotel.ordersTotal,
+  }));
+
+  const totalHarga = hotelsBill.reduce(
+    (sum, item) => sum + parseFloat(item.ordersTotal),
+    0
+  );
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
@@ -64,7 +101,8 @@ export default function HotelDetail({ onBack, hotel }) {
       <div className="flex justify-between mb-5">
         <div
           className={`w-fit px-2 py-2 rounded-lg text-white ${
-            sisa === 0 ? "bg-custom-green-1" : "bg-red-500"}`}
+            sisa === 0 ? "bg-custom-green-1" : "bg-red-500"
+          }`}
         >
           {sisa === 0 ? (
             <div className="flex items-center justify-center">
@@ -81,7 +119,9 @@ export default function HotelDetail({ onBack, hotel }) {
         <div className="flex gap-[18px]">
           <ActionButton onClick={() => alert("Paying...")}>
             <PiHandCoinsLight className="mr-[6px]" size={16} />
-            <p className="text-slate-900 font-semibold text-xs">Bayar Tagihan</p>
+            <p className="text-slate-900 font-semibold text-xs">
+              Bayar Tagihan
+            </p>
           </ActionButton>
           <ActionButton onClick={() => alert("Exporting...")}>
             <GoDownload className="mr-[6px]" size={16} />
@@ -106,7 +146,7 @@ export default function HotelDetail({ onBack, hotel }) {
           {sisa.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}
         </p>
       </div>
-      <Table headers={tableHeaders} data={tableData} total={totalHarga} />
+      <Table headers={tableHeaders} data={tableDataHotel} total={totalHarga} />
     </div>
   );
 }

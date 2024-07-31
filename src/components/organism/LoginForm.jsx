@@ -1,11 +1,16 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { adminLogin } from "../../redux/slices/adminSlice";
 import InputField from "../molecules/InputField";
 import ButtonSubmit from "../atoms/ButtonSubmit";
 import PropTypes from "prop-types";
 
-export default function LoginForm({ handleSubmit }) {
+export default function LoginForm({ onLoginSuccess, onLoginFailure }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.admin);
 
   const handleChange = (e) => {
     if (e.target.name === "username") {
@@ -17,7 +22,14 @@ export default function LoginForm({ handleSubmit }) {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(username, password);
+    dispatch(adminLogin({ username, password }))
+      .unwrap()
+      .then((response) => {
+        onLoginSuccess(response);
+      })
+      .catch((error) => {
+        onLoginFailure(error);
+      });
   };
 
   return (
@@ -39,14 +51,17 @@ export default function LoginForm({ handleSubmit }) {
         name="password"
       />
       <ButtonSubmit
-        text="Login"
+        text={loading ? "Loading..." : "Login"}
         backgroundColor="bg-custom-green-2"
         onClick={handleFormSubmit}
+        disabled={loading}
       />
+      {error && <p className="text-red-500">Error: {error.message}</p>}
     </form>
   );
 }
 
 LoginForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
+  onLoginSuccess: PropTypes.func.isRequired,
+  onLoginFailure: PropTypes.func.isRequired,
 };

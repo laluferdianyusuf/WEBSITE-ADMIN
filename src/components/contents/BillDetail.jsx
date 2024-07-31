@@ -1,9 +1,11 @@
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Table from "../organism/Table";
 import ActionButton from "../atoms/ActionButton";
 import { GoTrash, GoDownload } from "react-icons/go";
 import { FiEdit2 } from "react-icons/fi";
-
+import { useSelector, useDispatch } from "react-redux";
+import { getDetailBill } from "../../redux/slices/billSlice";
 
 const tableHeaders2 = [
   "No",
@@ -13,40 +15,48 @@ const tableHeaders2 = [
   "Jumlah Harga",
 ];
 
-const tableData2 = [
-  {
-    No: "1",
-    Item: "Hand Towel",
-    Quantity: "1 Dus",
-    "Harga / Unit": 1000000,
-    "Jumlah Harga": 2000000,
-  },
-  {
-    No: "2",
-    Item: "Hand Sanitizer",
-    Quantity: "1 Pack",
-    "Harga / Unit": 500000,
-    "Jumlah Harga": 1000000,
-  },
-  {
-    No: "3",
-    Item: "Fruit Tea",
-    Quantity: "3 Box",
-    "Harga / Unit": 10000,
-    "Jumlah Harga": 30000,
-  },
-];
-
-const totalHarga = tableData2.reduce(
-  (sum, item) => sum + item["Jumlah Harga"],
-  0
-);
-
 const BillDetail = ({ onBack, bill }) => {
+  const dispatch = useDispatch();
+  const { bills, loading, error } = useSelector((state) => state.bill);
+  const [dataBill, setDataBill] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await dispatch(getDetailBill(bill.id));
+        setDataBill(result.payload.data.bill);
+      } catch (err) {
+        console.error("Failed to fetch bill details:", err);
+      }
+    };
+
+    fetchData();
+  }, [dispatch, bill]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading bill details.</p>;
+
+  const orders = dataBill?.orders || [];
+
+  const totalHarga = orders.reduce(
+    (sum, order) => sum + parseFloat(order.total),
+    0
+  );
+
+  const tableData2 = orders.map((order, index) => ({
+    No: index + 1,
+    Item: order.productName,
+    Quantity: `${order.quantity} ${order.quantity > 1 ? "Units" : "Unit"}`,
+    "Harga / Unit": order.productPrice,
+    "Jumlah Harga": parseFloat(order.total),
+  }));
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
       <div className="mb-2">
-        <h3 className="font-semibold text-xl mb-1">{bill["Nama Hotel"]}</h3>
+        <h3 className="font-semibold text-xl mb-1">
+          {dataBill && dataBill.hotel.hotelName}
+        </h3>
         <div className="breadcrumbs text-sm">
           <ul className="flex gap-2">
             <li>
@@ -58,7 +68,9 @@ const BillDetail = ({ onBack, bill }) => {
               </button>
             </li>
             <li>
-              <span className="text-gray-700">{bill["Nama Hotel"]}</span>
+              <span className="text-gray-700">
+                {dataBill && dataBill.hotel.hotelName}
+              </span>
             </li>
           </ul>
         </div>
