@@ -7,25 +7,26 @@ import TableWithActions from "../organism/TableWithActions";
 import { useState } from "react";
 import ModalCrud from "../molecules/ModalCrud";
 import PropTypes from "prop-types";
+import NoHotelData from "/icons/belum-ada-hotel.svg";
 
 const tableHeaders3 = ["Nama Hotel", "Actions"];
 
 const initialTableData = [
-  {
-    "Nama Hotel": "Hotel Indonesia",
-  },
-  {
-    "Nama Hotel": "Hotel Bali",
-  },
-  {
-    "Nama Hotel": "Hotel Lombok",
-  },
-  {
-    "Nama Hotel": "Hotel Surabaya",
-  },
-  {
-    "Nama Hotel": "Hotel Bandung",
-  },
+  // {
+  //   "Nama Hotel": "Hotel Indonesia",
+  // },
+  // {
+  //   "Nama Hotel": "Hotel Bali",
+  // },
+  // {
+  //   "Nama Hotel": "Hotel Lombok",
+  // },
+  // {
+  //   "Nama Hotel": "Hotel Surabaya",
+  // },
+  // {
+  //   "Nama Hotel": "Hotel Bandung",
+  // },
 ];
 
 export default function Hotel({ handleHotelSelect }) {
@@ -115,13 +116,26 @@ export default function Hotel({ handleHotelSelect }) {
           <p className="text-slate-900 font-semibold text-xs">Tambah Hotel</p>
         </ActionButton>
       </div>
-      <TableWithActions
-        headers={tableHeaders3}
-        data={tableData}
-        onUpdate={handleEdit}
-        onDelete={handleDelete}
-        onRowClick={handleRowClick}
-      />
+
+      {tableData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <img
+            src={NoHotelData}
+            alt="Tidak ada hotel"
+            width={250}
+          />
+          <p className="text-gray-500 mt-4">Belum ada data hotel</p>
+        </div>
+      ) : (
+        <TableWithActions
+          headers={tableHeaders3}
+          data={tableData}
+          onUpdate={handleEdit}
+          onDelete={handleDelete}
+          onRowClick={handleRowClick}
+        />
+      )}
+
       <ModalCrud
         title="Tambah Hotel"
         isOpen={isAdding}
