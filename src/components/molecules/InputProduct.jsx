@@ -9,9 +9,12 @@ import { addBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import Select from "react-select";
 
-
-export default function InputProduct({ closeModal, isOpen, initialData, isEdit }) {
-
+export default function InputProduct({
+  closeModal,
+  isOpen,
+  initialData,
+  isEdit,
+}) {
   const dispatch = useDispatch();
   const { hotels } = useSelector((state) => state.hotel);
   const [inputs, setInputs] = useState([
@@ -85,7 +88,6 @@ export default function InputProduct({ closeModal, isOpen, initialData, isEdit }
     }
   };
 
-
   const handleSubmit = async (event) => {
     if (!selectedHotel) {
       alert("hotel not found");
@@ -152,11 +154,11 @@ export default function InputProduct({ closeModal, isOpen, initialData, isEdit }
       lineHeight: "1rem",
     }),
   };
+  const hotelArray = Array.isArray(hotels.hotel) ? hotels.hotel : [];
 
-  const handleSelectHotel = Array.isArray(hotels)
-    ? hotels.map((hotel) => ({ value: hotel.id, label: hotel.hotelName }))
+  const handleSelectHotel = hotelArray
+    ? hotelArray.map((hotel) => ({ value: hotel.id, label: hotel.hotelName }))
     : [];
-
 
   return isOpen ? (
     <div
@@ -255,9 +257,7 @@ export default function InputProduct({ closeModal, isOpen, initialData, isEdit }
             <Button
               backgroundColor="bg-custom-green-1"
               type="submit"
-
               text={isEdit ? "Simpan Perubahan" : "Buat Nota Baru"}
-
             />
           </div>
         </form>

@@ -17,6 +17,7 @@ const ExportBill = () => {
   const [bill, setBill] = useState(null);
   const [tableData2, setTableData2] = useState(null);
   const componentRef = useRef();
+  console.log(tableData2);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);

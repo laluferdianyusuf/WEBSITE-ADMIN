@@ -25,16 +25,12 @@ const initialTableData = [
   // },
 ];
 
-
 import {
   createProduct,
   updateProduct,
   deleteProduct,
   getProducts,
 } from "../../redux/slices/productSlice";
-
-const tableHeaders3 = ["Nama Produk", "Actions"];
-
 
 export default function Product() {
   const dispatch = useDispatch();
@@ -132,12 +128,47 @@ export default function Product() {
     product?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const getLastUpdateTime = (data) => {
+    if (!data || data.length === 0) return null;
+
+    const sortedData = [...data].sort(
+      (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+    );
+    console.log(sortedData);
+
+    return sortedData[0].updatedAt;
+  };
+
+  const lastUpdated = getLastUpdateTime(productArray);
+  const now = new Date();
+  const timeDifference = lastUpdated
+    ? Math.floor((now - new Date(lastUpdated)) / 1000)
+    : null;
+
+  let timeSinceUpdate = "Tidak ada data";
+  if (timeDifference !== null) {
+    const days = Math.floor(timeDifference / 86400);
+    const hours = Math.floor((timeDifference % 86400) / 3600);
+    const minutes = Math.floor((timeDifference % 3600) / 60);
+    const seconds = timeDifference % 60;
+
+    if (days > 0) {
+      timeSinceUpdate = `${days} hari, ${hours} jam yang lalu`;
+    } else if (hours > 0) {
+      timeSinceUpdate = `${hours} jam, ${minutes} menit yang lalu`;
+    } else if (minutes > 0) {
+      timeSinceUpdate = `${minutes} menit yang lalu`;
+    } else {
+      timeSinceUpdate = `${seconds} detik yang lalu`;
+    }
+  }
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
       <div>
         <h3 className="font-semibold text-xl mb-1">Manajemen Produk</h3>
         <p className="text-xs text-slate-500">
-          Terakhir di Update 1 Jam 24 Menit yang lalu
+          Terakhir di Update {timeSinceUpdate}
         </p>
       </div>
 
@@ -154,26 +185,21 @@ export default function Product() {
         </ActionButton>
       </div>
 
-      {tableData.length === 0 ? (
+      {filteredProducts.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
-          <img
-            src={NoProductFound}
-            alt="Tidak ada produk"
-            width={250}
-          />
+          <img src={NoProductFound} alt="Tidak ada produk" width={250} />
           <p className="text-gray-500 mt-2">Belum ada data produk</p>
         </div>
       ) : (
-       
-      <TableWithActions
-        headers={tableHeaders3}
-        data={filteredProducts.map((product) => ({
-          ProductName: product.name,
-        }))}
-        onUpdate={handleEdit}
-        onDelete={handleDelete}
-      />
-
+        <TableWithActions
+          headers={tableHeaders3}
+          data={filteredProducts.map((product) => ({
+            ProductName: product.name,
+          }))}
+          onUpdate={handleEdit}
+          onDelete={handleDelete}
+        />
+      )}
       <ModalCrud
         title="Tambah Produk"
         isOpen={isAdding}

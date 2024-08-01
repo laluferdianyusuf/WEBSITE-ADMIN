@@ -18,13 +18,12 @@ const InvoiceExport = () => {
   const location = useLocation();
   const [hotel, setHotel] = useState(null);
 
-  
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const stateString = urlParams.get("state");
     if (stateString) {
       const state = JSON.parse(decodeURIComponent(stateString));
-      setHotel(state.tableData2);
+      setHotel(state.data);
     }
   }, [location.search]);
 
@@ -46,7 +45,7 @@ const InvoiceExport = () => {
   //         remainingPayment -= remainingBill;
   //       } else {
   //         bill.total_dibayar += remainingPayment;
-  //         remainingPayment = 0;  
+  //         remainingPayment = 0;
   //       }
   //     }
   //   });
@@ -62,8 +61,10 @@ const InvoiceExport = () => {
   }
 
   const unpaidBills = hotel.bills.filter(
-    (bill) => bill.total_dibayar < bill.total_pesanan
+    (bill) => bill.total_dibayar <= bill.total_pesanan
   );
+
+  console.log(unpaidBills);
 
   const calculateTotals = () => {
     let totalAmount = 0;

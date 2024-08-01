@@ -50,7 +50,7 @@ export const updateHotel = createAsyncThunk(
 // Update hotel paid
 export const updateHotelPaid = createAsyncThunk(
   "hotel/updatePaid",
-  async ({ totalPaid, id }, { rejectWithValue }) => {
+  async ({ id, totalPaid }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
@@ -174,7 +174,7 @@ const hotelSlice = createSlice({
       .addCase(updateHotelPaid.fulfilled, (state, action) => {
         state.loading = false;
         const updatedHotel = action.payload.data;
-        state.hotels = state.hotels.hotel.map((hotel) =>
+        state.hotels = state.hotels.map((hotel) =>
           hotel.id === updatedHotel.id ? updatedHotel : hotel
         );
       })
@@ -221,7 +221,7 @@ const hotelSlice = createSlice({
       })
       .addCase(getDetailHotels.fulfilled, (state, action) => {
         state.loading = false;
-        state.hotels = action.payload.data;
+        state.hotels = [action.payload.data];
       })
       .addCase(getDetailHotels.rejected, (state, action) => {
         state.loading = false;

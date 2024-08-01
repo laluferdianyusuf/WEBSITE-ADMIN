@@ -8,7 +8,11 @@ export default function Table({ headers, data, total, sisa, onRowClick }) {
     <div className="overflow-auto no-scrollbar rounded-lg shadow-sm border w-full">
       <table className="w-full">
         <TableHeader headers={headers} />
-        <TableBody data={data} columns={headers} onRowClick={onRowClick ? onRowClick : null} />
+        <TableBody
+          data={data}
+          columns={headers}
+          onRowClick={onRowClick ? onRowClick : null}
+        />
         {sisa && total && (
           <TableFooter
             total={sisa}

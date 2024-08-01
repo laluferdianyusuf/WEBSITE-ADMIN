@@ -48,6 +48,7 @@ const Admin = () => {
   };
 
   const handleBillSelect = (bill) => {
+    console.log(bill);
     setSelectedBill(bill);
     setActiveMenu("BillsDetail");
   };

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Table from "../organism/Table";
@@ -9,6 +8,7 @@ import InputProduct from "../molecules/InputProduct";
 import ModalCrud from "../molecules/ModalCrud";
 import { useSelector, useDispatch } from "react-redux";
 import { getDetailBill } from "../../redux/slices/billSlice";
+import BackButton from "../atoms/BackButton";
 
 const tableHeaders2 = [
   "No",
@@ -18,10 +18,13 @@ const tableHeaders2 = [
   "Jumlah Harga",
 ];
 
-const BillDetail = ({ onBack, bill }) => {
+export default function BillDetail({ onBack, bill }) {
   const dispatch = useDispatch();
-  const { bills, loading, error } = useSelector((state) => state.bill);
+  const { loading, error } = useSelector((state) => state.bill);
   const [dataBill, setDataBill] = useState(null);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedBill, setSelectedBill] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +37,7 @@ const BillDetail = ({ onBack, bill }) => {
     };
 
     fetchData();
-  }, [dispatch, bill]);
+  }, [dispatch, bill.id]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading bill details.</p>;
@@ -53,11 +56,6 @@ const BillDetail = ({ onBack, bill }) => {
     "Harga / Unit": order.productPrice,
     "Jumlah Harga": parseFloat(order.total),
   }));
-
-const BillDetail = ({ onBack, bill }) => {
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedBill, setSelectedBill] = useState(null);
 
   const handleEditClick = () => {
     setEditModalOpen(true);
@@ -108,10 +106,11 @@ const BillDetail = ({ onBack, bill }) => {
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
       <div className="mb-2">
-        <h3 className="font-semibold text-xl mb-1">
+        <h3 className="font-semibold text-xl mb-1 flex items-center gap-3">
+          <BackButton onClick={onBack} />
           {dataBill && dataBill.hotel.hotelName}
         </h3>
-        <div className="breadcrumbs text-sm">
+        <div className="ms-12 breadcrumbs text-sm">
           <ul className="flex gap-2">
             <li>
               <button
@@ -143,7 +142,9 @@ const BillDetail = ({ onBack, bill }) => {
           <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>
         </ActionButton>
       </div>
-      <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
+      <div className="ms-12 overflow-auto no-scrollbar">
+        <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
+      </div>
       <InputProduct
         isOpen={isEditModalOpen}
         closeModal={handleCloseEditModal}
@@ -167,11 +168,9 @@ const BillDetail = ({ onBack, bill }) => {
       />
     </div>
   );
-};
+}
 
 BillDetail.propTypes = {
   bill: PropTypes.object.isRequired,
   onBack: PropTypes.func.isRequired,
 };
-
-export default BillDetail;

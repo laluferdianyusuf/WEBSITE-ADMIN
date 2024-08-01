@@ -1,42 +1,22 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
 import { GoDownload } from "react-icons/go";
 import { PiHandCoinsLight } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-
 import Table from "../organism/Table";
 import ActionButton from "../atoms/ActionButton";
 import SuccessNotification from "../atoms/SuccessNotification";
 import InputNotaField from "../molecules/InputNotaField";
 import Button from "../atoms/Button";
-
+import BackButton from "../atoms/BackButton";
 import { useEffect, useState } from "react";
-import { getDetailHotels } from "../../redux/slices/hotelSlice";
+import {
+  getDetailHotels,
+  updateHotelPaid,
+} from "../../redux/slices/hotelSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-
 const tableHeaders = ["Tanggal", "Total Tagihan"];
-
-const tableData = [
-  {
-    Tanggal: "12/07/2022",
-    "Total Tagihan": 5000000,
-  },
-  {
-    Tanggal: "09/12/2024",
-    "Total Tagihan": 100000,
-  },
-  {
-    Tanggal: "10/01/2025",
-    "Total Tagihan": 7500000,
-  },
-  {
-    Tanggal: "28/03/2021",
-    "Total Tagihan": 2500000,
-  },
-];
-
 const tableData2 = {
   id: 1,
   nama_hotel: "Hotel A",
@@ -120,43 +100,35 @@ const tableData2 = {
   ],
 };
 
-const totalHarga = tableData.reduce(
-  (sum, item) => sum + item["Total Tagihan"],
-  0
-);
-
-
 export default function HotelDetail({ onBack, hotel }) {
   const dispatch = useDispatch();
-  const { bills, loading, error } = useSelector((state) => state.bill);
+  const { loading, error } = useSelector((state) => state.hotel);
   const [dataHotel, setDataHotel] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await dispatch(getDetailHotels(hotel.id));
-        setDataHotel(result.payload.data.hotel);
-      } catch (err) {
-        console.error("Failed to fetch bill details:", err);
-      }
-    };
-
-    fetchData();
-  }, [dispatch, hotel]);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading bill details.</p>;
-  const hotelsBill = dataHotel?.bills || [];
   const [sisa, setSisa] = useState(0);
   const [isPaying, setIsPaying] = useState(false);
   const [totalBayar, setTotalBayar] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    const isPaid = Math.random() > 0.5;
-    setSisa(isPaid ? 0 : 50000000 - totalHarga);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const result = await dispatch(getDetailHotels(hotel.id));
+        const hotelData = result.payload.data.hotel;
+        setDataHotel(hotelData);
+        const totalBills = hotelData.totalBills || 0;
+        const totalPaid = hotelData.totalPaid || 0;
+        setSisa(totalBills - totalPaid);
+      } catch (err) {
+        console.error("Failed to fetch hotel details:", err);
+      }
+    };
 
+    fetchData();
+  }, [dispatch, hotel.id]);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading hotel details.</p>;
+
+  const hotelsBill = dataHotel?.bills || [];
 
   const handlePaying = () => {
     setIsPaying(true);
@@ -167,28 +139,29 @@ export default function HotelDetail({ onBack, hotel }) {
     setTotalBayar("");
   };
 
-  const handleConfirmPay = () => {
-    const value = parseInt(totalBayar.replace(/\./g, ""));
-    setSisa((prevValue) => prevValue - value);
+  const handleConfirmPay = async () => {
+    const value = parseFloat(totalBayar.replace(/\./g, "").replace(/,/g, "."));
+    if (isNaN(value)) {
+      console.error("Invalid totalBayar value");
+      return;
+    }
+    setSisa((prevValue) => {
+      const newValue = prevValue - value;
+      return isNaN(newValue) ? prevValue : newValue;
+    });
     setIsPaying(false);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
+
+    try {
+      await dispatch(updateHotelPaid({ id: hotel.id, totalPaid: value }));
+    } catch (error) {
+      console.error("Failed to update hotel paid amount:", error);
+    }
   };
 
   const onChangeInput = (event) => {
     setTotalBayar(event.target.value);
-  };
-
-  const handleExportClick = () => {
-    const state = {
-      tableData2,
-    };
-    const stateString = encodeURIComponent(JSON.stringify(state));
-    window.open(
-      `/#/invoiceexport?state=${stateString}`,
-      "_blank",
-      `noopener,noreferrer`
-    );
   };
 
   const formatDate = (dateString) => {
@@ -196,9 +169,50 @@ export default function HotelDetail({ onBack, hotel }) {
     return new Date(dateString).toLocaleDateString("id-ID", options);
   };
 
-  const tableDataHotel = hotelsBill.map((hotel) => ({
-    Tanggal: formatDate(hotel.createdAt),
-    "Total Tagihan": hotel.ordersTotal,
+  const formatDate2 = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleExportClick = () => {
+    if (!dataHotel) {
+      console.error("Hotel data is not available for export.");
+      return;
+    }
+    const data = {
+      id: dataHotel.id,
+      nama_hotel: dataHotel.hotelName,
+      total_bayar: dataHotel.totalBills || 0,
+      total_bill: dataHotel.totalBills || 0,
+      bills: hotelsBill.map((bill) => ({
+        id: bill.id,
+        tanggal_nota: formatDate2(bill.createdAt) || 0,
+        total_dibayar: bill.ordersTotal || 0,
+        total_pesanan: bill.ordersTotal || 0,
+        orders: bill.orders.map((order) => ({
+          qty: order.quantity || 0,
+          nama_produk: order.productName || 0,
+          harga_produk: order.productPrice || 0,
+          total_harga: parseInt(order.total) || 0,
+        })),
+      })),
+    };
+
+    const stateString = encodeURIComponent(JSON.stringify({ data }));
+    window.open(
+      `/#/invoiceexport?state=${stateString}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+
+  const tableDataHotel = hotelsBill.map((bill) => ({
+    Tanggal: formatDate(bill.createdAt),
+    "Total Tagihan": bill.ordersTotal,
   }));
 
   const totalHarga = hotelsBill.reduce(
@@ -206,12 +220,14 @@ export default function HotelDetail({ onBack, hotel }) {
     0
   );
 
-
   return (
-    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
+    <div className=" px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
       <div className="mb-6">
-        <h3 className="font-semibold text-xl mb-1">{hotel["Nama Hotel"]}</h3>
-        <div className="breadcrumbs text-sm">
+        <h3 className="font-semibold text-xl mb-1 flex items-center gap-3">
+          <BackButton onClick={onBack} />
+          {hotel["Nama Hotel"]}
+        </h3>
+        <div className="breadcrumbs text-sm ms-12">
           <ul className="flex gap-2">
             <li>
               <button
@@ -227,7 +243,7 @@ export default function HotelDetail({ onBack, hotel }) {
           </ul>
         </div>
       </div>
-      <div className="flex justify-between mb-5">
+      <div className="flex justify-between mb-5 ms-12">
         <div
           className={`w-fit px-2 py-2 rounded-lg text-white ${
             sisa === 0 ? "bg-custom-green-1" : "bg-red-500"
@@ -260,7 +276,7 @@ export default function HotelDetail({ onBack, hotel }) {
           </ActionButton>
         </div>
       </div>
-      <div className="grid grid-cols-3 w-1/2 text-xs text-slate-900 mb-5">
+      <div className="grid grid-cols-3 w-1/2 text-xs text-slate-900 mb-5 ms-12">
         <p>Total Tagihan</p>
         <p>:</p>
         <p>
@@ -312,14 +328,21 @@ export default function HotelDetail({ onBack, hotel }) {
         </div>
       )}
       {showSuccess && <SuccessNotification text="Pembayaran Berhasil" />}
-
-      <Table headers={tableHeaders} data={tableDataHotel} total={totalHarga} />
-
+      <div className="ms-12 overflow-auto no-scrollbar">
+        <Table
+          headers={tableHeaders}
+          data={tableDataHotel}
+          total={totalHarga}
+        />
+      </div>
     </div>
   );
 }
 
 HotelDetail.propTypes = {
   onBack: PropTypes.func.isRequired,
-  hotel: PropTypes.object,
+  hotel: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    nama: PropTypes.string.isRequired,
+  }).isRequired,
 };

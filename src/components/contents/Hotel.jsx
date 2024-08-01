@@ -15,7 +15,7 @@ import {
   getHotels,
 } from "../../redux/slices/hotelSlice";
 
-const tableHeaders3 = ["Nama Hotel", "Actions"];
+const tableHeaders3 = ["Nama Hotel", "ID", "Actions"];
 
 export default function Hotel({ handleHotelSelect }) {
   const dispatch = useDispatch();
@@ -34,7 +34,6 @@ export default function Hotel({ handleHotelSelect }) {
   const handleAdd = () => {
     setIsAdding(true);
     setInputHotel("");
-
   };
 
   const handleChangeHotel = (e) => {
@@ -112,12 +111,47 @@ export default function Hotel({ handleHotelSelect }) {
     id: hotel.id,
   }));
 
+  const getLastUpdateTime = (data) => {
+    if (!data || data.length === 0) return null;
+
+    const sortedData = [...data].sort(
+      (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+    );
+    console.log(sortedData);
+
+    return sortedData[0].updatedAt;
+  };
+
+  const lastUpdated = getLastUpdateTime(hotelsArray);
+  const now = new Date();
+  const timeDifference = lastUpdated
+    ? Math.floor((now - new Date(lastUpdated)) / 1000)
+    : null;
+
+  let timeSinceUpdate = "Tidak ada data";
+  if (timeDifference !== null) {
+    const days = Math.floor(timeDifference / 86400);
+    const hours = Math.floor((timeDifference % 86400) / 3600);
+    const minutes = Math.floor((timeDifference % 3600) / 60);
+    const seconds = timeDifference % 60;
+
+    if (days > 0) {
+      timeSinceUpdate = `${days} hari, ${hours} jam yang lalu`;
+    } else if (hours > 0) {
+      timeSinceUpdate = `${hours} jam, ${minutes} menit yang lalu`;
+    } else if (minutes > 0) {
+      timeSinceUpdate = `${minutes} menit yang lalu`;
+    } else {
+      timeSinceUpdate = `${seconds} detik yang lalu`;
+    }
+  }
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
       <div>
         <h3 className="font-semibold text-xl mb-1">Manajemen Hotel</h3>
         <p className="text-xs text-slate-500">
-          Terakhir di Update 1 Jam 24 Menit yang lalu
+          Terakhir di Update {timeSinceUpdate}
         </p>
       </div>
 
@@ -134,25 +168,20 @@ export default function Hotel({ handleHotelSelect }) {
         </ActionButton>
       </div>
 
-
-      {tableData.length === 0 ? (
+      {dataFilteredHotel.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
-          <img
-            src={NoHotelData}
-            alt="Tidak ada hotel"
-            width={250}
-          />
+          <img src={NoHotelData} alt="Tidak ada hotel" width={250} />
           <p className="text-gray-500 mt-4">Belum ada data hotel</p>
         </div>
       ) : (
-
-      <TableWithActions
-        headers={tableHeaders3}
-        data={dataFilteredHotel}
-        onUpdate={handleEdit}
-        onDelete={handleDelete}
-        onRowClick={handleRowClick}
-      />
+        <TableWithActions
+          headers={tableHeaders3}
+          data={dataFilteredHotel}
+          onUpdate={handleEdit}
+          onDelete={handleDelete}
+          onRowClick={handleRowClick}
+        />
+      )}
       <ModalCrud
         title="Tambah Hotel"
         isOpen={isAdding}
