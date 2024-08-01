@@ -9,13 +9,16 @@ import { addBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import Select from "react-select";
 
-export default function InputProduct({ closeModal, isOpen }) {
+
+export default function InputProduct({ closeModal, isOpen, initialData, isEdit }) {
+
   const dispatch = useDispatch();
   const { hotels } = useSelector((state) => state.hotel);
   const [inputs, setInputs] = useState([
     { item: "", quantity: "", harga_unit: "", total_harga: "" },
   ]);
   const [selectedHotel, setSelectedHotel] = useState(null);
+
   const [totalHarga, setTotalHarga] = useState(0);
 
   useEffect(() => {
@@ -81,6 +84,7 @@ export default function InputProduct({ closeModal, isOpen }) {
       closeModal();
     }
   };
+
 
   const handleSubmit = async (event) => {
     if (!selectedHotel) {
@@ -153,6 +157,7 @@ export default function InputProduct({ closeModal, isOpen }) {
     ? hotels.map((hotel) => ({ value: hotel.id, label: hotel.hotelName }))
     : [];
 
+
   return isOpen ? (
     <div
       className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40"
@@ -163,7 +168,9 @@ export default function InputProduct({ closeModal, isOpen }) {
           <h4 className="text-slate-300 text-[10px] mb-1">
             UD TIMUR JAYA RAYA
           </h4>
-          <h3 className="text-slate-900 text-lg">Buat Nota Baru</h3>
+          <h3 className="text-slate-900 text-lg">
+            {isEdit ? "Edit Nota" : "Buat Nota Baru"}
+          </h3>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="w-11/12 mb-3">
@@ -196,7 +203,7 @@ export default function InputProduct({ closeModal, isOpen }) {
               <InputNotaField
                 label="Quantity"
                 name="quantity"
-                type="number"
+                type="text"
                 placeholder="Jumlah"
                 value={input.quantity}
                 onChange={(e) => handleInputChange(index, e)}
@@ -248,7 +255,9 @@ export default function InputProduct({ closeModal, isOpen }) {
             <Button
               backgroundColor="bg-custom-green-1"
               type="submit"
-              text="Buat Nota Baru"
+
+              text={isEdit ? "Simpan Perubahan" : "Buat Nota Baru"}
+
             />
           </div>
         </form>
@@ -260,4 +269,6 @@ export default function InputProduct({ closeModal, isOpen }) {
 InputProduct.propTypes = {
   closeModal: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  initialData: PropTypes.object,
+  isEdit: PropTypes.bool,
 };

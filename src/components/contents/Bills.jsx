@@ -6,8 +6,9 @@ import { GrAddCircle } from "react-icons/gr";
 import Table from "../organism/Table";
 import InputProduct from "../molecules/InputProduct";
 import PropTypes from "prop-types";
-import { listBills } from "../../redux/slices/billSlice";
 
+import NoBillData from "/icons/belum-ada-nota.svg";
+import { listBills } from "../../redux/slices/billSlice";
 const tableHeaders = ["Tanggal", "Nama Hotel", "Total Tagihan"];
 
 export default function Bills({ handleBillSelect }) {
@@ -78,12 +79,23 @@ export default function Bills({ handleBillSelect }) {
           <p className="text-slate-900 font-semibold text-xs">Tambah produk</p>
         </ActionButton>
       </div>
+      {tableData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <img
+            src={NoBillData}
+            alt="Tidak ada hotel"
+            width={250}
+          />
+          <p className="text-gray-500 mt-2">Belum ada data nota</p>
+        </div>
+      ) : (
 
       <Table
         headers={tableHeaders}
         data={dataFiltered}
         onRowClick={handleRowClick}
       />
+
 
       <InputProduct isOpen={isOpen} closeModal={closeModal} />
     </div>

@@ -80,7 +80,7 @@ export default function Input({
 Input.propTypes = {
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
   isDisabled: PropTypes.bool,

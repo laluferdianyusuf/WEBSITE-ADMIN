@@ -5,6 +5,27 @@ import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import ModalCrud from "../molecules/ModalCrud";
+
+import NoProductFound from "/icons/belum-ada-produk.svg";
+
+const tableHeaders3 = ["Nama Produk", "Actions"];
+
+const initialTableData = [
+  // {
+  //   "Nama Produk": "Pulpen",
+  // },
+  // {
+  //   "Nama Produk": "Penggaris",
+  // },
+  // {
+  //   "Nama Produk": "Penghapus",
+  // },
+  // {
+  //   "Nama Produk": "Penggaris",
+  // },
+];
+
+
 import {
   createProduct,
   updateProduct,
@@ -13,6 +34,7 @@ import {
 } from "../../redux/slices/productSlice";
 
 const tableHeaders3 = ["Nama Produk", "Actions"];
+
 
 export default function Product() {
   const dispatch = useDispatch();
@@ -131,6 +153,18 @@ export default function Product() {
           <p className="text-slate-900 font-semibold text-xs">Tambah Produk</p>
         </ActionButton>
       </div>
+
+      {tableData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <img
+            src={NoProductFound}
+            alt="Tidak ada produk"
+            width={250}
+          />
+          <p className="text-gray-500 mt-2">Belum ada data produk</p>
+        </div>
+      ) : (
+       
       <TableWithActions
         headers={tableHeaders3}
         data={filteredProducts.map((product) => ({
@@ -139,6 +173,7 @@ export default function Product() {
         onUpdate={handleEdit}
         onDelete={handleDelete}
       />
+
       <ModalCrud
         title="Tambah Produk"
         isOpen={isAdding}

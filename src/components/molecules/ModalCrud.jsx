@@ -47,7 +47,7 @@ ModalCrud.propTypes = {
   functionOk: PropTypes.func,
   textCancel: PropTypes.string,
   textOk: PropTypes.string,
-  inputValue: PropTypes.string,
+  inputValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
   inputName: PropTypes.string,
   inputPlaceholder: PropTypes.string,

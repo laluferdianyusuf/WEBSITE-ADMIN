@@ -5,6 +5,9 @@ import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import ModalCrud from "../molecules/ModalCrud";
+
+import PropTypes from "prop-types";
+import NoHotelData from "/icons/belum-ada-hotel.svg";
 import {
   createHotel,
   updateHotel,
@@ -30,7 +33,8 @@ export default function Hotel({ handleHotelSelect }) {
 
   const handleAdd = () => {
     setIsAdding(true);
-    setInputHotel(""); // Clear input field
+    setInputHotel("");
+
   };
 
   const handleChangeHotel = (e) => {
@@ -129,6 +133,19 @@ export default function Hotel({ handleHotelSelect }) {
           <p className="text-slate-900 font-semibold text-xs">Tambah Hotel</p>
         </ActionButton>
       </div>
+
+
+      {tableData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <img
+            src={NoHotelData}
+            alt="Tidak ada hotel"
+            width={250}
+          />
+          <p className="text-gray-500 mt-4">Belum ada data hotel</p>
+        </div>
+      ) : (
+
       <TableWithActions
         headers={tableHeaders3}
         data={dataFilteredHotel}
