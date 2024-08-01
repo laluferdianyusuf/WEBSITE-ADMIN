@@ -1,99 +1,116 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../atoms/SearchBar";
 import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
-import { useState } from "react";
 import ModalCrud from "../molecules/ModalCrud";
+
 import PropTypes from "prop-types";
 import NoHotelData from "/icons/belum-ada-hotel.svg";
+import {
+  createHotel,
+  updateHotel,
+  deleteHotel,
+  getHotels,
+} from "../../redux/slices/hotelSlice";
 
 const tableHeaders3 = ["Nama Hotel", "Actions"];
 
-const initialTableData = [
-  // {
-  //   "Nama Hotel": "Hotel Indonesia",
-  // },
-  // {
-  //   "Nama Hotel": "Hotel Bali",
-  // },
-  // {
-  //   "Nama Hotel": "Hotel Lombok",
-  // },
-  // {
-  //   "Nama Hotel": "Hotel Surabaya",
-  // },
-  // {
-  //   "Nama Hotel": "Hotel Bandung",
-  // },
-];
-
 export default function Hotel({ handleHotelSelect }) {
-  const [tableData, setTableData] = useState(initialTableData);
+  const dispatch = useDispatch();
+  const { hotels, loading, error } = useSelector((state) => state.hotel);
   const [inputHotel, setInputHotel] = useState("");
   const [currentHotelIndex, setCurrentHotelIndex] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    dispatch(getHotels());
+  }, [dispatch]);
 
   const handleAdd = () => {
     setIsAdding(true);
     setInputHotel("");
+
   };
 
   const handleChangeHotel = (e) => {
     setInputHotel(e.target.value);
   };
 
-  const handleCloseAdd = () => {
-    setIsAdding(false);
-  };
-
-  const handleCloseEdit = () => {
-    setIsEditing(false);
-  };
-
-  const handleCloseDelete = () => {
-    setIsDeleting(false);
-  };
+  const handleCloseAdd = () => setIsAdding(false);
+  const handleCloseEdit = () => setIsEditing(false);
+  const handleCloseDelete = () => setIsDeleting(false);
 
   const handleEdit = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(tableData[index]["Nama Hotel"]);
+    setInputHotel(hotels.hotel[index].hotelName);
     setIsEditing(true);
   };
 
   const handleDelete = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(tableData[index]["Nama Hotel"]);
+    setInputHotel(hotels.hotel[index].hotelName);
     setIsDeleting(true);
   };
 
-  const handleSaveDelete = () => {
-    const updatedData = tableData.filter((_, idx) => idx !== currentHotelIndex);
-    setTableData(updatedData);
-    handleCloseDelete();
+  const handleSaveDelete = async () => {
+    try {
+      const hotelId = hotels.hotel[currentHotelIndex].id;
+      await dispatch(deleteHotel(hotelId)).unwrap();
+      dispatch(getHotels());
+      handleCloseDelete();
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
   };
 
-  const handleSaveEdit = () => {
-    const updatedData = [...tableData];
-    updatedData[currentHotelIndex]["Nama Hotel"] = inputHotel;
-    setTableData(updatedData);
-    handleCloseEdit();
+  const handleSaveEdit = async () => {
+    try {
+      const hotelId = hotels.hotel[currentHotelIndex].id;
+      await dispatch(
+        updateHotel({ hotelName: inputHotel, id: hotelId })
+      ).unwrap();
+      dispatch(getHotels());
+      handleCloseEdit();
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
   };
 
-  const handleSaveAdd = () => {
-    const newHotel = {
-      "Nama Hotel": inputHotel,
-    };
-    setTableData([...tableData, newHotel]);
-    handleCloseAdd();
+  const handleSaveAdd = async () => {
+    try {
+      await dispatch(createHotel({ hotelName: inputHotel })).unwrap();
+      dispatch(getHotels());
+      handleCloseAdd();
+    } catch (err) {
+      console.error("Add failed:", err);
+    }
   };
 
   const handleRowClick = (hotelId) => {
     handleHotelSelect(hotelId);
   };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const hotelsArray = Array.isArray(hotels.hotel) ? hotels.hotel : [];
+
+  const filteredHotels = hotelsArray.filter((hotel) =>
+    hotel.hotelName
+      ? hotel.hotelName.toLowerCase().includes(searchQuery.toLowerCase())
+      : false
+  );
+
+  const dataFilteredHotel = filteredHotels.map((hotel, index) => ({
+    "Nama Hotel": hotel.hotelName,
+    id: hotel.id,
+  }));
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
@@ -107,8 +124,8 @@ export default function Hotel({ handleHotelSelect }) {
       <div className="flex justify-between items-center">
         <div className="w-1/3">
           <SearchBar
-            onSearch={(e) => console.log(e.target.value)}
-            placeholder="Cari dari total 6 data..."
+            onSearch={handleSearch}
+            placeholder={`Cari dari total ${hotelsArray.length} data...`}
           />
         </div>
         <ActionButton onClick={handleAdd}>
@@ -116,6 +133,7 @@ export default function Hotel({ handleHotelSelect }) {
           <p className="text-slate-900 font-semibold text-xs">Tambah Hotel</p>
         </ActionButton>
       </div>
+
 
       {tableData.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
@@ -127,15 +145,14 @@ export default function Hotel({ handleHotelSelect }) {
           <p className="text-gray-500 mt-4">Belum ada data hotel</p>
         </div>
       ) : (
-        <TableWithActions
-          headers={tableHeaders3}
-          data={tableData}
-          onUpdate={handleEdit}
-          onDelete={handleDelete}
-          onRowClick={handleRowClick}
-        />
-      )}
 
+      <TableWithActions
+        headers={tableHeaders3}
+        data={dataFilteredHotel}
+        onUpdate={handleEdit}
+        onDelete={handleDelete}
+        onRowClick={handleRowClick}
+      />
       <ModalCrud
         title="Tambah Hotel"
         isOpen={isAdding}
@@ -174,13 +191,9 @@ export default function Hotel({ handleHotelSelect }) {
         textOk="Hapus"
         textCancel="Batal"
         inputType="text"
-        functionCancel={() => setIsDeleting(false)}
+        functionCancel={handleCloseDelete}
         functionOk={handleSaveDelete}
       />
     </div>
   );
 }
-
-Hotel.propTypes = {
-  handleHotelSelect: PropTypes.func,
-};

@@ -1,44 +1,25 @@
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../atoms/SearchBar";
 import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import Table from "../organism/Table";
-import { useState } from "react";
 import InputProduct from "../molecules/InputProduct";
 import PropTypes from "prop-types";
+
 import NoBillData from "/icons/belum-ada-nota.svg";
-
+import { listBills } from "../../redux/slices/billSlice";
 const tableHeaders = ["Tanggal", "Nama Hotel", "Total Tagihan"];
-
-const tableData = [
-  // {
-  //   Tanggal: "12/07/2022",
-  //   "Nama Hotel": "Hotel Indonesia",
-  //   "Total Tagihan": 5000000,
-  // },
-  // {
-  //   Tanggal: "09/12/2024",
-  //   "Nama Hotel": "Hotel Bali",
-  //   "Total Tagihan": 0,
-  // },
-  // {
-  //   Tanggal: "10/01/2025",
-  //   "Nama Hotel": "Hotel Lombok",
-  //   "Total Tagihan": 7500000,
-  // },
-  // {
-  //   Tanggal: "28/03/2021",
-  //   "Nama Hotel": "Hotel Surabaya",
-  //   "Total Tagihan": 2500000,
-  // },
-  // {
-  //   Tanggal: "29/04/2022",
-  //   "Nama Hotel": "Hotel Bandung",
-  //   "Total Tagihan": 0,
-  // },
-];
 
 export default function Bills({ handleBillSelect }) {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { bills, loading, error } = useSelector((state) => state.bill);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    dispatch(listBills());
+  }, [dispatch]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -52,6 +33,31 @@ export default function Bills({ handleBillSelect }) {
     handleBillSelect(billId);
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const billsArray = Array.isArray(bills.bills) ? bills.bills : [];
+
+  const filteredBills = billsArray.filter(
+    (bill) =>
+      (bill.hotelName &&
+        bill.hotelName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (bill.date && bill.date.includes(searchQuery))
+  );
+
+  const dataFiltered = filteredBills.map((bill) => ({
+    Tanggal: bill.date,
+    "Nama Hotel": bill.hotelName,
+    "Total Tagihan": bill.total,
+    id: bill.billId,
+    orders: bill.orders.map((order) => ({
+      name: order.productName,
+      price: order.productPrice,
+      quantity: order.quantity,
+    })),
+  }));
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
       <div>
@@ -64,8 +70,8 @@ export default function Bills({ handleBillSelect }) {
       <div className="flex justify-between items-center">
         <div className="w-1/3">
           <SearchBar
-            onSearch={(e) => console.log(e.target.value)}
-            placeholder="Cari dari total 255 data..."
+            onSearch={handleSearch}
+            placeholder={`Cari dari total ${billsArray.length} data...`}
           />
         </div>
         <ActionButton onClick={openModal}>
@@ -83,12 +89,14 @@ export default function Bills({ handleBillSelect }) {
           <p className="text-gray-500 mt-2">Belum ada data nota</p>
         </div>
       ) : (
-        <Table
-          headers={tableHeaders}
-          data={tableData}
-          onRowClick={handleRowClick}
-        />
-      )}
+
+      <Table
+        headers={tableHeaders}
+        data={dataFiltered}
+        onRowClick={handleRowClick}
+      />
+
+
       <InputProduct isOpen={isOpen} closeModal={closeModal} />
     </div>
   );

@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const uri = "http://localhost:1010";
+const uri = "http://localhost:2500";
 
-// admin registration
+// Admin registration
 export const adminRegister = createAsyncThunk(
   "admin/register",
   async (admin, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${uri}/api/v7/register`, admin);
+      const response = await axios.post(`${uri}/api/v1/user/register`, admin);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -16,12 +16,31 @@ export const adminRegister = createAsyncThunk(
   }
 );
 
-// admin login
+// Admin login
 export const adminLogin = createAsyncThunk(
   "admin/login",
   async (admin, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${uri}/api/v7/login`, admin);
+      const response = await axios.post(`${uri}/api/v1/user/login`, admin);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// Get current user
+export const currentUser = createAsyncThunk(
+  "admin/current",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${uri}/api/v1/user/current`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -41,39 +60,53 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.admin = null;
+      state.admin = {};
       state.token = null;
       localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
     builder
-      // registration states
+      // Registration states
       .addCase(adminRegister.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(adminRegister.fulfilled, (state, action) => {
         state.loading = false;
-        state.admin = action.payload;
+        state.admin = action.payload.data;
       })
       .addCase(adminRegister.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // login states
+      // Login states
       .addCase(adminLogin.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(adminLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.admin = action.payload.admin;
-        state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token);
+        state.admin = action.payload.data.user;
+        state.token = action.payload.data.user;
+        localStorage.setItem("token", action.payload.data.user);
       })
       .addCase(adminLogin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Current user states
+      .addCase(currentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(currentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.admin = action.payload.data;
+      })
+      .addCase(currentUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

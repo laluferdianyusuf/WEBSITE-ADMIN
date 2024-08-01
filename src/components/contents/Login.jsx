@@ -6,14 +6,12 @@ import PropTypes from "prop-types";
 export default function Login({ onLogin }) {
   const [isLoginFailed, setIsLoginFailed] = useState(false);
 
-  const handleLogin = (username, password) => {
-    const isLoginSuccessful = username === "admin" && password === "password";
+  const handleLoginSuccess = (response) => {
+    onLogin(response);
+  };
 
-    if (isLoginSuccessful) {
-      onLogin();
-    } else {
-      setIsLoginFailed(true);
-    }
+  const handleLoginFailure = () => {
+    setIsLoginFailed(true);
   };
 
   const handleCloseModal = () => {
@@ -31,7 +29,10 @@ export default function Login({ onLogin }) {
             Silahkan login untuk mengakses database anda
           </p>
         </div>
-        <LoginForm handleSubmit={handleLogin} />
+        <LoginForm
+          onLoginSuccess={handleLoginSuccess}
+          onLoginFailure={handleLoginFailure}
+        />
       </div>
       <ModalConfirmation
         headText="Login Gagal"

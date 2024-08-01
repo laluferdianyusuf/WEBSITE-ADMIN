@@ -4,11 +4,17 @@ import { GoDownload } from "react-icons/go";
 import { PiHandCoinsLight } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+
 import Table from "../organism/Table";
 import ActionButton from "../atoms/ActionButton";
 import SuccessNotification from "../atoms/SuccessNotification";
 import InputNotaField from "../molecules/InputNotaField";
 import Button from "../atoms/Button";
+
+import { useEffect, useState } from "react";
+import { getDetailHotels } from "../../redux/slices/hotelSlice";
+import { useSelector, useDispatch } from "react-redux";
+
 
 const tableHeaders = ["Tanggal", "Total Tagihan"];
 
@@ -119,7 +125,28 @@ const totalHarga = tableData.reduce(
   0
 );
 
+
 export default function HotelDetail({ onBack, hotel }) {
+  const dispatch = useDispatch();
+  const { bills, loading, error } = useSelector((state) => state.bill);
+  const [dataHotel, setDataHotel] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await dispatch(getDetailHotels(hotel.id));
+        setDataHotel(result.payload.data.hotel);
+      } catch (err) {
+        console.error("Failed to fetch bill details:", err);
+      }
+    };
+
+    fetchData();
+  }, [dispatch, hotel]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading bill details.</p>;
+  const hotelsBill = dataHotel?.bills || [];
   const [sisa, setSisa] = useState(0);
   const [isPaying, setIsPaying] = useState(false);
   const [totalBayar, setTotalBayar] = useState("");
@@ -129,6 +156,7 @@ export default function HotelDetail({ onBack, hotel }) {
     const isPaid = Math.random() > 0.5;
     setSisa(isPaid ? 0 : 50000000 - totalHarga);
   }, []);
+
 
   const handlePaying = () => {
     setIsPaying(true);
@@ -162,6 +190,22 @@ export default function HotelDetail({ onBack, hotel }) {
       `noopener,noreferrer`
     );
   };
+
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "2-digit", year: "2-digit" };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
+  };
+
+  const tableDataHotel = hotelsBill.map((hotel) => ({
+    Tanggal: formatDate(hotel.createdAt),
+    "Total Tagihan": hotel.ordersTotal,
+  }));
+
+  const totalHarga = hotelsBill.reduce(
+    (sum, item) => sum + parseFloat(item.ordersTotal),
+    0
+  );
+
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
@@ -231,7 +275,7 @@ export default function HotelDetail({ onBack, hotel }) {
           {sisa.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}
         </p>
       </div>
-      <Table headers={tableHeaders} data={tableData} total={totalHarga} />
+
       {isPaying && (
         <div className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
           <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-[40%] max-h-[90vh] overflow-y-auto">
@@ -268,6 +312,9 @@ export default function HotelDetail({ onBack, hotel }) {
         </div>
       )}
       {showSuccess && <SuccessNotification text="Pembayaran Berhasil" />}
+
+      <Table headers={tableHeaders} data={tableDataHotel} total={totalHarga} />
+
     </div>
   );
 }

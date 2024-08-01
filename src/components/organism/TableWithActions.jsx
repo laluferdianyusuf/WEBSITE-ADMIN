@@ -9,7 +9,7 @@ export default function TableWithActions({
   onRowClick = null,
 }) {
   return (
-    <div className="overflow-hidden border border-slate-200 rounded-lg shadow-sm w-full text-xs">
+    <div className="overflow-auto no-scrollbar border border-slate-200 rounded-lg shadow-sm w-full text-xs">
       <table className="w-full">
         <thead className="bg-custom-blue-1">
           <tr>

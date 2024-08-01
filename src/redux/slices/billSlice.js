@@ -1,20 +1,47 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const uri = "http://localhost:1010";
+const uri = "http://localhost:2500";
 
 // bills registration
 export const addBills = createAsyncThunk(
-  "bills/add",
-  async (bills, { rejectWithValue }) => {
+  "bills/create",
+  async (billData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${uri}/api/v1/add/bills`, bills, {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${uri}/api/v2/bills/create`,
+        billData,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// bills by id
+export const getDetailBill = createAsyncThunk(
+  "bills/hotel/id",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${uri}/api/v2/bills/details/${id}`, {
         headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
           "Access-Control-Allow-Credentials": true,
+          Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -27,13 +54,15 @@ export const listBills = createAsyncThunk(
   "bills/list",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${uri}/api/v1/list/bills`, {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${uri}/api/v2/bills/detail`, {
         headers: {
-          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
           "Access-Control-Allow-Credentials": true,
         },
       });
-      return response.data.data.bills;
+      console.log(response);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -42,7 +71,6 @@ export const listBills = createAsyncThunk(
 
 const initialState = {
   bills: {},
-  token: null,
   loading: false,
   error: null,
 };
@@ -50,11 +78,7 @@ const initialState = {
 const billsSlice = createSlice({
   name: "bills",
   initialState,
-  reducers: {
-    bills: (state, payload) => {
-      state.bills = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // registration bills states
@@ -64,9 +88,23 @@ const billsSlice = createSlice({
       })
       .addCase(addBills.fulfilled, (state, action) => {
         state.loading = false;
-        state.schools = action.payload;
+        state.bills = action.payload.data;
       })
       .addCase(addBills.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // list bills by hotel id states
+      .addCase(getDetailBill.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getDetailBill.fulfilled, (state, action) => {
+        state.loading = false;
+        state.bills = action.payload.data;
+      })
+      .addCase(getDetailBill.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -78,7 +116,7 @@ const billsSlice = createSlice({
       })
       .addCase(listBills.fulfilled, (state, action) => {
         state.loading = false;
-        state.schools = action.payload;
+        state.bills = action.payload.data;
       })
       .addCase(listBills.rejected, (state, action) => {
         state.loading = false;
