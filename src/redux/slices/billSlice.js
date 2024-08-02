@@ -69,6 +69,26 @@ export const listBills = createAsyncThunk(
   }
 );
 
+// delete bill
+export const deleteBill = createAsyncThunk(
+  "bills/delete",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${uri}/api/v2/bills/delete/${id}`, {
+        headers: {
+          "Access-Control-Allow-Credentials": true,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   bills: {},
   loading: false,
@@ -119,6 +139,24 @@ const billsSlice = createSlice({
         state.bills = action.payload.data;
       })
       .addCase(listBills.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Delete bill states
+      .addCase(deleteBill.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteBill.fulfilled, (state, action) => {
+        state.loading = false;
+        if (Array.isArray(state.bills.data)) {
+          state.bills.data = state.bills.data.filter(
+            (bill) => bill.id !== action.payload.data.id
+          );
+        }
+      })
+      .addCase(deleteBill.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

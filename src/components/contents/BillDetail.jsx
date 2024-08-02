@@ -7,7 +7,7 @@ import { FiEdit2 } from "react-icons/fi";
 import InputProduct from "../molecules/InputProduct";
 import ModalCrud from "../molecules/ModalCrud";
 import { useSelector, useDispatch } from "react-redux";
-import { getDetailBill } from "../../redux/slices/billSlice";
+import { getDetailBill, deleteBill } from "../../redux/slices/billSlice";
 import BackButton from "../atoms/BackButton";
 
 const tableHeaders2 = [
@@ -25,6 +25,7 @@ export default function BillDetail({ onBack, bill }) {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,11 +74,20 @@ export default function BillDetail({ onBack, bill }) {
   const handleCloseDeleteModal = () => {
     setDeleteModalOpen(false);
     setSelectedBill(null);
+    setDeleteError(null);
   };
 
-  const confirmDelete = () => {
-    console.log("Deleting bill:", selectedBill);
-    handleCloseDeleteModal();
+  const confirmDelete = async () => {
+    try {
+      console.log(selectedBill);
+
+      await dispatch(deleteBill(selectedBill.id));
+      onBack();
+      handleCloseDeleteModal();
+    } catch (err) {
+      setDeleteError("Failed to delete the bill. Please try again.");
+      console.error("Error deleting bill:", err);
+    }
   };
 
   const initialData = {
@@ -166,6 +176,9 @@ export default function BillDetail({ onBack, bill }) {
         inputLabel="Nama Hotel"
         isDisabled={true}
       />
+      {deleteError && (
+        <div className="text-red-500 mt-2 text-sm">{deleteError}</div>
+      )}
     </div>
   );
 }

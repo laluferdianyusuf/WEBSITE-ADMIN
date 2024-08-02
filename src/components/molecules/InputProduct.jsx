@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { addBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
+import { getProducts } from "../../redux/slices/productSlice"; // Import the product slice
 import Select from "react-select";
 
 export default function InputProduct({
@@ -17,22 +18,23 @@ export default function InputProduct({
 }) {
   const dispatch = useDispatch();
   const { hotels } = useSelector((state) => state.hotel);
+  const { products } = useSelector((state) => state.product);
   const [inputs, setInputs] = useState([
-    { item: "", quantity: "", harga_unit: "", total_harga: "" },
+    { item: null, quantity: "", harga_unit: "", total_harga: "" },
   ]);
   const [selectedHotel, setSelectedHotel] = useState(null);
-
   const [totalHarga, setTotalHarga] = useState(0);
 
   useEffect(() => {
     dispatch(getHotels());
+    dispatch(getProducts());
   }, [dispatch]);
 
   const handleAddInput = (event) => {
     event.preventDefault();
     setInputs([
       ...inputs,
-      { item: "", quantity: "", harga_unit: "", total_harga: "" },
+      { item: null, quantity: "", harga_unit: "", total_harga: "" },
     ]);
   };
 
@@ -47,6 +49,12 @@ export default function InputProduct({
     const newInputs = [...inputs];
     const { name, value } = event.target;
     newInputs[index][name] = value;
+    setInputs(newInputs);
+  };
+
+  const handleProductChange = (index, selectedOption) => {
+    const newInputs = [...inputs];
+    newInputs[index].item = selectedOption || null;
     setInputs(newInputs);
   };
 
@@ -90,12 +98,11 @@ export default function InputProduct({
 
   const handleSubmit = async (event) => {
     if (!selectedHotel) {
-      alert("hotel not found");
       return;
     }
 
     const products = inputs.map((input) => ({
-      productName: input.item,
+      productName: input.item?.label || "",
       quantity: parseInt(input.quantity, 10),
       productPrice: parseFloat(input.harga_unit),
       total: parseFloat(input.total_harga),
@@ -113,11 +120,10 @@ export default function InputProduct({
         dispatch(getHotels());
         closeModal();
       } else {
-        alert(resultAction.payload?.message || "failed to create bill");
+        alert(resultAction.payload?.message || "Failed to create bill");
       }
     } catch (error) {
-      console.error("error creating bill:", error);
-      alert("failed to create bill");
+      console.error("Error creating bill:", error);
     }
   };
 
@@ -150,14 +156,22 @@ export default function InputProduct({
       ...provided,
       backgroundColor: state.isSelected ? "#48bb78" : provided.backgroundColor,
       color: state.isSelected ? "#fff" : "#48bb78",
-      fontSize: "0.75 rem",
+      fontSize: "0.75rem",
       lineHeight: "1rem",
     }),
   };
-  const hotelArray = Array.isArray(hotels.hotel) ? hotels.hotel : [];
 
+  const hotelArray = Array.isArray(hotels.hotel) ? hotels.hotel : [];
   const handleSelectHotel = hotelArray
     ? hotelArray.map((hotel) => ({ value: hotel.id, label: hotel.hotelName }))
+    : [];
+
+  const productArray = Array.isArray(products.product) ? products.product : [];
+  const handleSelectProduct = productArray
+    ? productArray.map((product) => ({
+        value: product.id,
+        label: product.name,
+      }))
     : [];
 
   return isOpen ? (
@@ -193,15 +207,21 @@ export default function InputProduct({
               key={index}
               className="grid grid-cols-4 gap-3 mb-3 items-center relative w-11/12"
             >
-              <InputNotaField
-                label="Nama Item"
-                name="item"
-                type="text"
-                placeholder="Masukkan nama produk"
-                value={input.item}
-                onChange={(e) => handleInputChange(index, e)}
-                isModal={true}
-              />
+              <div className="col-span-1">
+                <label className="block mb-2 text-xs font-medium text-gray-700">
+                  Nama Produk
+                </label>
+                <Select
+                  options={handleSelectProduct}
+                  value={input.item}
+                  onChange={(selectedOption) =>
+                    handleProductChange(index, selectedOption)
+                  }
+                  placeholder="Pilih Produk"
+                  isClearable
+                  styles={customStyles}
+                />
+              </div>
               <InputNotaField
                 label="Quantity"
                 name="quantity"
