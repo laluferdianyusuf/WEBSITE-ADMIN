@@ -16,9 +16,11 @@ export default function TableRowWithAction({
       {Object.values(data).map((item, idx) => (
         <td
           key={idx}
-          className={`w-full px-4 ${
+          className={`px-4 ${
             onRowClick ? "cursor-pointer hover:bg-gray-200" : ""
-          }`}
+          }
+            ${item === "Belum Lunas" ? "text-red-500" : ""}
+            ${item === "Lunas" ? "text-green-500" : ""}`}
           onClick={onRowClick ? onRowClick : null}
         >
           {item}

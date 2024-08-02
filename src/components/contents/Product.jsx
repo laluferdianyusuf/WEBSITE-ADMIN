@@ -8,7 +8,7 @@ import ModalCrud from "../molecules/ModalCrud";
 import NoProductFound from "/icons/belum-ada-produk.svg";
 import Pagination from "../molecules/Pagination";
 
-const tableHeaders3 = ["Nama Produk", "ID", "Actions"];
+const tableHeaders3 = ["ID", "Nama Produk", "Actions"];
 
 import {
   createProduct,
@@ -194,8 +194,8 @@ export default function Product() {
         <TableWithActions
           headers={tableHeaders3}
           data={currentProducts.map((product) => ({
-            productName: product.name,
             id: product.id,
+            productName: product.name,
           }))}
           onUpdate={handleEdit}
           onDelete={handleDelete}
