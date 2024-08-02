@@ -15,7 +15,7 @@ import {
   getHotels,
 } from "../../redux/slices/hotelSlice";
 
-const tableHeaders3 = ["Nama Hotel", "ID", "Actions"];
+const tableHeaders3 = ["ID", "Nama Hotel", "Status", "Actions"];
 
 export default function Hotel({ handleHotelSelect }) {
   const dispatch = useDispatch();
@@ -109,8 +109,9 @@ export default function Hotel({ handleHotelSelect }) {
   );
 
   const dataFilteredHotel = filteredHotels.map((hotel, index) => ({
-    "Nama Hotel": hotel.hotelName,
     id: hotel.id,
+    "Nama Hotel": hotel.hotelName,
+    Status: hotel.totalBills <= hotel.totalPaid ? "Lunas" : "Belum Lunas",
   }));
 
   const getLastUpdateTime = (data) => {

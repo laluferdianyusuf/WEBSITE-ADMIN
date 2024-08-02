@@ -16,7 +16,7 @@ export default function TableRow({
       onClick={onRowClick}
     >
       {rowData.map((data, cellIndex) => (
-        <TableCell key={cellIndex} isHeader={isHeader}>
+        <TableCell key={cellIndex} isHeader={isHeader} index={cellIndex}>
           {data}
         </TableCell>
       ))}
