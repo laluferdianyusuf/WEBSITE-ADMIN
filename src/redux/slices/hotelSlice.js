@@ -69,6 +69,28 @@ export const updateHotelPaid = createAsyncThunk(
   }
 );
 
+// Update hotel paid for each db
+export const updateHotelPaidDb = createAsyncThunk(
+  "hotel/updatePaid/each",
+  async ({ id, totalPaid }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `${uri}/api/v3/hotels/paid/${id}`,
+        { totalPaid },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 // Delete hotel
 export const deleteHotel = createAsyncThunk(
   "hotel/delete",
@@ -105,7 +127,7 @@ export const getHotels = createAsyncThunk(
   }
 );
 
-// Get hotels
+// Get detail hotels
 export const getDetailHotels = createAsyncThunk(
   "hotel/detail",
   async (id, { rejectWithValue }) => {
@@ -179,6 +201,23 @@ const hotelSlice = createSlice({
         );
       })
       .addCase(updateHotelPaid.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Update Hotel Paid each states
+      .addCase(updateHotelPaidDb.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateHotelPaidDb.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedHotel = action.payload.data;
+        state.hotels = state.hotels.map((hotel) =>
+          hotel.id === updatedHotel.id ? updatedHotel : hotel
+        );
+      })
+      .addCase(updateHotelPaidDb.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

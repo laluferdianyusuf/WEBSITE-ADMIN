@@ -16,7 +16,7 @@ export default function TableRowWithAction({
       {Object.values(data).map((item, idx) => (
         <td
           key={idx}
-          className={`w-full px-4 py-3 ${
+          className={`w-full px-4 ${
             onRowClick ? "cursor-pointer hover:bg-gray-200" : ""
           }`}
           onClick={onRowClick ? onRowClick : null}

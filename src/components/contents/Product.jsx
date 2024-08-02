@@ -5,25 +5,10 @@ import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import ModalCrud from "../molecules/ModalCrud";
-
 import NoProductFound from "/icons/belum-ada-produk.svg";
+import Pagination from "../molecules/Pagination";
 
 const tableHeaders3 = ["Nama Produk", "Actions"];
-
-const initialTableData = [
-  // {
-  //   "Nama Produk": "Pulpen",
-  // },
-  // {
-  //   "Nama Produk": "Penggaris",
-  // },
-  // {
-  //   "Nama Produk": "Penghapus",
-  // },
-  // {
-  //   "Nama Produk": "Penggaris",
-  // },
-];
 
 import {
   createProduct,
@@ -35,13 +20,14 @@ import {
 export default function Product() {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.product);
-
   const [inputProduct, setInputProduct] = useState("");
   const [currentProductIndex, setCurrentProductIndex] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     dispatch(getProducts());
@@ -163,8 +149,24 @@ export default function Product() {
     }
   }
 
+  const handlePageChange = (page) => {
+    console.log();
+    setCurrentPage(page);
+  };
+
+  const currentProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage + 1;
+  const endIndex = Math.min(
+    currentPage * itemsPerPage,
+    filteredProducts.length
+  );
+
   return (
-    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
+    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-5 relative">
       <div>
         <h3 className="font-semibold text-xl mb-1">Manajemen Produk</h3>
         <p className="text-xs text-slate-500">
@@ -185,21 +187,35 @@ export default function Product() {
         </ActionButton>
       </div>
 
-      {filteredProducts.length === 0 ? (
+      {currentProducts.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
           <img src={NoProductFound} alt="Tidak ada produk" width={250} />
           <p className="text-gray-500 mt-2">Belum ada data produk</p>
         </div>
       ) : (
-        <TableWithActions
-          headers={tableHeaders3}
-          data={filteredProducts.map((product) => ({
-            ProductName: product.name,
-          }))}
-          onUpdate={handleEdit}
-          onDelete={handleDelete}
-        />
+        <>
+          <TableWithActions
+            headers={tableHeaders3}
+            data={currentProducts.map((product) => ({
+              ProductName: product.name,
+            }))}
+            onUpdate={handleEdit}
+            onDelete={handleDelete}
+          />
+        </>
       )}
+      <p className="text-xs text-end absolute bottom-[3rem] right-[2.3rem] ">
+        Menampilkan {startIndex} - {endIndex} dari total{" "}
+        {filteredProducts.length} produk
+      </p>
+
+      <Pagination
+        totalItems={filteredProducts.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
+
       <ModalCrud
         title="Tambah Produk"
         isOpen={isAdding}
