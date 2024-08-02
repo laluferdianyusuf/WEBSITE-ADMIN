@@ -5,7 +5,7 @@ import ActionButton from "../atoms/ActionButton";
 import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import ModalCrud from "../molecules/ModalCrud";
-
+import Pagination from "../molecules/Pagination";
 import PropTypes from "prop-types";
 import NoHotelData from "/icons/belum-ada-hotel.svg";
 import {
@@ -26,6 +26,8 @@ export default function Hotel({ handleHotelSelect }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     dispatch(getHotels());
@@ -46,19 +48,19 @@ export default function Hotel({ handleHotelSelect }) {
 
   const handleEdit = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(hotels.hotel[index].hotelName);
+    setInputHotel(index["Nama Hotel"]);
     setIsEditing(true);
   };
 
   const handleDelete = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(hotels.hotel[index].hotelName);
+    setInputHotel(index["Nama Hotel"]);
     setIsDeleting(true);
   };
 
   const handleSaveDelete = async () => {
     try {
-      const hotelId = hotels.hotel[currentHotelIndex].id;
+      const hotelId = currentHotelIndex.id;
       await dispatch(deleteHotel(hotelId)).unwrap();
       dispatch(getHotels());
       handleCloseDelete();
@@ -69,7 +71,7 @@ export default function Hotel({ handleHotelSelect }) {
 
   const handleSaveEdit = async () => {
     try {
-      const hotelId = hotels.hotel[currentHotelIndex].id;
+      const hotelId = currentHotelIndex.id;
       await dispatch(
         updateHotel({ hotelName: inputHotel, id: hotelId })
       ).unwrap();
@@ -146,8 +148,23 @@ export default function Hotel({ handleHotelSelect }) {
     }
   }
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const currentHotel = dataFilteredHotel.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage + 1;
+  const endIndex = Math.min(
+    currentPage * itemsPerPage,
+    dataFilteredHotel.length
+  );
+
   return (
-    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6">
+    <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-5 relative">
       <div>
         <h3 className="font-semibold text-xl mb-1">Manajemen Hotel</h3>
         <p className="text-xs text-slate-500">
@@ -168,7 +185,7 @@ export default function Hotel({ handleHotelSelect }) {
         </ActionButton>
       </div>
 
-      {dataFilteredHotel.length === 0 ? (
+      {currentHotel.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
           <img src={NoHotelData} alt="Tidak ada hotel" width={250} />
           <p className="text-gray-500 mt-4">Belum ada data hotel</p>
@@ -176,12 +193,23 @@ export default function Hotel({ handleHotelSelect }) {
       ) : (
         <TableWithActions
           headers={tableHeaders3}
-          data={dataFilteredHotel}
+          data={currentHotel}
           onUpdate={handleEdit}
           onDelete={handleDelete}
           onRowClick={handleRowClick}
         />
       )}
+      <p className="text-xs text-end absolute bottom-[3rem] right-[2.3rem] ">
+        Menampilkan {startIndex} - {endIndex} dari total{" "}
+        {dataFilteredHotel.length} data
+      </p>
+
+      <Pagination
+        totalItems={dataFilteredHotel.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
       <ModalCrud
         title="Tambah Hotel"
         isOpen={isAdding}

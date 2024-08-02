@@ -10,7 +10,9 @@ export default function TableRow({
   const rowClass = index % 2 === 0 ? "bg-white" : "bg-gray-100";
   return (
     <tr
-      className={`${rowClass} cursor-pointer hover:bg-gray-200`}
+      className={`${rowClass} ${
+        onRowClick ? "cursor-pointer hover:bg-gray-200" : ""
+      }`}
       onClick={onRowClick}
     >
       {rowData.map((data, cellIndex) => (

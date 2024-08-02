@@ -28,8 +28,8 @@ export default function TableWithActions({
             <TableRowWithActions
               key={index}
               data={row}
-              onUpdate={() => onUpdate(index)}
-              onDelete={() => onDelete(index)}
+              onUpdate={() => onUpdate(row)}
+              onDelete={() => onDelete(row)}
               index={index}
               onRowClick={onRowClick ? () => onRowClick(row) : null}
             />

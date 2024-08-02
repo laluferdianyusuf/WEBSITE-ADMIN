@@ -24,7 +24,7 @@ export default function TableRowWithAction({
           {item}
         </td>
       ))}
-      <td className="px-4 py-3">
+      <td className="px-4 py-2">
         <div className="flex gap-2 items-center">
           <ActionButton onClick={onUpdate}>
             <FiEdit2 className="mr-[6px]" size={16} />

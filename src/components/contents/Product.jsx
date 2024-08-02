@@ -8,7 +8,7 @@ import ModalCrud from "../molecules/ModalCrud";
 import NoProductFound from "/icons/belum-ada-produk.svg";
 import Pagination from "../molecules/Pagination";
 
-const tableHeaders3 = ["Nama Produk", "Actions"];
+const tableHeaders3 = ["Nama Produk", "ID", "Actions"];
 
 import {
   createProduct,
@@ -27,7 +27,7 @@ export default function Product() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     dispatch(getProducts());
@@ -56,18 +56,18 @@ export default function Product() {
 
   const handleEdit = (index) => {
     setCurrentProductIndex(index);
-    setInputProduct(products.product[index]["name"]);
+    setInputProduct(index.productName);
     setIsEditing(true);
   };
 
   const handleDelete = (index) => {
     setCurrentProductIndex(index);
-    setInputProduct(products.product[index]["name"]);
+    setInputProduct(index.productName);
     setIsDeleting(true);
   };
 
   const handleSaveDelete = () => {
-    const productId = products.product[currentProductIndex].id;
+    const productId = currentProductIndex.id;
     dispatch(deleteProduct(productId))
       .unwrap()
       .then(() => {
@@ -80,7 +80,7 @@ export default function Product() {
   };
 
   const handleSaveEdit = () => {
-    const productId = products.product[currentProductIndex].id;
+    const productId = currentProductIndex.id;
     dispatch(updateProduct({ name: inputProduct, id: productId }))
       .unwrap()
       .then(() => {
@@ -120,7 +120,6 @@ export default function Product() {
     const sortedData = [...data].sort(
       (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
     );
-    console.log(sortedData);
 
     return sortedData[0].updatedAt;
   };
@@ -150,7 +149,6 @@ export default function Product() {
   }
 
   const handlePageChange = (page) => {
-    console.log();
     setCurrentPage(page);
   };
 
@@ -193,20 +191,19 @@ export default function Product() {
           <p className="text-gray-500 mt-2">Belum ada data produk</p>
         </div>
       ) : (
-        <>
-          <TableWithActions
-            headers={tableHeaders3}
-            data={currentProducts.map((product) => ({
-              ProductName: product.name,
-            }))}
-            onUpdate={handleEdit}
-            onDelete={handleDelete}
-          />
-        </>
+        <TableWithActions
+          headers={tableHeaders3}
+          data={currentProducts.map((product) => ({
+            productName: product.name,
+            id: product.id,
+          }))}
+          onUpdate={handleEdit}
+          onDelete={handleDelete}
+        />
       )}
       <p className="text-xs text-end absolute bottom-[3rem] right-[2.3rem] ">
         Menampilkan {startIndex} - {endIndex} dari total{" "}
-        {filteredProducts.length} produk
+        {filteredProducts.length} data
       </p>
 
       <Pagination

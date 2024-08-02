@@ -63,7 +63,8 @@ export default function Pagination({
 
   const buttonClass =
     "pagination-button bg-white border border-slate-300 rounded-md p-1.5";
-  const disabledClass = "bg-slate-400 opacity-50 cursor-not-allowed";
+  const disabledClass =
+    "rounded-md p-1.5 bg-slate-400 opacity-50 cursor-not-allowed";
 
   return (
     <div className="pagination flex justify-end items-center gap-2 absolute bottom-[1rem] right-[2.3rem] ">
@@ -71,7 +72,7 @@ export default function Pagination({
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className={`${buttonClass} ${currentPage === 1 ? disabledClass : ""}`}
+          className={`${currentPage === 1 ? disabledClass : buttonClass}`}
         >
           <img
             src={currentPage === 1 ? LeftArrow2 : LeftArrowBlack2}
@@ -81,7 +82,7 @@ export default function Pagination({
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
-          className={`${buttonClass} ${currentPage === 1 ? disabledClass : ""}`}
+          className={`${currentPage === 1 ? disabledClass : buttonClass}`}
         >
           <img
             src={currentPage === 1 ? LeftArrow1 : LeftArrowBlack1}
@@ -117,8 +118,8 @@ export default function Pagination({
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className={`${buttonClass} ${
-            currentPage === totalPages ? disabledClass : ""
+          className={`${
+            currentPage === totalPages ? disabledClass : buttonClass
           }`}
         >
           <img
@@ -129,8 +130,8 @@ export default function Pagination({
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
-          className={`${buttonClass} ${
-            currentPage === totalPages ? disabledClass : ""
+          className={`${
+            currentPage === totalPages ? disabledClass : buttonClass
           }`}
         >
           <img
