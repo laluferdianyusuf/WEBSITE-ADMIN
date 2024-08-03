@@ -103,7 +103,7 @@ export default function InputProduct({
 
     const products = inputs.map((input) => ({
       productName: input.item?.label || "",
-      quantity: parseInt(input.quantity, 10),
+      quantity: input.quantity,
       productPrice: parseFloat(input.harga_unit),
       total: parseFloat(input.total_harga),
     }));
