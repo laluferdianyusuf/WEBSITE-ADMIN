@@ -13,10 +13,10 @@ import BackButton from "../atoms/BackButton";
 import { useEffect, useState } from "react";
 import {
   getDetailHotels,
-  updateHotelPaid,
   updateHotelPaidDb,
 } from "../../redux/slices/hotelSlice";
 import { useSelector, useDispatch } from "react-redux";
+import NoBillData from "/icons/belum-ada-nota.svg";
 
 const tableHeaders = ["Tanggal", "Total Tagihan"];
 export default function HotelDetail({ onBack, hotel }) {
@@ -151,15 +151,10 @@ export default function HotelDetail({ onBack, hotel }) {
     );
   };
 
-  const tableDataHotel = hotelsBill.map(
-    (bill) => (
-      console.log(bill),
-      {
-        Tanggal: formatDate(bill.createdAt),
-        "Total Tagihan": parseInt(bill.ordersTotal - bill.totalPaid),
-      }
-    )
-  );
+  const tableDataHotel = hotelsBill.map((bill) => ({
+    Tanggal: formatDate(bill.createdAt),
+    "Total Tagihan": parseInt(bill.ordersTotal - bill.totalPaid),
+  }));
 
   const totalHarga = hotelsBill.reduce(
     (sum, item) => sum + parseFloat(item.ordersTotal - item.totalPaid),
@@ -191,102 +186,114 @@ export default function HotelDetail({ onBack, hotel }) {
           </ul>
         </div>
       </div>
-      <div className="flex justify-between mb-5 ms-12">
-        <div
-          className={`w-fit px-2 py-2 rounded-lg text-white ${
-            sisa === 0 ? "bg-custom-green-1" : "bg-red-500"
-          }`}
-        >
-          {sisa === 0 ? (
-            <div className="flex items-center justify-center">
-              <IoIosCheckmarkCircleOutline className="mr-[6px]" size={16} />
-              <p className="text-xs">Sudah Lunas</p>
+      {tableDataHotel === 0 ? (
+        <>
+          <div className="flex justify-between mb-5 ms-12">
+            <div
+              className={`w-fit px-2 py-2 rounded-lg text-white ${
+                sisa === 0 ? "bg-custom-green-1" : "bg-red-500"
+              }`}
+            >
+              {sisa === 0 ? (
+                <div className="flex items-center justify-center">
+                  <IoIosCheckmarkCircleOutline className="mr-[6px]" size={16} />
+                  <p className="text-xs">Sudah Lunas</p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <IoCloseCircleOutline className="mr-[6px]" size={16} />
+                  <p className="text-xs">Belum Lunas</p>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="flex items-center justify-center">
-              <IoCloseCircleOutline className="mr-[6px]" size={16} />
-              <p className="text-xs">Belum Lunas</p>
-            </div>
-          )}
-        </div>
-        <div className="flex gap-[18px]">
-          <ActionButton onClick={handlePaying}>
-            <PiHandCoinsLight className="mr-[6px]" size={16} />
-            <p className="text-slate-900 font-semibold text-xs">
-              Bayar Tagihan
-            </p>
-          </ActionButton>
-          <ActionButton onClick={handleExportClick}>
-            <GoDownload className="mr-[6px]" size={16} />
-            <p className="text-slate-900 font-semibold text-xs">
-              Export Invoice
-            </p>
-          </ActionButton>
-        </div>
-      </div>
-      <div className="grid grid-cols-3 w-1/2 text-xs text-slate-900 mb-5 ms-12">
-        <p>Total Tagihan</p>
-        <p>:</p>
-        <p>
-          {totalTagihan.toLocaleString("id-ID", {
-            style: "currency",
-            currency: "IDR",
-          })}
-        </p>
-        <p>Sisa</p>
-        <p>:</p>
-        <p>
-          {sisa.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}
-        </p>
-      </div>
-
-      {isPaying && (
-        <div className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-          <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-[40%] max-h-[90vh] overflow-y-auto">
-            <div className="font-semibold text-center">
-              <h4 className="text-slate-300 text-[10px] mb-1">
-                UD TIMUR JAYA RAYA
-              </h4>
-              <h3 className="text-slate-900 text-lg">
-                Bayar Tagihan {hotel["Nama Hotel"]}
-              </h3>
-            </div>
-            <InputNotaField
-              label="Jumlah Setoran"
-              name="jumlahSetoran"
-              type="number"
-              placeholder="Rp. 1.000.000"
-              value={totalBayar}
-              onChange={onChangeInput}
-              isModal={true}
-            />
-            <div className="flex justify-center mt-4 gap-4">
-              <Button
-                backgroundColor="bg-white"
-                text="Batalkan"
-                onClick={handleClosePay}
-              />
-              <Button
-                backgroundColor="bg-custom-green-1"
-                text="Bayar Tagihan"
-                onClick={handleConfirmPay}
-              />
+            <div className="flex gap-[18px]">
+              <ActionButton onClick={handlePaying}>
+                <PiHandCoinsLight className="mr-[6px]" size={16} />
+                <p className="text-slate-900 font-semibold text-xs">
+                  Bayar Tagihan
+                </p>
+              </ActionButton>
+              <ActionButton onClick={handleExportClick}>
+                <GoDownload className="mr-[6px]" size={16} />
+                <p className="text-slate-900 font-semibold text-xs">
+                  Export Invoice
+                </p>
+              </ActionButton>
             </div>
           </div>
+          <div className="grid grid-cols-3 w-1/2 text-xs text-slate-900 mb-5 ms-12">
+            <p>Total Tagihan</p>
+            <p>:</p>
+            <p>
+              {totalTagihan.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              })}
+            </p>
+            <p>Sisa</p>
+            <p>:</p>
+            <p>
+              {sisa.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              })}
+            </p>
+          </div>
+
+          {isPaying && (
+            <div className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
+              <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-[40%] max-h-[90vh] overflow-y-auto">
+                <div className="font-semibold text-center">
+                  <h4 className="text-slate-300 text-[10px] mb-1">
+                    UD TIMUR JAYA RAYA
+                  </h4>
+                  <h3 className="text-slate-900 text-lg">
+                    Bayar Tagihan {hotel["Nama Hotel"]}
+                  </h3>
+                </div>
+                <InputNotaField
+                  label="Jumlah Setoran"
+                  name="jumlahSetoran"
+                  type="number"
+                  placeholder="Rp. 1.000.000"
+                  value={totalBayar}
+                  onChange={onChangeInput}
+                  isModal={true}
+                />
+                <div className="flex justify-center mt-4 gap-4">
+                  <Button
+                    backgroundColor="bg-white"
+                    text="Batalkan"
+                    onClick={handleClosePay}
+                  />
+                  <Button
+                    backgroundColor="bg-custom-green-1"
+                    text="Bayar Tagihan"
+                    onClick={handleConfirmPay}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="ms-12 overflow-auto no-scrollbar">
+            <Table
+              headers={tableHeaders}
+              data={tableDataHotel}
+              total={totalHarga}
+            />
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-full">
+          <img src={NoBillData} alt="Tidak ada hotel" width={250} />
+          <p className="text-gray-500 mt-2">Belum ada data nota</p>
         </div>
       )}
-
       {showWarning && (
         <WarningNotification text="Jumlah setoran yang anda masukkan melebihi jumlah tagihan" />
       )}
       {showSuccess && <SuccessNotification text="Pembayaran Berhasil" />}
-      <div className="ms-12 overflow-auto no-scrollbar">
-        <Table
-          headers={tableHeaders}
-          data={tableDataHotel}
-          total={totalHarga}
-        />
-      </div>
     </div>
   );
 }
