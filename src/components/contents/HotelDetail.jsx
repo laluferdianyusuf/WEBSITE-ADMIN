@@ -186,7 +186,7 @@ export default function HotelDetail({ onBack, hotel }) {
           </ul>
         </div>
       </div>
-      {tableDataHotel === 0 ? (
+      {tableDataHotel.length > 0 ? (
         <>
           <div className="flex justify-between mb-5 ms-12">
             <div
