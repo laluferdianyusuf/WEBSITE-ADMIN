@@ -53,7 +53,7 @@ export default function BillDetail({ onBack, bill }) {
   const tableData2 = orders.map((order, index) => ({
     No: index + 1,
     Item: order.productName,
-    Quantity: `${order.quantity} ${order.quantity > 1 ? "Units" : "Unit"}`,
+    Quantity: order.quantity,
     "Harga / Unit": order.productPrice,
     "Jumlah Harga": parseFloat(order.total),
   }));
