@@ -7,6 +7,8 @@ import { FaHotel } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai";
 import PropTypes from "prop-types";
 import ButtonAuth from "../atoms/ButtonAuth";
+import LoginIcon from "/icons/Login.svg";
+import LogoutIcon from "/icons/Logout.svg";
 
 export default function Sidebar({
   activeMenu,
@@ -38,8 +40,12 @@ export default function Sidebar({
   };
 
   return (
-    <div className="w-64 px-5 flex flex-col justify-between my-7">
-      <div>
+    <div
+      className={`w-64 pl-7 pr-3 flex flex-col ${
+        isLoggedIn ? "justify-between" : ""
+      } my-7`}
+    >
+      <div className={`${isLoggedIn ? "" : "mb-10"}`}>
         <div className="flex flex-col">
           <span>
             <h1 className="font-semibold text-xl text-custom-white-1">
@@ -48,7 +54,7 @@ export default function Sidebar({
           </span>
         </div>
         <div className="mt-16">
-          <ul className="space-y-5">
+          <ul className="space-y-4">
             <div className="font-semibold text-xs text-slate-500">
               MENU MANAJEMEN
             </div>
@@ -95,12 +101,12 @@ export default function Sidebar({
       </div>
       {isLoggedIn ? (
         <ButtonAuth handle={onLogout}>
-          <TbLogout />
+          <img src={LogoutIcon} alt="login" />
           <p className="lowercase">admin</p>
         </ButtonAuth>
       ) : (
         <ButtonAuth handle={handleLogin} isLogin={true}>
-          <TbLogin />
+          <img src={LoginIcon} alt="logout" />
           <p className="capitalize"> Login</p>
         </ButtonAuth>
       )}

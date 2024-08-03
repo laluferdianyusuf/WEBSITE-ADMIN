@@ -6,6 +6,7 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import Table from "../organism/Table";
 import ActionButton from "../atoms/ActionButton";
 import SuccessNotification from "../atoms/SuccessNotification";
+import WarningNotification from "../atoms/WarningNotification";
 import InputNotaField from "../molecules/InputNotaField";
 import Button from "../atoms/Button";
 import BackButton from "../atoms/BackButton";
@@ -13,111 +14,34 @@ import { useEffect, useState } from "react";
 import {
   getDetailHotels,
   updateHotelPaid,
+  updateHotelPaidDb,
 } from "../../redux/slices/hotelSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const tableHeaders = ["Tanggal", "Total Tagihan"];
-const tableData2 = {
-  id: 1,
-  nama_hotel: "Hotel A",
-  total_bill: 8000000,
-  total_bayar: 4000000,
-  bills: [
-    {
-      id: 1,
-      tanggal_nota: "2024-07-01",
-      total_pesanan: 2000000,
-      total_dibayar: 2000000,
-      orders: [
-        {
-          qty: 2,
-          nama_produk: "Hand Towel",
-          harga_produk: 500000,
-          total_harga: 1000000,
-        },
-        {
-          qty: 1,
-          nama_produk: "Hand Sanitizer",
-          harga_produk: 1000000,
-          total_harga: 1000000,
-        },
-      ],
-    },
-    {
-      id: 2,
-      tanggal_nota: "2024-07-05",
-      total_pesanan: 2000000,
-      total_dibayar: 1000000,
-      orders: [
-        {
-          qty: 10,
-          nama_produk: "Fruit Tea",
-          harga_produk: 100000,
-          total_harga: 1000000,
-        },
-        {
-          qty: 2,
-          nama_produk: "Hand Towel",
-          harga_produk: 500000,
-          total_harga: 1000000,
-        },
-      ],
-    },
-    {
-      id: 3,
-      tanggal_nota: "2024-07-10",
-      total_pesanan: 1000000,
-      total_dibayar: 0,
-      orders: [
-        {
-          qty: 20,
-          nama_produk: "Fruit Juice",
-          harga_produk: 50000,
-          total_harga: 1000000,
-        },
-      ],
-    },
-    {
-      id: 4,
-      tanggal_nota: "2024-07-15",
-      total_pesanan: 3000000,
-      total_dibayar: 1000000,
-      orders: [
-        {
-          qty: 5,
-          nama_produk: "Bath Towel",
-          harga_produk: 400000,
-          total_harga: 2000000,
-        },
-        {
-          qty: 2,
-          nama_produk: "Shampoo",
-          harga_produk: 500000,
-          total_harga: 1000000,
-        },
-      ],
-    },
-  ],
-};
-
 export default function HotelDetail({ onBack, hotel }) {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.hotel);
+  const { hotels, loading, error } = useSelector((state) => state.hotel);
   const [dataHotel, setDataHotel] = useState(null);
   const [sisa, setSisa] = useState(0);
   const [isPaying, setIsPaying] = useState(false);
   const [totalBayar, setTotalBayar] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await dispatch(getDetailHotels(hotel.id));
-        const hotelData = result.payload.data.hotel;
-        setDataHotel(hotelData);
-        const totalBills = hotelData.totalBills || 0;
-        const totalPaid = hotelData.totalPaid || 0;
-        setSisa(totalBills - totalPaid);
+        const hotelData = result.payload?.data?.hotel;
+        if (hotelData) {
+          setDataHotel(hotelData);
+          const totalBills = hotelData.totalBills || 0;
+          const totalPaid = hotelData.totalPaid || 0;
+          setSisa(totalBills - totalPaid);
+        } else {
+          console.error("No hotel data found");
+        }
       } catch (err) {
         console.error("Failed to fetch hotel details:", err);
       }
@@ -125,6 +49,7 @@ export default function HotelDetail({ onBack, hotel }) {
 
     fetchData();
   }, [dispatch, hotel.id]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading hotel details.</p>;
 
@@ -141,20 +66,36 @@ export default function HotelDetail({ onBack, hotel }) {
 
   const handleConfirmPay = async () => {
     const value = parseFloat(totalBayar.replace(/\./g, "").replace(/,/g, "."));
-    if (isNaN(value)) {
+    if (isNaN(value) || value <= 0) {
       console.error("Invalid totalBayar value");
       return;
     }
-    setSisa((prevValue) => {
-      const newValue = prevValue - value;
-      return isNaN(newValue) ? prevValue : newValue;
-    });
+
     setIsPaying(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    setTotalBayar("");
 
     try {
-      await dispatch(updateHotelPaid({ id: hotel.id, totalPaid: value }));
+      const response = await dispatch(
+        updateHotelPaidDb({ id: hotel.id, totalPaid: value })
+      );
+      if (response.payload?.status) {
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
+        setShowWarning(false);
+      } else {
+        setShowSuccess(false);
+        setShowWarning(true);
+      }
+      const result = await dispatch(getDetailHotels(hotel.id));
+      const hotelData = result.payload?.data?.hotel;
+      if (hotelData) {
+        setDataHotel(hotelData);
+        const totalBills = hotelData.totalBills || 0;
+        const totalPaid = hotelData.totalPaid || 0;
+        setSisa(totalBills - totalPaid);
+      } else {
+        console.error("No hotel data found");
+      }
     } catch (error) {
       console.error("Failed to update hotel paid amount:", error);
     }
@@ -191,7 +132,7 @@ export default function HotelDetail({ onBack, hotel }) {
       bills: hotelsBill.map((bill) => ({
         id: bill.id,
         tanggal_nota: formatDate2(bill.createdAt) || 0,
-        total_dibayar: bill.ordersTotal || 0,
+        total_dibayar: bill.totalPaid || 0,
         total_pesanan: bill.ordersTotal || 0,
         orders: bill.orders.map((order) => ({
           qty: order.quantity || 0,
@@ -210,15 +151,22 @@ export default function HotelDetail({ onBack, hotel }) {
     );
   };
 
-  const tableDataHotel = hotelsBill.map((bill) => ({
-    Tanggal: formatDate(bill.createdAt),
-    "Total Tagihan": bill.ordersTotal,
-  }));
+  const tableDataHotel = hotelsBill.map(
+    (bill) => (
+      console.log(bill),
+      {
+        Tanggal: formatDate(bill.createdAt),
+        "Total Tagihan": parseInt(bill.ordersTotal - bill.totalPaid),
+      }
+    )
+  );
 
   const totalHarga = hotelsBill.reduce(
-    (sum, item) => sum + parseFloat(item.ordersTotal),
+    (sum, item) => sum + parseFloat(item.ordersTotal - item.totalPaid),
     0
   );
+
+  const totalTagihan = dataHotel?.totalBills || 0;
 
   return (
     <div className=" px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
@@ -280,7 +228,7 @@ export default function HotelDetail({ onBack, hotel }) {
         <p>Total Tagihan</p>
         <p>:</p>
         <p>
-          {totalHarga.toLocaleString("id-ID", {
+          {totalTagihan.toLocaleString("id-ID", {
             style: "currency",
             currency: "IDR",
           })}
@@ -326,6 +274,10 @@ export default function HotelDetail({ onBack, hotel }) {
             </div>
           </div>
         </div>
+      )}
+
+      {showWarning && (
+        <WarningNotification text="Jumlah setoran yang anda masukkan melebihi jumlah tagihan" />
       )}
       {showSuccess && <SuccessNotification text="Pembayaran Berhasil" />}
       <div className="ms-12 overflow-auto no-scrollbar">

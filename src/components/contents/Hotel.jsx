@@ -14,6 +14,7 @@ import {
   deleteHotel,
   getHotels,
 } from "../../redux/slices/hotelSlice";
+import { listBills } from "../../redux/slices/billSlice";
 
 const tableHeaders3 = ["ID", "Nama Hotel", "Status", "Actions"];
 
@@ -64,6 +65,7 @@ export default function Hotel({ handleHotelSelect }) {
       await dispatch(deleteHotel(hotelId)).unwrap();
       dispatch(getHotels());
       handleCloseDelete();
+      window.location.reload();
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -77,6 +79,7 @@ export default function Hotel({ handleHotelSelect }) {
       ).unwrap();
       dispatch(getHotels());
       handleCloseEdit();
+      window.location.reload();
     } catch (err) {
       console.error("Update failed:", err);
     }

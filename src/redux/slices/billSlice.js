@@ -89,6 +89,28 @@ export const deleteBill = createAsyncThunk(
   }
 );
 
+// update bills
+export const updateBills = createAsyncThunk(
+  "bills/update",
+  async ({ id, billData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `${uri}/api/v3/hotels/paid/${id}`,
+        billData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   bills: {},
   loading: false,
@@ -157,6 +179,23 @@ const billsSlice = createSlice({
         }
       })
       .addCase(deleteBill.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Update bill states
+      .addCase(updateBills.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateBills.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedBill = action.payload.data;
+        state.bills = state.bills.bill.map((bill) =>
+          bill.id === updatedBill.id ? updatedBill : bill
+        );
+      })
+      .addCase(updateBills.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

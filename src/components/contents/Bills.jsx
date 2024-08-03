@@ -51,7 +51,7 @@ export default function Bills({ handleBillSelect }) {
   const dataFiltered = filteredBills.map((bill) => ({
     Tanggal: bill.date,
     "Nama Hotel": bill.hotelName,
-    "Total Tagihan": bill.total,
+    "Total Tagihan": bill.total - bill.paid,
     id: bill.billId,
     orders: bill.orders.map((order) => ({
       name: order.productName,

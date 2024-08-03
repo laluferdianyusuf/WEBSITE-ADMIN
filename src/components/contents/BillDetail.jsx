@@ -79,8 +79,6 @@ export default function BillDetail({ onBack, bill }) {
 
   const confirmDelete = async () => {
     try {
-      console.log(selectedBill);
-
       await dispatch(deleteBill(selectedBill.id));
       onBack();
       handleCloseDeleteModal();
@@ -143,10 +141,10 @@ export default function BillDetail({ onBack, bill }) {
           <GoDownload className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
         </ActionButton>
-        <ActionButton onClick={handleEditClick}>
+        {/* <ActionButton onClick={handleEditClick}>
           <FiEdit2 className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Edit Nota</p>
-        </ActionButton>
+        </ActionButton> */}
         <ActionButton onClick={handleDeleteClick}>
           <GoTrash className="mr-[6px]" size={16} />
           <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>

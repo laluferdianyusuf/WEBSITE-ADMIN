@@ -5,9 +5,9 @@ import { FiMinusCircle } from "react-icons/fi";
 import Button from "../atoms/Button";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { addBills } from "../../redux/slices/billSlice";
+import { addBills, updateBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
-import { getProducts } from "../../redux/slices/productSlice"; // Import the product slice
+import { getProducts } from "../../redux/slices/productSlice";
 import Select from "react-select";
 
 export default function InputProduct({

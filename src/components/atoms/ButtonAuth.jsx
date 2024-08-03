@@ -6,7 +6,9 @@ export default function ButtonAuth({ children, handle, isLogin = false }) {
       type="submit"
       className={`
         ${isLogin ? "hover:bg-custom-green-1" : "hover:bg-red-500"}
-        p-2 rounded-[12px] flex flex-row-reverse justify-between items-center w-full bg-transparent text-white font-bold border border-custom-white-1 text-[14px] px-3`}
+        rounded-[12px] ${
+          isLogin ? "justify-center gap-2" : "flex-row-reverse justify-between"
+        } flex  items-center w-full bg-transparent text-slate-100 border border-custom-white-1 text-[14px] px-3 py-1.5`}
       onClick={handle}
     >
       {children}
