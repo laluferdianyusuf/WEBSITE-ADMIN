@@ -24,8 +24,6 @@ export default function InputProduct({
   ]);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
-  const [hotelError, setHotelError] = useState("");
-  const [productErrors, setProductErrors] = useState([]);
 
   useEffect(() => {
     dispatch(getHotels());
@@ -99,32 +97,7 @@ export default function InputProduct({
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    let isValid = true;
-
-    // Reset errors
-    setHotelError("");
-    setProductErrors([]);
-
-    // Validate hotel
     if (!selectedHotel) {
-      setHotelError("Nama hotel harus dipilih.");
-      isValid = false;
-    }
-
-    // Validate products
-    const newProductErrors = inputs.map((input) => {
-      if (!input.item) {
-        isValid = false;
-        return "Nama produk harus dipilih.";
-      }
-      return "";
-    });
-
-    setProductErrors(newProductErrors);
-
-    if (!isValid) {
       return;
     }
 
@@ -228,11 +201,7 @@ export default function InputProduct({
               isClearable
               styles={customStyles}
             />
-            {hotelError && (
-              <p className="text-red-500 text-xs mt-1">{hotelError}</p>
-            )}
           </div>
-
           {inputs.map((input, index) => (
             <div
               key={index}
@@ -252,11 +221,6 @@ export default function InputProduct({
                   isClearable
                   styles={customStyles}
                 />
-                {productErrors[index] && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {productErrors[index]}
-                  </p>
-                )}
               </div>
               <InputNotaField
                 label="Quantity"
