@@ -20,7 +20,7 @@ export default function Table({
           columns={headers}
           onRowClick={onRowClick ? onRowClick : null}
         />
-        {(total || totalDibayarkan) && (
+        {(total !== undefined || totalDibayarkan !== undefined) && (
           <TableFooter
             total={total}
             colSpan={headers.length}

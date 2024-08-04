@@ -20,13 +20,15 @@ export default function TableFooter({
             </td>
           </>
         )}
-        {isHotelDetail && totalDibayarkan && (
+        {isHotelDetail && (
           <>
             <td colSpan={1} className="border-t-0 px-4 py-4 ">
               Rp. {total.toLocaleString()}
             </td>
             <td colSpan={1} className="border-t-0 px-4 py-4">
-              Rp. {totalDibayarkan.toLocaleString()}
+              {totalDibayarkan !== undefined
+                ? `Rp. ${totalDibayarkan.toLocaleString()}`
+                : ""}
             </td>
           </>
         )}
