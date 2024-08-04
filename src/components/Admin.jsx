@@ -107,7 +107,7 @@ const Admin = () => {
     switch (activeMenu) {
       case "Nota":
         return <Bills handleBillSelect={handleBillSelect} />;
-      case "Product":
+      case "Produk":
         return <Product />;
       case "Hotel":
         return <Hotel handleHotelSelect={handleHotelSelect} />;

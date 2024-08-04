@@ -14,13 +14,13 @@ import {
   deleteHotel,
   getHotels,
 } from "../../redux/slices/hotelSlice";
-import { listBills } from "../../redux/slices/billSlice";
+import WarningNotification from "../atoms/WarningNotification";
 
 const tableHeaders3 = ["ID", "Nama Hotel", "Status", "Actions"];
 
 export default function Hotel({ handleHotelSelect }) {
   const dispatch = useDispatch();
-  const { hotels, loading, error } = useSelector((state) => state.hotel);
+  const { hotels, loading } = useSelector((state) => state.hotel);
   const [inputHotel, setInputHotel] = useState("");
   const [currentHotelIndex, setCurrentHotelIndex] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -28,7 +28,8 @@ export default function Hotel({ handleHotelSelect }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
+  const [error, setError] = useState("");
 
   useEffect(() => {
     dispatch(getHotels());
@@ -86,10 +87,18 @@ export default function Hotel({ handleHotelSelect }) {
   };
 
   const handleSaveAdd = async () => {
+    setError("");
     try {
-      await dispatch(createHotel({ hotelName: inputHotel })).unwrap();
-      dispatch(getHotels());
-      handleCloseAdd();
+      await dispatch(createHotel({ hotelName: inputHotel }))
+        .unwrap()
+        .then(() => {
+          dispatch(getHotels());
+          handleCloseAdd();
+        })
+        .catch((error) => {
+          setError(error.message);
+          handleCloseAdd();
+        });
     } catch (err) {
       console.error("Add failed:", err);
     }
@@ -255,6 +264,8 @@ export default function Hotel({ handleHotelSelect }) {
         functionCancel={handleCloseDelete}
         functionOk={handleSaveDelete}
       />
+
+      {error && <WarningNotification text={error} duration={3000} />}
     </div>
   );
 }

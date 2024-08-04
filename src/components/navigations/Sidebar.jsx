@@ -29,9 +29,9 @@ export default function Sidebar({
       handler: () => handleMenuClick("Hotel"),
     },
     {
-      name: "Product",
+      name: "Produk",
       icon: <AiFillProduct />,
-      handler: () => handleMenuClick("Product"),
+      handler: () => handleMenuClick("Produk"),
     },
   ];
 
@@ -48,7 +48,7 @@ export default function Sidebar({
       <div className={`${isLoggedIn ? "" : "mb-10"}`}>
         <div className="flex flex-col">
           <span>
-            <h1 className="font-semibold text-xl text-custom-white-1">
+            <h1 className="font-semibold text-xl text-custom-white-1 mt-4">
               UD TIMUR JAYA RAYA
             </h1>
           </span>

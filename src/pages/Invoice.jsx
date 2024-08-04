@@ -83,6 +83,7 @@ const InvoiceExport = () => {
   const date = new Date().toLocaleDateString();
 
   const { totalAmount, totalPaid, totalBalance } = calculateTotals();
+  console.log(hotel);
 
   return (
     <div>

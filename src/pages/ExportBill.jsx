@@ -45,10 +45,8 @@ const ExportBill = () => {
     0
   );
 
-  const date = new Date().toLocaleDateString();
-
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-white mb-10">
       <div ref={componentRef} className="flex flex-col mt-8 mx-12">
         <div className="mb-7">
           <h3 className="font-semibold text-[26px] mb-1 text-slate-900">
@@ -62,7 +60,7 @@ const ExportBill = () => {
             </div>
             <div className="flex flex-col gap-[6px]">
               <p>Nomor Nota: </p>
-              <p>Tanggal Dibuat: {date}</p>
+              <p>Tanggal Dibuat: {bill["Tanggal"]}</p>
               <p>Nama Hotel: {bill["Nama Hotel"]}</p>
             </div>
           </div>

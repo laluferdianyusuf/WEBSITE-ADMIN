@@ -19,7 +19,7 @@ export default function Bills({ handleBillSelect }) {
   const { bills, loading, error } = useSelector((state) => state.bill);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
   useEffect(() => {
     dispatch(listBills());
