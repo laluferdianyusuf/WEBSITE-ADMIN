@@ -114,7 +114,7 @@ export default function Hotel({ handleHotelSelect }) {
   const dataFilteredHotel = filteredHotels.map((hotel, index) => ({
     id: hotel.id,
     "Nama Hotel": hotel.hotelName,
-    Status: hotel.totalBills <= hotel.totalPaid ? "Lunas" : "Belum Lunas",
+    Status: hotel.totalBills === hotel.totalPaid ? "Lunas" : "Belum Lunas",
   }));
 
   const getLastUpdateTime = (data) => {
