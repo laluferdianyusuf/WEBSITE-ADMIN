@@ -19,5 +19,5 @@ export default function TableBody({ data, columns, onRowClick }) {
 TableBody.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onRowClick: PropTypes.func.isRequired,
+  onRowClick: PropTypes.func,
 };

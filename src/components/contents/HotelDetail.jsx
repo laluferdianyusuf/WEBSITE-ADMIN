@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { GoDownload } from "react-icons/go";
 import { PiHandCoinsLight } from "react-icons/pi";
@@ -18,7 +20,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import NoBillData from "/icons/belum-ada-nota.svg";
 
-const tableHeaders = ["Tanggal", "Total Tagihan"];
+const tableHeaders = ["Tanggal", "Total Tagihan", "Total Dibayarkan"];
 export default function HotelDetail({ onBack, hotel }) {
   const dispatch = useDispatch();
   const { hotels, loading, error } = useSelector((state) => state.hotel);
@@ -37,7 +39,7 @@ export default function HotelDetail({ onBack, hotel }) {
         if (hotelData) {
           setDataHotel(hotelData);
           const totalBills = hotelData.totalBills || 0;
-          const totalPaid = hotelData.totalPaid || 0;
+          const totalPaid = hotelData.totalPaid;
           setSisa(totalBills - totalPaid);
         } else {
           console.error("No hotel data found");
@@ -91,7 +93,7 @@ export default function HotelDetail({ onBack, hotel }) {
       if (hotelData) {
         setDataHotel(hotelData);
         const totalBills = hotelData.totalBills || 0;
-        const totalPaid = hotelData.totalPaid || 0;
+        const totalPaid = hotelData.totalPaid;
         setSisa(totalBills - totalPaid);
       } else {
         console.error("No hotel data found");
@@ -127,7 +129,7 @@ export default function HotelDetail({ onBack, hotel }) {
     const data = {
       id: dataHotel.id,
       nama_hotel: dataHotel.hotelName,
-      total_bayar: dataHotel.totalBills || 0,
+      total_bayar: dataHotel.totalPaid || 0,
       total_bill: dataHotel.totalBills || 0,
       bills: hotelsBill.map((bill) => ({
         id: bill.id,
@@ -153,15 +155,12 @@ export default function HotelDetail({ onBack, hotel }) {
 
   const tableDataHotel = hotelsBill.map((bill) => ({
     Tanggal: formatDate(bill.createdAt),
-    "Total Tagihan": parseInt(bill.ordersTotal - bill.totalPaid),
+    "Total Tagihan": parseInt(bill.ordersTotal),
+    "Total Dibayarkan": parseInt(bill.totalPaid),
   }));
 
-  const totalHarga = hotelsBill.reduce(
-    (sum, item) => sum + parseFloat(item.ordersTotal - item.totalPaid),
-    0
-  );
-
-  const totalTagihan = dataHotel?.totalBills || 0;
+  const totalTagihan = dataHotel?.totalBills;
+  const totalDibayarkan = dataHotel?.totalPaid;
 
   return (
     <div className=" px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
@@ -280,7 +279,9 @@ export default function HotelDetail({ onBack, hotel }) {
             <Table
               headers={tableHeaders}
               data={tableDataHotel}
-              total={totalHarga}
+              total={totalTagihan}
+              totalDibayarkan={totalDibayarkan}
+              isHotelDetail={true}
             />
           </div>
         </>
@@ -301,7 +302,6 @@ export default function HotelDetail({ onBack, hotel }) {
 HotelDetail.propTypes = {
   onBack: PropTypes.func.isRequired,
   hotel: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    nama: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
   }).isRequired,
 };

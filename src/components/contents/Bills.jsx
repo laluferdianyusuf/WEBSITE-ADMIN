@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../atoms/SearchBar";
@@ -9,7 +10,8 @@ import PropTypes from "prop-types";
 import Pagination from "../molecules/Pagination";
 import NoBillData from "/icons/belum-ada-nota.svg";
 import { listBills } from "../../redux/slices/billSlice";
-const tableHeaders = ["Tanggal", "Nama Hotel", "Total Tagihan"];
+
+const tableHeaders = ["Tanggal", "Nama Hotel", "Total Tagihan", "Status Tagihan"];
 
 export default function Bills({ handleBillSelect }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +53,8 @@ export default function Bills({ handleBillSelect }) {
   const dataFiltered = filteredBills.map((bill) => ({
     Tanggal: bill.date,
     "Nama Hotel": bill.hotelName,
-    "Total Tagihan": bill.total - bill.paid,
+    "Total Tagihan": bill.total,
+    "Status Tagihan": bill.total === bill.paid ? "Lunas" : "Belum Lunas",
     id: bill.billId,
     orders: bill.orders.map((order) => ({
       name: order.productName,
@@ -124,7 +127,7 @@ export default function Bills({ handleBillSelect }) {
         </div>
         <ActionButton onClick={openModal}>
           <GrAddCircle className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">Tambah produk</p>
+          <p className="text-slate-900 font-semibold text-xs">Tambah Nota</p>
         </ActionButton>
       </div>
       {currentBills.length === 0 ? (

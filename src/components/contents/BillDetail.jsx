@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Table from "../organism/Table";
 import ActionButton from "../atoms/ActionButton";
 import { GoTrash, GoDownload } from "react-icons/go";
-import { FiEdit2 } from "react-icons/fi";
 import InputProduct from "../molecules/InputProduct";
 import ModalCrud from "../molecules/ModalCrud";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,6 +16,17 @@ const tableHeaders2 = [
   "Harga / Unit",
   "Jumlah Harga",
 ];
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
+  return date.toLocaleDateString("id-ID", options);
+};
 
 export default function BillDetail({ onBack, bill }) {
   const dispatch = useDispatch();
@@ -57,10 +67,6 @@ export default function BillDetail({ onBack, bill }) {
     "Harga / Unit": order.productPrice,
     "Jumlah Harga": parseFloat(order.total),
   }));
-
-  const handleEditClick = () => {
-    setEditModalOpen(true);
-  };
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
@@ -136,19 +142,20 @@ export default function BillDetail({ onBack, bill }) {
           </ul>
         </div>
       </div>
-      <div className="self-end mb-6 flex gap-[26px]">
-        <ActionButton onClick={handleExportClick}>
-          <GoDownload className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
-        </ActionButton>
-        {/* <ActionButton onClick={handleEditClick}>
-          <FiEdit2 className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">Edit Nota</p>
-        </ActionButton> */}
-        <ActionButton onClick={handleDeleteClick}>
-          <GoTrash className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>
-        </ActionButton>
+      <div className="ms-12 flex justify-between mb-6 items-center">
+        <h3 className="font-extralight text-slate-900 text-base">
+          {dataBill && formatDate(dataBill.createdAt)}
+        </h3>
+        <div className="flex gap-4">
+          <ActionButton onClick={handleExportClick}>
+            <GoDownload className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
+          </ActionButton>
+          <ActionButton onClick={handleDeleteClick}>
+            <GoTrash className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>
+          </ActionButton>
+        </div>
       </div>
       <div className="ms-12 overflow-auto no-scrollbar">
         <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />

@@ -3,7 +3,14 @@ import TableBody from "../molecules/TableBody";
 import TableHeader from "../molecules/TableHeader";
 import TableFooter from "../molecules/TableFooter";
 
-export default function Table({ headers, data, total, sisa, onRowClick }) {
+export default function Table({
+  headers,
+  data,
+  total,
+  totalDibayarkan,
+  onRowClick,
+  isHotelDetail,
+}) {
   return (
     <div className="overflow-auto no-scrollbar rounded-lg shadow-sm border w-full">
       <table className="w-full">
@@ -13,18 +20,12 @@ export default function Table({ headers, data, total, sisa, onRowClick }) {
           columns={headers}
           onRowClick={onRowClick ? onRowClick : null}
         />
-        {sisa && total && (
-          <TableFooter
-            total={sisa}
-            colSpan={headers.length}
-            text="Sisa Tagihan"
-          />
-        )}
-        {total && (
+        {(total || totalDibayarkan) && (
           <TableFooter
             total={total}
             colSpan={headers.length}
-            text="Total Tagihan"
+            totalDibayarkan={totalDibayarkan}
+            isHotelDetail={isHotelDetail}
           />
         )}
       </table>
@@ -36,6 +37,7 @@ Table.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   total: PropTypes.number,
-  sisa: PropTypes.number,
-  onRowClick: PropTypes.func.isRequired,
+  totalDibayarkan: PropTypes.number,
+  onRowClick: PropTypes.func,
+  isHotelDetail: PropTypes.bool,
 };

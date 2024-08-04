@@ -54,6 +54,7 @@ export default function InputNotaField({
         value={formattedValue}
         onChange={handleChange}
         className="px-[10px] py-[7px] border rounded-lg border-slate-400 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-400 text-xs font-medium w-full"
+        required
       />
     </div>
   );

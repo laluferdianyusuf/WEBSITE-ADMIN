@@ -19,9 +19,9 @@ export default function Sidebar({
 }) {
   const menu = [
     {
-      name: "Bills",
+      name: "Nota",
       icon: <FaRegMoneyBillAlt />,
-      handler: () => handleMenuClick("Bills"),
+      handler: () => handleMenuClick("Nota"),
     },
     {
       name: "Hotel",

@@ -19,7 +19,7 @@ import ModalConfirmation from "./molecules/ModalConfirmation";
 import animation from "/icons/login-animation.svg";
 
 const Admin = () => {
-  const [activeMenu, setActiveMenu] = useState("Bills");
+  const [activeMenu, setActiveMenu] = useState("Nota");
   const [selectedBill, setSelectedBill] = useState(null);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,12 +50,12 @@ const Admin = () => {
   const handleBillSelect = (bill) => {
     console.log(bill);
     setSelectedBill(bill);
-    setActiveMenu("BillsDetail");
+    setActiveMenu("NotaDetail");
   };
 
   const handleBackToBills = () => {
     setSelectedBill(null);
-    setActiveMenu("Bills");
+    setActiveMenu("Nota");
   };
 
   const handleHotelSelect = (index) => {
@@ -70,7 +70,7 @@ const Admin = () => {
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-    setActiveMenu("Bills");
+    setActiveMenu("Nota");
   };
 
   const handleLogout = () => {
@@ -105,13 +105,13 @@ const Admin = () => {
     }
 
     switch (activeMenu) {
-      case "Bills":
+      case "Nota":
         return <Bills handleBillSelect={handleBillSelect} />;
       case "Product":
         return <Product />;
       case "Hotel":
         return <Hotel handleHotelSelect={handleHotelSelect} />;
-      case "BillsDetail":
+      case "NotaDetail":
         return <BillDetail bill={selectedBill} onBack={handleBackToBills} />;
       case "HotelDetail":
         return <HotelDetail hotel={selectedHotel} onBack={handleBackToHotel} />;

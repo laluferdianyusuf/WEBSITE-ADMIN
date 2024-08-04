@@ -28,5 +28,5 @@ TableRow.propTypes = {
   rowData: PropTypes.arrayOf(PropTypes.node).isRequired,
   isHeader: PropTypes.bool,
   index: PropTypes.number,
-  onRowClick: PropTypes.func.isRequired,
+  onRowClick: PropTypes.func,
 };
