@@ -58,10 +58,22 @@ export default function InputProduct({
     const newInputs = [...inputs];
     newInputs[index].item = selectedOption || null;
     setInputs(newInputs);
+
+    setValidationErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      delete newErrors[`item-${index}`];
+      return newErrors;
+    });
   };
 
   const handleHotelChange = (selectedOption) => {
     setSelectedHotel(selectedOption);
+
+    setValidationErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      delete newErrors.selectedHotel;
+      return newErrors;
+    });
   };
 
   useEffect(() => {
