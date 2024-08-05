@@ -9,7 +9,7 @@ import { addBills, listBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import { getProducts } from "../../redux/slices/productSlice";
 import Select from "react-select";
-import WarningNotification from "../atoms/WarningNotification";
+import SuccessNotification from "../atoms/SuccessNotification";
 
 export default function InputProduct({
   closeModal,
@@ -26,6 +26,7 @@ export default function InputProduct({
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     dispatch(getHotels());
@@ -137,6 +138,7 @@ export default function InputProduct({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSuccess("");
     if (!validateForm()) {
       return;
     }
@@ -157,6 +159,7 @@ export default function InputProduct({
       await dispatch(addBills(billData))
         .unwrap()
         .then(() => {
+          setSuccess("Berhasil membuat nota");
           dispatch(listBills());
           closeModal();
           setInputs([
@@ -349,6 +352,7 @@ export default function InputProduct({
           </div>
         </form>
       </div>
+      {success && <SuccessNotification text={success} duration={3000} />}
     </div>
   ) : null;
 }

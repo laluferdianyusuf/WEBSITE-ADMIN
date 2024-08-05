@@ -15,6 +15,7 @@ import {
   getHotels,
 } from "../../redux/slices/hotelSlice";
 import WarningNotification from "../atoms/WarningNotification";
+import SuccessNotification from "../atoms/SuccessNotification";
 
 const tableHeaders3 = ["ID", "Nama Hotel", "Status", "Actions"];
 
@@ -30,6 +31,7 @@ export default function Hotel({ handleHotelSelect }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     dispatch(getHotels());
@@ -61,26 +63,40 @@ export default function Hotel({ handleHotelSelect }) {
   };
 
   const handleSaveDelete = async () => {
+    setSuccess("");
+    setError("");
     try {
       const hotelId = currentHotelIndex.id;
-      await dispatch(deleteHotel(hotelId)).unwrap();
-      dispatch(getHotels());
-      handleCloseDelete();
-      window.location.reload();
+      await dispatch(deleteHotel(hotelId))
+        .unwrap()
+        .then(() => {
+          setSuccess("Berhasil menghapus hotel");
+          dispatch(getHotels());
+          handleCloseDelete();
+        })
+        .catch((error) => {
+          setError("Gagal menghapus hotel");
+        });
     } catch (err) {
       console.error("Delete failed:", err);
     }
   };
 
   const handleSaveEdit = async () => {
+    setSuccess("");
+    setError("");
     try {
       const hotelId = currentHotelIndex.id;
-      await dispatch(
-        updateHotel({ hotelName: inputHotel, id: hotelId })
-      ).unwrap();
-      dispatch(getHotels());
-      handleCloseEdit();
-      window.location.reload();
+      await dispatch(updateHotel({ hotelName: inputHotel, id: hotelId }))
+        .unwrap()
+        .then(() => {
+          setSuccess("Berhasil update hotel");
+          dispatch(getHotels());
+          handleCloseEdit();
+        })
+        .catch((error) => {
+          setError("Gagal update hotel");
+        });
     } catch (err) {
       console.error("Update failed:", err);
     }
@@ -88,10 +104,12 @@ export default function Hotel({ handleHotelSelect }) {
 
   const handleSaveAdd = async () => {
     setError("");
+    setSuccess("");
     try {
       await dispatch(createHotel({ hotelName: inputHotel }))
         .unwrap()
         .then(() => {
+          setSuccess("Berhasil menambah hotel");
           dispatch(getHotels());
           handleCloseAdd();
         })
@@ -131,7 +149,6 @@ export default function Hotel({ handleHotelSelect }) {
     const sortedData = [...data].sort(
       (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
     );
-    console.log(sortedData);
 
     return sortedData[0].updatedAt;
   };
@@ -264,6 +281,7 @@ export default function Hotel({ handleHotelSelect }) {
         functionOk={handleSaveDelete}
       />
 
+      {success && <SuccessNotification text={success} duration={3000} />}
       {error && <WarningNotification text={error} duration={3000} />}
     </div>
   );

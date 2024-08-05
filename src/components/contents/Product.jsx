@@ -17,6 +17,7 @@ import {
   getProducts,
 } from "../../redux/slices/productSlice";
 import WarningNotification from "../atoms/WarningNotification";
+import SuccessNotification from "../atoms/SuccessNotification";
 
 export default function Product() {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ export default function Product() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -70,11 +72,13 @@ export default function Product() {
 
   const handleSaveDelete = () => {
     setError("");
+    setSuccess("");
     try {
       const productId = currentProductIndex.id;
       dispatch(deleteProduct(productId))
         .unwrap()
         .then(() => {
+          setSuccess("Berhasil hapus produk");
           dispatch(getProducts());
           handleCloseDelete();
         })
@@ -87,12 +91,14 @@ export default function Product() {
   };
 
   const handleSaveEdit = () => {
+    setSuccess("");
     setError("");
     try {
       const productId = currentProductIndex.id;
       dispatch(updateProduct({ name: inputProduct, id: productId }))
         .unwrap()
         .then(() => {
+          setSuccess("berhasil update produk");
           dispatch(getProducts());
           handleCloseEdit();
         })
@@ -105,11 +111,13 @@ export default function Product() {
   };
 
   const handleSaveAdd = () => {
+    setSuccess("");
     setError("");
     try {
       dispatch(createProduct({ name: inputProduct }))
         .unwrap()
         .then(() => {
+          setSuccess("Berhasil menambah produk");
           dispatch(getProducts());
           handleCloseAdd();
         })
@@ -271,6 +279,7 @@ export default function Product() {
         functionCancel={handleCloseDelete}
         functionOk={handleSaveDelete}
       />
+      {success && <SuccessNotification text={success} duration={3000} />}
       {error && <WarningNotification text={error} duration={3000} />}
     </div>
   );
