@@ -1,13 +1,6 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logout } from "../redux/slices/adminSlice";
-import { TbLogout, TbLogin } from "react-icons/tb";
-import { FaRegMoneyBillAlt } from "react-icons/fa";
-import { FaHotel } from "react-icons/fa";
-import { AiFillProduct } from "react-icons/ai";
-import PropTypes from "prop-types";
 import Sidebar from "./navigations/Sidebar";
 import Hotel from "./contents/Hotel";
 import Bills from "./contents/Bills";
@@ -18,8 +11,9 @@ import Login from "./contents/Login";
 import ModalConfirmation from "./molecules/ModalConfirmation";
 import animation from "/icons/login-animation.svg";
 
-const Admin = () => {
+export default function Admin() {
   const [activeMenu, setActiveMenu] = useState("Nota");
+  const [previousMenu, setPreviousMenu] = useState(null);
   const [selectedBill, setSelectedBill] = useState(null);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,28 +38,25 @@ const Admin = () => {
   }, [dispatch]);
 
   const handleMenuClick = (menuName) => {
+    setPreviousMenu(activeMenu);
     setActiveMenu(menuName);
   };
 
   const handleBillSelect = (bill) => {
-    console.log(bill);
+    setPreviousMenu(activeMenu);
     setSelectedBill(bill);
     setActiveMenu("NotaDetail");
   };
 
-  const handleBackToBills = () => {
-    setSelectedBill(null);
-    setActiveMenu("Nota");
+  const handleBack = () => {
+    setActiveMenu(previousMenu);
+    setPreviousMenu(null);
   };
 
   const handleHotelSelect = (index) => {
+    setPreviousMenu(activeMenu);
     setSelectedHotel(index);
     setActiveMenu("HotelDetail");
-  };
-
-  const handleBackToHotel = () => {
-    setSelectedHotel(null);
-    setActiveMenu("Hotel");
   };
 
   const handleLogin = () => {
@@ -112,9 +103,15 @@ const Admin = () => {
       case "Hotel":
         return <Hotel handleHotelSelect={handleHotelSelect} />;
       case "NotaDetail":
-        return <BillDetail bill={selectedBill} onBack={handleBackToBills} />;
+        return <BillDetail bill={selectedBill} onBack={handleBack} />;
       case "HotelDetail":
-        return <HotelDetail hotel={selectedHotel} onBack={handleBackToHotel} />;
+        return (
+          <HotelDetail
+            hotel={selectedHotel}
+            onBack={handleBack}
+            onBillSelect={handleBillSelect}
+          />
+        );
       default:
         return <Bills handleBillSelect={handleBillSelect} />;
     }
@@ -141,6 +138,4 @@ const Admin = () => {
       />
     </div>
   );
-};
-
-export default Admin;
+}
