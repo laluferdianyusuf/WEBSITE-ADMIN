@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../atoms/SearchBar";
@@ -11,7 +10,12 @@ import Pagination from "../molecules/Pagination";
 import NoBillData from "/icons/belum-ada-nota.svg";
 import { listBills } from "../../redux/slices/billSlice";
 
-const tableHeaders = ["Tanggal", "Nama Hotel", "Total Tagihan", "Status Tagihan"];
+const tableHeaders = [
+  "Tanggal",
+  "Nama Hotel",
+  "Total Tagihan",
+  "Status Tagihan",
+];
 
 export default function Bills({ handleBillSelect }) {
   const [isOpen, setIsOpen] = useState(false);

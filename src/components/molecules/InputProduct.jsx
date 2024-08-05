@@ -5,10 +5,11 @@ import { FiMinusCircle } from "react-icons/fi";
 import Button from "../atoms/Button";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { addBills, updateBills } from "../../redux/slices/billSlice";
+import { addBills, listBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import { getProducts } from "../../redux/slices/productSlice";
 import Select from "react-select";
+import WarningNotification from "../atoms/WarningNotification";
 
 export default function InputProduct({
   closeModal,
@@ -24,6 +25,7 @@ export default function InputProduct({
   ]);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     dispatch(getHotels());
@@ -96,8 +98,34 @@ export default function InputProduct({
     }
   };
 
-  const handleSubmit = async (event) => {
+  const validateForm = () => {
+    const errors = {};
     if (!selectedHotel) {
+      errors.selectedHotel = "Please select a hotel.";
+    }
+
+    inputs.forEach((input, index) => {
+      if (!input.item) {
+        errors[`item-${index}`] = "Please select a product.";
+      }
+      if (!input.quantity) {
+        errors[`quantity-${index}`] = "Quantity is required.";
+      }
+      if (!input.harga_unit) {
+        errors[`harga_unit-${index}`] = "Price per unit is required.";
+      }
+      if (!input.total_harga) {
+        errors[`total_harga-${index}`] = "Total price is required.";
+      }
+    });
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) {
       return;
     }
 
@@ -114,14 +142,16 @@ export default function InputProduct({
     };
 
     try {
-      const resultAction = await dispatch(addBills(billData));
-
-      if (addBills.fulfilled.match(resultAction)) {
-        dispatch(getHotels());
-        closeModal();
-      } else {
-        alert(resultAction.payload?.message || "Failed to create bill");
-      }
+      await dispatch(addBills(billData))
+        .unwrap()
+        .then(() => {
+          dispatch(listBills());
+          closeModal();
+          setInputs([
+            { item: "", quantity: "", harga_unit: "", total_harga: "" },
+          ]);
+          setSelectedHotel(null);
+        });
     } catch (error) {
       console.error("Error creating bill:", error);
     }
@@ -201,6 +231,11 @@ export default function InputProduct({
               isClearable
               styles={customStyles}
             />
+            {validationErrors.selectedHotel && (
+              <span className="text-red-500 text-xs">
+                {validationErrors.selectedHotel}
+              </span>
+            )}
           </div>
           {inputs.map((input, index) => (
             <div
@@ -221,6 +256,11 @@ export default function InputProduct({
                   isClearable
                   styles={customStyles}
                 />
+                {validationErrors[`item-${index}`] && (
+                  <span className="text-red-500 text-xs">
+                    {validationErrors[`item-${index}`]}
+                  </span>
+                )}
               </div>
               <InputNotaField
                 label="Quantity"
@@ -231,6 +271,11 @@ export default function InputProduct({
                 onChange={(e) => handleInputChange(index, e)}
                 isModal={true}
               />
+              {validationErrors[`quantity-${index}`] && (
+                <span className="text-red-500 text-xs">
+                  {validationErrors[`quantity-${index}`]}
+                </span>
+              )}
               <InputNotaField
                 label="Harga / Unit"
                 name="harga_unit"
@@ -240,6 +285,11 @@ export default function InputProduct({
                 onChange={(e) => handleInputChange(index, e)}
                 isModal={true}
               />
+              {validationErrors[`harga_unit-${index}`] && (
+                <span className="text-red-500 text-xs">
+                  {validationErrors[`harga_unit-${index}`]}
+                </span>
+              )}
               <InputNotaField
                 label="Total Harga Barang"
                 name="total_harga"
@@ -249,6 +299,11 @@ export default function InputProduct({
                 onChange={(e) => handleInputChange(index, e)}
                 isModal={true}
               />
+              {validationErrors[`total_harga-${index}`] && (
+                <span className="text-red-500 text-xs">
+                  {validationErrors[`total_harga-${index}`]}
+                </span>
+              )}
               <div className="absolute right-[-3rem] top-[10px] flex justify-center items-center h-full">
                 {inputs.length > 1 && (
                   <button
