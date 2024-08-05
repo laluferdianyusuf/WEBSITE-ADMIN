@@ -16,10 +16,11 @@ import {
   deleteProduct,
   getProducts,
 } from "../../redux/slices/productSlice";
+import WarningNotification from "../atoms/WarningNotification";
 
 export default function Product() {
   const dispatch = useDispatch();
-  const { products, loading, error } = useSelector((state) => state.product);
+  const { products } = useSelector((state) => state.product);
   const [inputProduct, setInputProduct] = useState("");
   const [currentProductIndex, setCurrentProductIndex] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -27,6 +28,7 @@ export default function Product() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState("");
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -88,7 +90,7 @@ export default function Product() {
         handleCloseEdit();
       })
       .catch((error) => {
-        console.error("Update failed:", error);
+        setError("Produk sudah ada");
       });
   };
 
@@ -254,6 +256,7 @@ export default function Product() {
         functionCancel={handleCloseDelete}
         functionOk={handleSaveDelete}
       />
+      {error && <WarningNotification text={error} duration={3000} />}
     </div>
   );
 }
