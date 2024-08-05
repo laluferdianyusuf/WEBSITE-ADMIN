@@ -80,7 +80,6 @@ export default function Product() {
         })
         .catch((error) => {
           setError("Error saat delete");
-          handleCloseDelete();
         });
     } catch (error) {
       console.log(error);
@@ -99,7 +98,6 @@ export default function Product() {
         })
         .catch((error) => {
           setError("Error saat edit");
-          handleCloseEdit();
         });
     } catch (error) {
       console.log(error);
@@ -117,7 +115,6 @@ export default function Product() {
         })
         .catch((error) => {
           setError("Produk sudah ada");
-          handleCloseAdd();
         });
     } catch (error) {
       console.log(error);
