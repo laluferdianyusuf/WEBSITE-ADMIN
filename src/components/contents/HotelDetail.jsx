@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import { GoDownload } from "react-icons/go";
 import { PiHandCoinsLight } from "react-icons/pi";
@@ -21,7 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import NoBillData from "/icons/belum-ada-nota.svg";
 
 const tableHeaders = ["Tanggal", "Total Tagihan", "Total Dibayarkan"];
-export default function HotelDetail({ onBack, hotel }) {
+export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   const dispatch = useDispatch();
   const { hotels, loading, error } = useSelector((state) => state.hotel);
   const [dataHotel, setDataHotel] = useState(null);
@@ -56,6 +54,7 @@ export default function HotelDetail({ onBack, hotel }) {
   if (error) return <p>Error loading hotel details.</p>;
 
   const hotelsBill = dataHotel?.bills || [];
+  console.log(hotelsBill);
 
   const handlePaying = () => {
     setIsPaying(true);
@@ -154,6 +153,7 @@ export default function HotelDetail({ onBack, hotel }) {
   };
 
   const tableDataHotel = hotelsBill.map((bill) => ({
+    ...bill,
     Tanggal: formatDate(bill.createdAt),
     "Total Tagihan": parseInt(bill.ordersTotal),
     "Total Dibayarkan": parseInt(bill.totalPaid),
@@ -282,6 +282,7 @@ export default function HotelDetail({ onBack, hotel }) {
               total={totalTagihan}
               totalDibayarkan={totalDibayarkan}
               isHotelDetail={true}
+              onRowClick={(bill) => onBillSelect(bill)}
             />
           </div>
         </>

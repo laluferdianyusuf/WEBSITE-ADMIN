@@ -143,7 +143,7 @@ export default function BillDetail({ onBack, bill }) {
         </div>
       </div>
       <div className="ms-12 flex justify-between mb-6 items-center">
-        <h3 className="font-extralight text-slate-900 text-base">
+        <h3 className="font-bold text-slate-700 text-xs">
           {dataBill && formatDate(dataBill.createdAt)}
         </h3>
         <div className="flex gap-4">
