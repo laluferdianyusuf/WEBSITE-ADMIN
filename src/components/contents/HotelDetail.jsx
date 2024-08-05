@@ -206,9 +206,9 @@ export default function HotelDetail({ onBack, hotel }) {
               )}
             </div>
             <div className="flex gap-[18px]">
-              <ActionButton onClick={handlePaying} isDisabled={sisa === 0}>
+              <ActionButton onClick={handlePaying}>
                 <PiHandCoinsLight className="mr-[6px]" size={16} />
-                <p className="font-semibold text-xs">
+                <p className="text-slate-900 font-semibold text-xs">
                   Bayar Tagihan
                 </p>
               </ActionButton>
@@ -220,7 +220,7 @@ export default function HotelDetail({ onBack, hotel }) {
               </ActionButton>
             </div>
           </div>
-          <div className="grid grid-cols-3 w-1/3 text-xs text-slate-900 mb-5 ms-12">
+          <div className="grid grid-cols-3 w-1/2 text-xs text-slate-900 mb-5 ms-12">
             <p>Total Tagihan</p>
             <p>:</p>
             <p>
@@ -229,7 +229,7 @@ export default function HotelDetail({ onBack, hotel }) {
                 currency: "IDR",
               })}
             </p>
-            <p>Sisa Tagihan</p>
+            <p>Sisa</p>
             <p>:</p>
             <p>
               {sisa.toLocaleString("id-ID", {
