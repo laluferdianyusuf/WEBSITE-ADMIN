@@ -90,7 +90,7 @@ export default function Product() {
         handleCloseEdit();
       })
       .catch((error) => {
-        setError("Produk sudah ada");
+        setError("Error saat edit");
       });
   };
 
@@ -102,7 +102,7 @@ export default function Product() {
         handleCloseAdd();
       })
       .catch((error) => {
-        console.error("Add failed:", error);
+        setError("Produk sudah ada");
       });
   };
 
