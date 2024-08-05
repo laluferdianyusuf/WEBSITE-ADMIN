@@ -97,6 +97,7 @@ export default function Hotel({ handleHotelSelect }) {
         })
         .catch((error) => {
           setError("Hotel sudah ada");
+          handleCloseAdd();
         });
     } catch (err) {
       console.error("Add failed:", err);

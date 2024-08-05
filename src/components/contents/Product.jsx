@@ -69,41 +69,59 @@ export default function Product() {
   };
 
   const handleSaveDelete = () => {
-    const productId = currentProductIndex.id;
-    dispatch(deleteProduct(productId))
-      .unwrap()
-      .then(() => {
-        dispatch(getProducts());
-        handleCloseDelete();
-      })
-      .catch((error) => {
-        console.error("Delete failed:", error);
-      });
+    setError("");
+    try {
+      const productId = currentProductIndex.id;
+      dispatch(deleteProduct(productId))
+        .unwrap()
+        .then(() => {
+          dispatch(getProducts());
+          handleCloseDelete();
+        })
+        .catch((error) => {
+          setError("Error saat delete");
+          handleCloseDelete();
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSaveEdit = () => {
-    const productId = currentProductIndex.id;
-    dispatch(updateProduct({ name: inputProduct, id: productId }))
-      .unwrap()
-      .then(() => {
-        dispatch(getProducts());
-        handleCloseEdit();
-      })
-      .catch((error) => {
-        setError("Error saat edit");
-      });
+    setError("");
+    try {
+      const productId = currentProductIndex.id;
+      dispatch(updateProduct({ name: inputProduct, id: productId }))
+        .unwrap()
+        .then(() => {
+          dispatch(getProducts());
+          handleCloseEdit();
+        })
+        .catch((error) => {
+          setError("Error saat edit");
+          handleCloseEdit();
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSaveAdd = () => {
-    dispatch(createProduct({ name: inputProduct }))
-      .unwrap()
-      .then(() => {
-        dispatch(getProducts());
-        handleCloseAdd();
-      })
-      .catch((error) => {
-        setError("Produk sudah ada");
-      });
+    setError("");
+    try {
+      dispatch(createProduct({ name: inputProduct }))
+        .unwrap()
+        .then(() => {
+          dispatch(getProducts());
+          handleCloseAdd();
+        })
+        .catch((error) => {
+          setError("Produk sudah ada");
+          handleCloseAdd();
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSearch = (query) => {
