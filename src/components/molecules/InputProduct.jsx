@@ -254,8 +254,8 @@ export default function InputProduct({
               key={index}
               className="grid grid-cols-4 gap-3 mb-3 items-center relative w-11/12"
             >
-              <div className="col-span-1">
-                <label className="block mb-2 text-xs font-medium text-gray-700">
+              <div className="col-span-1 mt-[5px]">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
                   Nama Produk
                 </label>
                 <Select
