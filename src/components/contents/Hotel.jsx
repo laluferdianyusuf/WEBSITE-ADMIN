@@ -6,7 +6,7 @@ import { GrAddCircle } from "react-icons/gr";
 import TableWithActions from "../organism/TableWithActions";
 import ModalCrud from "../molecules/ModalCrud";
 import Pagination from "../molecules/Pagination";
-import PropTypes from "prop-types";
+import { listBills } from "../../redux/slices/billSlice";
 import NoHotelData from "/icons/belum-ada-hotel.svg";
 import {
   createHotel,
@@ -110,6 +110,7 @@ export default function Hotel({ handleHotelSelect }) {
         .unwrap()
         .then(() => {
           setSuccess("Berhasil menambah hotel");
+          dispatch(listBills());
           dispatch(getHotels());
           handleCloseAdd();
         })

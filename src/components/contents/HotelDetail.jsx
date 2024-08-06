@@ -86,6 +86,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       } else {
         setShowSuccess(false);
         setShowWarning(true);
+        console.log(response.payload);
       }
       const result = await dispatch(getDetailHotels(hotel.id));
       const hotelData = result.payload?.data?.hotel;
