@@ -8,6 +8,8 @@ import ModalCrud from "../molecules/ModalCrud";
 import { useSelector, useDispatch } from "react-redux";
 import { getDetailBill, deleteBill } from "../../redux/slices/billSlice";
 import BackButton from "../atoms/BackButton";
+import WarningNotification from "../atoms/WarningNotification";
+import SuccessNotification from "../atoms/SuccessNotification";
 
 const tableHeaders2 = [
   "No",
@@ -36,6 +38,7 @@ export default function BillDetail({ onBack, bill }) {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,9 +88,16 @@ export default function BillDetail({ onBack, bill }) {
 
   const confirmDelete = async () => {
     try {
-      await dispatch(deleteBill(selectedBill.id));
-      onBack();
-      handleCloseDeleteModal();
+      await dispatch(deleteBill(selectedBill.id))
+        .unwrap()
+        .then(() => {
+          setSuccess("Berhasil hapus nota");
+          handleCloseDeleteModal();
+          onBack();
+        })
+        .catch((error) => {
+          setDeleteError("Gagal hapus nota");
+        });
     } catch (err) {
       setDeleteError("Failed to delete the bill. Please try again.");
       console.error("Error deleting bill:", err);
@@ -181,9 +191,8 @@ export default function BillDetail({ onBack, bill }) {
         inputLabel="Nama Hotel"
         isDisabled={true}
       />
-      {deleteError && (
-        <div className="text-red-500 mt-2 text-sm">{deleteError}</div>
-      )}
+      {deleteError && <WarningNotification text={deleteError} />}
+      {success && <SuccessNotification text={success} />}
     </div>
   );
 }

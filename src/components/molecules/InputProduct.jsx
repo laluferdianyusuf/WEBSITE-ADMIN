@@ -9,7 +9,6 @@ import { addBills, listBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import { getProducts } from "../../redux/slices/productSlice";
 import Select from "react-select";
-import SuccessNotification from "../atoms/SuccessNotification";
 
 export default function InputProduct({
   closeModal,
@@ -26,7 +25,6 @@ export default function InputProduct({
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
-  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     dispatch(getHotels());
@@ -138,10 +136,6 @@ export default function InputProduct({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSuccess("");
-    if (!validateForm()) {
-      return;
-    }
 
     const products = inputs.map((input) => ({
       productName: input.item?.label || "",
@@ -159,14 +153,14 @@ export default function InputProduct({
       await dispatch(addBills(billData))
         .unwrap()
         .then(() => {
-          setSuccess("Berhasil membuat nota");
           dispatch(listBills());
           closeModal();
           setInputs([
             { item: "", quantity: "", harga_unit: "", total_harga: "" },
           ]);
           setSelectedHotel(null);
-        });
+        })
+        .catch((error) => console.log(error));
     } catch (error) {
       console.error("Error creating bill:", error);
     }
@@ -352,7 +346,6 @@ export default function InputProduct({
           </div>
         </form>
       </div>
-      {success && <SuccessNotification text={success} duration={3000} />}
     </div>
   ) : null;
 }
@@ -362,4 +355,5 @@ InputProduct.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   initialData: PropTypes.object,
   isEdit: PropTypes.bool,
+  setSuccess: PropTypes.func.isRequired,
 };
