@@ -355,5 +355,4 @@ InputProduct.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   initialData: PropTypes.object,
   isEdit: PropTypes.bool,
-  setSuccess: PropTypes.func.isRequired,
 };
