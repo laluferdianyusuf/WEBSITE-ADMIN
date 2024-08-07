@@ -137,6 +137,10 @@ export default function InputProduct({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     const products = inputs.map((input) => ({
       productName: input.item?.label || "",
       quantity: input.quantity,
@@ -160,7 +164,7 @@ export default function InputProduct({
           ]);
           setSelectedHotel(null);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => validateForm());
     } catch (error) {
       console.error("Error creating bill:", error);
     }
