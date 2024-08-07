@@ -6,8 +6,6 @@ import { Provider } from "react-redux";
 import { store } from "./redux/app/store.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import ExportBill from "./pages/ExportBill.jsx";
-import Hotel from "./pages/Hotel.jsx";
-import Slicing from "./pages/Slicing.jsx";
 import InvoiceExport from "./pages/Invoice.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -19,8 +17,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/billexport" element={<ExportBill />} />
           <Route path="/invoiceexport" element={<InvoiceExport />} />
-          <Route path="/hotel" element={<Hotel />} />
-          <Route path="/slicing" element={<Slicing />} />
         </Routes>
       </Router>
     </Provider>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logout } from "../redux/slices/adminSlice";
 import Sidebar from "./navigations/Sidebar";
@@ -10,6 +10,7 @@ import HotelDetail from "./contents/HotelDetail";
 import Login from "./contents/Login";
 import ModalConfirmation from "./molecules/ModalConfirmation";
 import animation from "/icons/login-animation.svg";
+import { IoClose, IoMenu } from "react-icons/io5";
 
 export default function Admin() {
   const [activeMenu, setActiveMenu] = useState("Nota");
@@ -18,6 +19,7 @@ export default function Admin() {
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const { admin } = useSelector((state) => state.admin);
 
@@ -40,6 +42,10 @@ export default function Admin() {
   const handleMenuClick = (menuName) => {
     setPreviousMenu(activeMenu);
     setActiveMenu(menuName);
+  };
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const handleBillSelect = (bill) => {
@@ -118,7 +124,13 @@ export default function Admin() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-custom-black-1 flex flex-row">
+    <div className="w-full min-h-screen bg-custom-white-1 lg:bg-custom-black-1 flex flex-col lg:flex-row relative">
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-40 lg:hidden"
+          onClick={handleMenuToggle}
+        ></div>
+      )}
       <Sidebar
         activeMenu={activeMenu}
         handleMenuClick={handleMenuClick}
@@ -126,8 +138,18 @@ export default function Admin() {
         onLogout={handleLogout}
         onLogin={handleLogin}
         user={admin.user}
+        isOpen={isMenuOpen}
+        handleMenuToggle={handleMenuToggle}
       />
-      <div className="flex-grow">{renderContent()}</div>
+      <div className="lg:hidden bg-custom-black-1 px-9 py-5 flex justify-center relative items-center text-custom-white-1">
+        <button className="absolute left-9" onClick={handleMenuToggle}>
+          <IoMenu size={32} className="cursor-pointer" />
+        </button>
+        <div className="">
+          <h3 className="text-lg font-semibold">UD TIMUR JAYA RAYA</h3>
+        </div>
+      </div>
+      <div className="lg:flex-grow z-30">{renderContent()}</div>
       <ModalConfirmation
         title="Konfirmasi Logout"
         textCancel="Kembali"

@@ -123,7 +123,7 @@ export default function Bills({ handleBillSelect }) {
       </div>
 
       <div className="flex justify-between items-center">
-        <div className="w-1/3">
+        <div className="w-[40%] lg:w-1/3">
           <SearchBar
             onSearch={handleSearch}
             placeholder={`Cari dari total ${dataFiltered.length} data...`}
@@ -146,7 +146,7 @@ export default function Bills({ handleBillSelect }) {
           onRowClick={handleRowClick}
         />
       )}
-      <p className="text-xs text-end absolute bottom-[3rem] right-[2.3rem] ">
+      <p className="text-xs text-end lg:absolute lg:bottom-[3rem] lg:right-[2.3rem]">
         Menampilkan {startIndex} - {endIndex} dari total {filteredBills.length}{" "}
         data
       </p>

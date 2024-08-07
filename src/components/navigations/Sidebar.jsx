@@ -1,7 +1,3 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable no-unused-vars */
-import React from "react";
-import { TbLogout, TbLogin } from "react-icons/tb";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { FaHotel } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai";
@@ -9,29 +5,41 @@ import PropTypes from "prop-types";
 import ButtonAuth from "../atoms/ButtonAuth";
 import LoginIcon from "/icons/Login.svg";
 import LogoutIcon from "/icons/Logout.svg";
+import { IoClose } from "react-icons/io5";
 
 export default function Sidebar({
   activeMenu,
   handleMenuClick,
   isLoggedIn,
   onLogout,
+  isOpen,
+  handleMenuToggle,
   user,
 }) {
   const menu = [
     {
       name: "Nota",
       icon: <FaRegMoneyBillAlt />,
-      handler: () => handleMenuClick("Nota"),
+      handler: () => {
+        handleMenuToggle();
+        handleMenuClick("Nota");
+      },
     },
     {
       name: "Hotel",
       icon: <FaHotel />,
-      handler: () => handleMenuClick("Hotel"),
+      handler: () => {
+        handleMenuToggle();
+        handleMenuClick("Hotel");
+      },
     },
     {
       name: "Produk",
       icon: <AiFillProduct />,
-      handler: () => handleMenuClick("Produk"),
+      handler: () => {
+        handleMenuToggle();
+        handleMenuClick("Produk");
+      },
     },
   ];
 
@@ -41,19 +49,30 @@ export default function Sidebar({
 
   return (
     <div
-      className={`w-64 pl-7 pr-3 flex flex-col ${
+      className={`fixed lg:static top-0 left-0 z-50 lg:z-0 w-64 pl-7 pr-3 flex flex-col ${
         isLoggedIn ? "justify-between" : ""
-      } my-7`}
+      } bg-custom-black-1 h-full lg:h-auto transform ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0 transition-transform duration-300 ease-in-out`}
     >
-      <div className={`${isLoggedIn ? "" : "mb-10"}`}>
-        <div className="flex flex-col">
+      <div className={`my-6 ${isLoggedIn ? "" : "mb-10"}`}>
+        <div className="text-custom-white-1 lg:hidden text-right">
+          <button>
+            <IoClose
+              size={20}
+              className="cursor-pointer"
+              onClick={handleMenuToggle}
+            />
+          </button>
+        </div>
+        <div className="hidden lg:flex lg:flex-col">
           <span>
             <h1 className="font-semibold text-xl text-custom-white-1 mt-4">
               UD TIMUR JAYA RAYA
             </h1>
           </span>
         </div>
-        <div className="mt-16">
+        <div className="mt-6 lg:mt-16">
           <ul className="space-y-4">
             <div className="font-semibold text-xs text-slate-500">
               MENU MANAJEMEN
@@ -98,17 +117,36 @@ export default function Sidebar({
             })}
           </ul>
         </div>
+        {isLoggedIn ? (
+          <div className="lg:hidden mt-10" onClick={handleMenuToggle}>
+            <ButtonAuth handle={onLogout}>
+              <img src={LogoutIcon} alt="login" />
+              <p className="lowercase">admin</p>
+            </ButtonAuth>
+          </div>
+        ) : (
+          <div className="lg:hidden mt-10" onClick={handleMenuToggle}>
+            <ButtonAuth handle={handleLogin} isLogin={true}>
+              <img src={LoginIcon} alt="logout" />
+              <p className="capitalize">Login</p>
+            </ButtonAuth>
+          </div>
+        )}
       </div>
       {isLoggedIn ? (
-        <ButtonAuth handle={onLogout}>
-          <img src={LogoutIcon} alt="login" />
-          <p className="lowercase">admin</p>
-        </ButtonAuth>
+        <div className="hidden lg:block mb-10">
+          <ButtonAuth handle={onLogout}>
+            <img src={LogoutIcon} alt="login" />
+            <p className="lowercase">admin</p>
+          </ButtonAuth>
+        </div>
       ) : (
-        <ButtonAuth handle={handleLogin} isLogin={true}>
-          <img src={LoginIcon} alt="logout" />
-          <p className="capitalize"> Login</p>
-        </ButtonAuth>
+        <div className="hidden lg:block mb-10">
+          <ButtonAuth handle={handleLogin} isLogin={true}>
+            <img src={LoginIcon} alt="logout" />
+            <p className="capitalize">Login</p>
+          </ButtonAuth>
+        </div>
       )}
     </div>
   );
@@ -119,4 +157,6 @@ Sidebar.propTypes = {
   handleMenuClick: PropTypes.func,
   isLoggedIn: PropTypes.bool,
   onLogout: PropTypes.func,
+  isOpen: PropTypes.bool,
+  handleMenuToggle: PropTypes.func,
 };

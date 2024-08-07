@@ -176,8 +176,10 @@ export default function InputProduct({
       "&:hover": {
         borderColor: "#48bb78",
       },
-      fontSize: "0.75rem",
-      color: "#94A3B8",
+      fontSize: window.matchMedia("(min-width: 1024px)").matches
+        ? "12px"
+        : "10px",
+      color: "#0f172a",
       fontWeight: "500",
       minHeight: "38px",
     }),
@@ -195,7 +197,9 @@ export default function InputProduct({
       ...provided,
       backgroundColor: state.isSelected ? "#48bb78" : provided.backgroundColor,
       color: state.isSelected ? "#fff" : "#48bb78",
-      fontSize: "0.75rem",
+      fontSize: window.matchMedia("(min-width: 1024px)").matches
+        ? "12px"
+        : "10px",
       lineHeight: "1rem",
     }),
   };
@@ -218,7 +222,7 @@ export default function InputProduct({
       className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40"
       onClick={handleClickOutside}
     >
-      <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-3/4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-11/12 lg:w-3/4 max-h-[90vh] overflow-y-auto">
         <div className="font-semibold text-center">
           <h4 className="text-slate-300 text-[10px] mb-1">
             UD TIMUR JAYA RAYA
@@ -229,7 +233,7 @@ export default function InputProduct({
         </div>
         <form onSubmit={handleSubmit}>
           <div className="w-11/12 mb-3">
-            <label className="block mb-2 text-xs font-medium text-gray-700">
+            <label className="block mb-2 text-[10px] lg:text-xs font-medium text-slate-900">
               Nama Hotel
             </label>
             <Select
@@ -251,8 +255,8 @@ export default function InputProduct({
               key={index}
               className="grid grid-cols-4 gap-3 mb-3 items-center relative w-11/12"
             >
-              <div className="col-span-1 mt-[5px]">
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+              <div className="col-span-1 lgmt-[5px]">
+                <label className="block text-[10px] lg:text-xs font-medium text-slate-900 mb-[0.5px] lg:mb-1">
                   Nama Produk
                 </label>
                 <Select

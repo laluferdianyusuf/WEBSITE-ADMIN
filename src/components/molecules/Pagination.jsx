@@ -67,7 +67,7 @@ export default function Pagination({
     "rounded-md p-1.5 bg-slate-400 opacity-50 cursor-not-allowed";
 
   return (
-    <div className="pagination flex justify-end items-center gap-2 absolute bottom-[1rem] right-[2.3rem] ">
+    <div className="pagination flex justify-end items-center gap-2 lg:absolute lg:bottom-[1rem] lg:right-[2.3rem] ">
       <div className="flex gap-2">
         <button
           onClick={() => onPageChange(1)}

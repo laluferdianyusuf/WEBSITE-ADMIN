@@ -45,15 +45,15 @@ export default function InputNotaField({
   };
 
   return (
-    <div className={`input-field ${isModal ? "modal-input" : ""}`}>
-      <label className="mb-1 text-slate-900 text-xs">{label}</label>
+    <div className={`input-field text-[10px] lg:text-xs ${isModal ? "modal-input" : ""}`}>
+      <label className="mb-1 text-slate-900">{label}</label>
       <input
         name={name}
         type="text"
         placeholder={placeholder}
         value={formattedValue}
         onChange={handleChange}
-        className="px-[10px] py-[7px] border rounded-lg border-slate-400 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-400 text-xs font-medium w-full h-9"
+        className="px-[10px] py-[7px] border rounded-lg border-slate-400 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-400 font-medium w-full h-9"
         required
       />
     </div>
