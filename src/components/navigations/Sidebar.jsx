@@ -3,8 +3,7 @@ import { FaHotel } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai";
 import PropTypes from "prop-types";
 import ButtonAuth from "../atoms/ButtonAuth";
-import LoginIcon from "/icons/Login.svg";
-import LogoutIcon from "/icons/Logout.svg";
+import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 export default function Sidebar({
@@ -120,14 +119,14 @@ export default function Sidebar({
         {isLoggedIn ? (
           <div className="lg:hidden mt-10" onClick={handleMenuToggle}>
             <ButtonAuth handle={onLogout}>
-              <img src={LogoutIcon} alt="login" />
+              <IoMdLogOut size={18}/>
               <p className="lowercase">admin</p>
             </ButtonAuth>
           </div>
         ) : (
           <div className="lg:hidden mt-10" onClick={handleMenuToggle}>
             <ButtonAuth handle={handleLogin} isLogin={true}>
-              <img src={LoginIcon} alt="logout" />
+              <IoMdLogIn size={18}/>
               <p className="capitalize">Login</p>
             </ButtonAuth>
           </div>
@@ -136,14 +135,14 @@ export default function Sidebar({
       {isLoggedIn ? (
         <div className="hidden lg:block mb-10">
           <ButtonAuth handle={onLogout}>
-            <img src={LogoutIcon} alt="login" />
+            <IoMdLogOut size={18}/>
             <p className="lowercase">admin</p>
           </ButtonAuth>
         </div>
       ) : (
         <div className="hidden lg:block mb-10">
           <ButtonAuth handle={handleLogin} isLogin={true}>
-            <img src={LoginIcon} alt="logout" />
+            <IoMdLogIn size={18}/>
             <p className="capitalize">Login</p>
           </ButtonAuth>
         </div>

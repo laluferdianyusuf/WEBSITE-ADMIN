@@ -5,7 +5,7 @@ export default function ButtonAuth({ children, handle, isLogin = false }) {
     <button
       type="submit"
       className={`
-        ${isLogin ? "hover:bg-custom-green-1" : "hover:bg-red-500"}
+        ${isLogin ? "hover:border-custom-green-1 hover:text-custom-green-1" : "hover:border-red-500 hover:text-red-500"}
         rounded-[12px] ${
           isLogin ? "justify-center gap-2" : "flex-row-reverse justify-between"
         } flex  items-center w-full bg-transparent text-slate-100 border border-custom-white-1 text-[14px] px-3 py-1.5`}

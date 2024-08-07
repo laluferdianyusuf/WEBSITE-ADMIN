@@ -161,7 +161,7 @@ export default function BillDetail({ onBack, bill }) {
             <GoDownload className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
           </ActionButton>
-          <ActionButton onClick={handleDeleteClick}>
+          <ActionButton onClick={handleDeleteClick} isDelete={true}>
             <GoTrash className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>
           </ActionButton>
