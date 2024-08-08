@@ -9,7 +9,9 @@ export default function ActionButton({
   return (
     <button
       className={`border w-fit px-2 py-2 rounded-lg ${backgroundColor} flex items-center justify-center ${
-        isDisabled ? "cursor-not-allowed border-slate-400 text-slate-400" : "cursor-pointer border-slate-900 text-slate-900"
+        isDisabled
+          ? "cursor-not-allowed border-slate-400 text-slate-400"
+          : "cursor-pointer border-slate-900 text-slate-900"
       }`}
       onClick={onClick}
       disabled={isDisabled}
