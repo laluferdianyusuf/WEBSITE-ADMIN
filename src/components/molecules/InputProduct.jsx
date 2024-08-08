@@ -9,6 +9,7 @@ import { addBills, listBills } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import { getProducts } from "../../redux/slices/productSlice";
 import Select from "react-select";
+import SuccessNotification from "../atoms/SuccessNotification";
 
 export default function InputProduct({
   closeModal,
@@ -25,6 +26,10 @@ export default function InputProduct({
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     dispatch(getHotels());
@@ -39,6 +44,17 @@ export default function InputProduct({
     ]);
   };
 
+  const handleBatal = () => {
+    closeModal();
+    setInputs([{ item: null, quantity: "", harga_unit: "", total_harga: "" }]);
+    setSelectedHotel(null);
+    setSelectedDate(new Date().toISOString().split("T")[0]);
+  };
+
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
   const handleRemoveInput = (index, event) => {
     event.preventDefault();
     const newInputs = [...inputs];
@@ -46,10 +62,20 @@ export default function InputProduct({
     setInputs(newInputs);
   };
 
+  const extractNumericValue = (input) => {
+    const match = input.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  };
+
   const handleInputChange = (index, event) => {
     const newInputs = [...inputs];
     const { name, value } = event.target;
     newInputs[index][name] = value;
+    if (name === "quantity" || name === "harga_unit") {
+      const quantity = extractNumericValue(newInputs[index].quantity);
+      const unitPrice = parseFloat(newInputs[index].harga_unit) || 0;
+      newInputs[index].total_harga = (quantity * unitPrice).toString();
+    }
     setInputs(newInputs);
   };
 
@@ -157,12 +183,17 @@ export default function InputProduct({
       await dispatch(addBills(billData))
         .unwrap()
         .then(() => {
+          setIsSuccess(true);
           dispatch(listBills());
-          closeModal();
+          setTimeout(() => {
+            setIsSuccess(false);
+            closeModal();
+          }, 3000);
           setInputs([
             { item: "", quantity: "", harga_unit: "", total_harga: "" },
           ]);
           setSelectedHotel(null);
+          setSelectedDate(new Date().toISOString().split("T")[0]);
         })
         .catch((error) => validateForm());
     } catch (error) {
@@ -236,31 +267,51 @@ export default function InputProduct({
           </h3>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="w-11/12 mb-3">
-            <label className="block mb-2 text-[10px] lg:text-xs font-medium text-slate-900">
-              Nama Hotel
-            </label>
-            <Select
-              options={handleSelectHotel}
-              value={selectedHotel}
-              onChange={handleHotelChange}
-              placeholder="Masukkan Nama Hotel"
-              isClearable
-              styles={customStyles}
-            />
-            {validationErrors.selectedHotel && (
-              <span className="text-red-500 text-xs">
-                {validationErrors.selectedHotel}
-              </span>
-            )}
+          <div className="w-11/12 mb-3 flex gap-3">
+            <div className="w-1/2">
+              <label className="block mb-2 text-[10px] lg:text-xs font-medium text-slate-900">
+                Nama Hotel
+              </label>
+              <Select
+                options={handleSelectHotel}
+                value={selectedHotel}
+                onChange={handleHotelChange}
+                placeholder="Masukkan Nama Hotel"
+                isClearable
+                styles={customStyles}
+              />
+              {validationErrors.selectedHotel && (
+                <span className="text-red-500 text-xs">
+                  {validationErrors.selectedHotel}
+                </span>
+              )}
+            </div>
+            <div className="w-1/2">
+              <label className="block mb-2 text-[10px] lg:text-xs font-medium text-slate-900">
+                Tanggal
+              </label>
+              <input
+                type="date"
+                className="px-[10px] py-[7px] border rounded-lg border-slate-400 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-400 font-medium w-full h-9 text-xs"
+                max={new Date().toISOString().split("T")[0]}
+                value={selectedDate}
+                onChange={handleDateChange}
+                required
+              />
+              {validationErrors.tanggalNota && (
+                <span className="text-red-500 text-xs">
+                  {validationErrors.tanggalNota}
+                </span>
+              )}
+            </div>
           </div>
           {inputs.map((input, index) => (
             <div
               key={index}
               className="grid grid-cols-4 gap-3 mb-3 items-center relative w-11/12"
             >
-              <div className="col-span-1 lgmt-[5px]">
-                <label className="block text-[10px] lg:text-xs font-medium text-slate-900 mb-[0.5px] lg:mb-1">
+              <div className="col-span-1">
+                <label className="block text-[10px] lg:text-xs font-medium text-slate-900 mb-[0.5px]">
                   Nama Produk
                 </label>
                 <Select
@@ -312,6 +363,7 @@ export default function InputProduct({
                 name="total_harga"
                 type="number"
                 placeholder="Total Harga"
+                isReadOnly={true}
                 value={input.total_harga}
                 onChange={(e) => handleInputChange(index, e)}
                 isModal={true}
@@ -333,9 +385,11 @@ export default function InputProduct({
               </div>
             </div>
           ))}
-          <div className="flex justify-center mt-6 mb-6">
+          <div className="flex justify-center mt-6 mb-6 relative w-11/12">
+            <div className="border-b border-slate-400 absolute left-0 top-6 w-[45%]"></div>
+            <div className="border-b border-slate-400 absolute right-0 top-6 w-[45%]"></div>
             <button
-              className="text-custom-green-1 p-2 rounded"
+              className="text-custom-green-1 p-2 rounded z-30"
               onClick={handleAddInput}
             >
               <IoMdAddCircleOutline size={32} />
@@ -345,7 +399,7 @@ export default function InputProduct({
             Total tagihan: {totalHarga.toLocaleString()}
           </p>
           <div className="mt-[18px] flex gap-[18px]">
-            <Button onClick={closeModal} text="Batal" />
+            <Button onClick={handleBatal} text="Batal" />
             <Button
               backgroundColor="bg-custom-green-1"
               type="submit"
@@ -354,6 +408,7 @@ export default function InputProduct({
           </div>
         </form>
       </div>
+      {isSuccess && <SuccessNotification text="Nota Berhasil Dibuat" />}
     </div>
   ) : null;
 }

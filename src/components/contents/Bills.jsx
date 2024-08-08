@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import Pagination from "../molecules/Pagination";
 import NoBillData from "/icons/belum-ada-nota.svg";
 import { listBills } from "../../redux/slices/billSlice";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 const tableHeaders = [
   "Tanggal",
@@ -24,6 +25,7 @@ export default function Bills({ handleBillSelect }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     dispatch(listBills());
@@ -110,6 +112,10 @@ export default function Bills({ handleBillSelect }) {
     currentPage * itemsPerPage
   );
 
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
   const endIndex = Math.min(currentPage * itemsPerPage, dataFiltered.length);
 
@@ -129,10 +135,37 @@ export default function Bills({ handleBillSelect }) {
             placeholder={`Cari dari total ${dataFiltered.length} data...`}
           />
         </div>
-        <ActionButton onClick={openModal}>
-          <GrAddCircle className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">Tambah Nota</p>
-        </ActionButton>
+        <div className="flex items-center gap-[18px]">
+          <div className="relative">
+            <select
+              className={`border w-fit py-2 rounded-lg border-slate-900 text-xs font-semibold cursor-pointer appearance-none pl-2 px-10 ${
+                filter === "all" ? "text-slate-900" : ""
+              } ${filter === "lunas" ? "text-green-500" : ""} ${
+                filter === "belum_lunas" ? "text-red-500" : ""
+              } `}
+              value={filter}
+              onChange={handleFilterChange}
+            >
+              <option value="all" className="text-slate-900">
+                Semua
+              </option>
+              <option value="lunas" className="text-green-500">
+                Lunas
+              </option>
+              <option value="belum_lunas" className="text-red-500">
+                Belum Lunas
+              </option>
+            </select>
+            <IoMdArrowDropdown
+              size={16}
+              className="absolute right-2 top-[10px]"
+            />
+          </div>
+          <ActionButton onClick={openModal}>
+            <GrAddCircle className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">Tambah Nota</p>
+          </ActionButton>
+        </div>
       </div>
       {currentBills.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">

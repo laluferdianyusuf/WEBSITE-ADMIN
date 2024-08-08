@@ -54,18 +54,27 @@ const ExportBill = () => {
           </h3>
           <div className="flex justify-between text-slate-900 mt-2">
             <div className="flex flex-col gap-[6px]">
-              <p>Alamat: Jl. Contoh No.123, Kota ABC</p>
-              <p>No HP: 081234567890</p>
-              <p>Fax: 021-987654</p>
+              <p>Jl. Gareng No. 28 Cakranegara</p>
+              <p>No HP. 081907647590</p>
+              <p>Fax. 0370-633668</p>
             </div>
             <div className="flex flex-col gap-[6px]">
-              <p>Nomor Nota: </p>
-              <p>Tanggal Dibuat: {bill["Tanggal"]}</p>
-              <p>Nama Hotel: {bill["Nama Hotel"]}</p>
+              <div className="grid grid-cols-2 gap-2">
+                <p>Nomor</p>
+                <p className="text-red-500 font-bold">: TJR-TEST</p>
+                <p>Tanggal Dibuat</p>
+                <p>: {bill["Tanggal"]}</p>
+                <p>Nama Hotel</p>
+                <p>: {bill["Nama Hotel"]}</p>
+              </div>
             </div>
           </div>
         </div>
         <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
+        <div className="mt-8 flex flex-col justify-between items-center w-1/6 h-20">
+          <p>Yang menerima</p>
+          <div className="border-b border-slate-900 w-full" />
+        </div>
       </div>
       <button
         onClick={handlePrint}
