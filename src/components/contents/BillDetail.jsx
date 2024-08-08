@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Table from "../organism/Table";
 import ActionButton from "../atoms/ActionButton";
 import { GoTrash, GoDownload } from "react-icons/go";
+import { FiEdit2 } from "react-icons/fi";
 import InputProduct from "../molecules/InputProduct";
 import ModalCrud from "../molecules/ModalCrud";
 import { useSelector, useDispatch } from "react-redux";
@@ -75,6 +76,11 @@ export default function BillDetail({ onBack, bill }) {
     setEditModalOpen(false);
   };
 
+  const handleEditClick = () => {
+    setEditModalOpen(true);
+    setSelectedBill(bill);
+  };
+
   const handleDeleteClick = () => {
     setDeleteModalOpen(true);
     setSelectedBill(bill);
@@ -92,8 +98,10 @@ export default function BillDetail({ onBack, bill }) {
         .unwrap()
         .then(() => {
           setSuccess("Berhasil hapus nota");
-          handleCloseDeleteModal();
-          onBack();
+          setTimeout(() => {
+            handleCloseDeleteModal();
+            onBack();
+          }, 3000);
         })
         .catch((error) => {
           setDeleteError("Gagal hapus nota");
@@ -161,7 +169,11 @@ export default function BillDetail({ onBack, bill }) {
             <GoDownload className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">Export Nota</p>
           </ActionButton>
-          <ActionButton onClick={handleDeleteClick}>
+          <ActionButton onClick={handleEditClick}>
+            <FiEdit2 className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">Edit Nota</p>
+          </ActionButton>
+          <ActionButton onClick={handleDeleteClick} isDelete={true}>
             <GoTrash className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">Hapus Nota</p>
           </ActionButton>

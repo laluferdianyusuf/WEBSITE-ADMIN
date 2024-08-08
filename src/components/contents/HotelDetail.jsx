@@ -126,12 +126,26 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       console.error("Hotel data is not available for export.");
       return;
     }
+
+    const unpaidBills = hotelsBill.filter(
+      (bill) => parseInt(bill.totalPaid) < parseInt(bill.ordersTotal)
+    );
+
+    const totalBill = unpaidBills.reduce(
+      (sum, bill) => sum + parseInt(bill.ordersTotal),
+      0
+    );
+    const totalPayment = unpaidBills.reduce(
+      (sum, bill) => sum + parseInt(bill.totalPaid),
+      0
+    );
+
     const data = {
       id: dataHotel.id,
       nama_hotel: dataHotel.hotelName,
-      total_bayar: dataHotel.totalPaid || 0,
-      total_bill: dataHotel.totalBills || 0,
-      bills: hotelsBill.map((bill) => ({
+      total_bayar: totalPayment || 0,
+      total_bill: totalBill || 0,
+      bills: unpaidBills.map((bill) => ({
         id: bill.id,
         tanggal_nota: formatDate2(bill.createdAt) || 0,
         total_dibayar: bill.totalPaid || 0,
@@ -221,18 +235,18 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
               </ActionButton>
             </div>
           </div>
-          <div className="grid grid-cols-3 w-1/2 text-xs text-slate-900 mb-5 ms-12">
+          <div className="grid grid-cols-2 w-[35%] text-xs text-slate-900 mb-5 ms-12">
             <p>Total Tagihan</p>
-            <p>:</p>
             <p>
+              :{" "}
               {totalTagihan.toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
               })}
             </p>
-            <p>Sisa</p>
-            <p>:</p>
+            <p>Sisa Tagihan</p>
             <p>
+              :{" "}
               {sisa.toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",

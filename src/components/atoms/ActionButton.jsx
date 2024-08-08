@@ -5,6 +5,7 @@ export default function ActionButton({
   children,
   onClick,
   isDisabled = false,
+  isDelete = false,
 }) {
   return (
     <button
@@ -12,7 +13,13 @@ export default function ActionButton({
         isDisabled
           ? "cursor-not-allowed border-slate-400 text-slate-400"
           : "cursor-pointer border-slate-900 text-slate-900"
-      }`}
+      }
+        ${
+          isDelete
+            ? "hover:bg-red-500 hover:border-none"
+            : "hover:bg-custom-green-1 hover:border-none"
+        }
+        `}
       onClick={onClick}
       disabled={isDisabled}
     >
@@ -26,4 +33,5 @@ ActionButton.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool,
+  isDelete: PropTypes.bool,
 };

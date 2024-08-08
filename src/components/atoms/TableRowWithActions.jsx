@@ -32,7 +32,7 @@ export default function TableRowWithAction({
             <FiEdit2 className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">Edit</p>
           </ActionButton>
-          <ActionButton onClick={onDelete}>
+          <ActionButton onClick={onDelete} isDelete={true}>
             <GoTrash className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">Hapus</p>
           </ActionButton>

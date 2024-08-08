@@ -32,30 +32,6 @@ const InvoiceExport = () => {
     documentTitle: `Invoice_${new Date().toLocaleDateString()}.pdf`,
   });
 
-  // const [payment, setPayment] = useState(0);
-
-  // const allocatePayment = (totalPayment) => {
-  //   const hotel = hotels[0];
-  //   let remainingPayment = totalPayment;
-  //   hotel.bills.forEach((bill) => {
-  //     if (remainingPayment > 0) {
-  //       const remainingBill = bill.total_pesanan - bill.total_dibayar;
-  //       if (remainingPayment >= remainingBill) {
-  //         bill.total_dibayar += remainingBill;
-  //         remainingPayment -= remainingBill;
-  //       } else {
-  //         bill.total_dibayar += remainingPayment;
-  //         remainingPayment = 0;
-  //       }
-  //     }
-  //   });
-  // };
-
-  // const handlePayment = () => {
-  //   allocatePayment(payment);
-  //   setPayment(0); // Reset input pembayaran setelah alokasi
-  // };
-
   if (!hotel) {
     return <div>Data hotel tidak tersedia</div>;
   }
@@ -213,19 +189,6 @@ const InvoiceExport = () => {
           Download Invoice
         </button>
       </div>
-      {/* <input
-          type="number"
-          value={payment}
-          onChange={(e) => setPayment(Number(e.target.value))}
-          className="border border-gray-300 px-2 py-1 rounded-md mr-2"
-          placeholder="Masukkan jumlah pembayaran"
-        /> */}
-      {/* <button
-          onClick={handlePayment}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
-        >
-          Alokasikan Pembayaran
-        </button> */}
     </div>
   );
 };

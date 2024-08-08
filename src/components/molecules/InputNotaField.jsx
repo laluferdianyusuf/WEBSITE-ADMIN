@@ -9,6 +9,7 @@ export default function InputNotaField({
   value,
   onChange,
   isModal,
+  isReadOnly = false,
 }) {
   const [formattedValue, setFormattedValue] = useState(value);
 
@@ -55,6 +56,7 @@ export default function InputNotaField({
         onChange={handleChange}
         className="px-[10px] py-[7px] border rounded-lg border-slate-400 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-400 font-medium w-full h-9"
         required
+        readOnly={isReadOnly}
       />
     </div>
   );
@@ -68,4 +70,5 @@ InputNotaField.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired,
   isModal: PropTypes.bool,
+  isReadOnly: PropTypes.bool,
 };
