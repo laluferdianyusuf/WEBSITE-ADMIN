@@ -10,11 +10,19 @@ export default function Table({
   totalDibayarkan,
   onRowClick,
   isHotelDetail,
+  onSort,
+  sortOrder,
+  sortColumns,
 }) {
   return (
     <div className="overflow-auto no-scrollbar rounded-lg shadow-sm border w-full">
       <table className="w-full">
-        <TableHeader headers={headers} />
+        <TableHeader
+          headers={headers}
+          onSort={onSort}
+          sortOrder={sortOrder}
+          sortColumns={sortColumns}
+        />
         <TableBody
           data={data}
           columns={headers}

@@ -1,13 +1,19 @@
 import PropTypes from "prop-types";
 
-export default function TableCell({ children, isHeader = false, index }) {
+export default function TableCell({ children, isHeader = false, index, data }) {
   const formatNumber = (number) => {
     if (number === 0) return "Rp. 0";
     return number ? `Rp. ${number.toLocaleString()}` : "-";
   };
 
   return isHeader ? (
-    <th className="p-4 text-left text-slate-900 text-xs">{children || "-"}</th>
+    <th
+      className={`p-4 text-left text-slate-900 text-xs relative ${
+        data === "Tanggal" ? "flex items-center justify-between" : ""
+      }`}
+    >
+      {children || "-"}
+    </th>
   ) : (
     <td
       className={`text-xs p-4 ${

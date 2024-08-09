@@ -17,7 +17,7 @@ export default function ActionButton({
         ${
           isDelete
             ? "hover:bg-red-500 hover:border-none"
-            : "hover:bg-custom-green-1 hover:border-none"
+            : "hover:bg-custom-green-1 hover:border-custom-green-1"
         }
         `}
       onClick={onClick}

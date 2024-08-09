@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import Pagination from "../molecules/Pagination";
 import NoBillData from "/icons/belum-ada-nota.svg";
 import { listBills } from "../../redux/slices/billSlice";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 
 const tableHeaders = [
   "Tanggal",
@@ -26,6 +26,8 @@ export default function Bills({ handleBillSelect }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [filter, setFilter] = useState("all");
+  const [dropdown, setDropdown] = useState(false);
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     dispatch(listBills());
@@ -49,12 +51,25 @@ export default function Bills({ handleBillSelect }) {
 
   const billsArray = Array.isArray(bills.bills) ? bills.bills : [];
 
-  const filteredBills = billsArray.filter(
-    (bill) =>
-      (bill.hotelName &&
-        bill.hotelName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (bill.date && bill.date.includes(searchQuery))
-  );
+  const filteredBills = billsArray
+    .filter((bill) => {
+      const matchesSearchQuery =
+        (bill.hotelName &&
+          bill.hotelName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (bill.date && bill.date.includes(searchQuery));
+
+      const matchesFilter =
+        filter === "all" ||
+        (filter === "lunas" && bill.total === bill.paid) ||
+        (filter === "belum_lunas" && bill.total !== bill.paid);
+
+      return matchesSearchQuery && matchesFilter;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
 
   const dataFiltered = filteredBills.map((bill) => ({
     Tanggal: bill.date,
@@ -113,11 +128,16 @@ export default function Bills({ handleBillSelect }) {
   );
 
   const handleFilterChange = (e) => {
-    setFilter(e.target.value);
+    setFilter(e);
+    setDropdown(false);
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
   const endIndex = Math.min(currentPage * itemsPerPage, dataFiltered.length);
+
+  const handleSortBills = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-6 relative">
@@ -136,30 +156,57 @@ export default function Bills({ handleBillSelect }) {
           />
         </div>
         <div className="flex items-center gap-[18px]">
-          <div className="relative">
-            <select
-              className={`border w-fit py-2 rounded-lg border-slate-900 text-xs font-semibold cursor-pointer appearance-none pl-2 px-10 ${
-                filter === "all" ? "text-slate-900" : ""
-              } ${filter === "lunas" ? "text-green-500" : ""} ${
-                filter === "belum_lunas" ? "text-red-500" : ""
-              } `}
-              value={filter}
+          <div className="relative flex flex-col items-center w-[130px] rounded-lg">
+            <button
+              onClick={() => setDropdown((prev) => !prev)}
               onChange={handleFilterChange}
+              className={`bg-white px-4 py-2 w-full items-center flex justify-center text-xs border-slate-700 border rounded-lg ${
+                filter === "all"
+                  ? "text-slate-900 border  border-slate-900"
+                  : ""
+              } ${
+                filter === "lunas"
+                  ? "text-green-500 border border-green-500"
+                  : ""
+              } ${
+                filter === "belum_lunas" ? "text-red-500 border-red-500" : ""
+              } tracking-wider duration-300 font-bold justify-between items-center`}
             >
-              <option value="all" className="text-slate-900">
-                Semua
-              </option>
-              <option value="lunas" className="text-green-500">
-                Lunas
-              </option>
-              <option value="belum_lunas" className="text-red-500">
-                Belum Lunas
-              </option>
-            </select>
-            <IoMdArrowDropdown
-              size={16}
-              className="absolute right-2 top-[10px]"
-            />
+              {filter === "all"
+                ? "Semua"
+                : filter === "lunas"
+                ? "Lunas"
+                : "Belum Lunas"}
+              <AiOutlineCaretDown
+                size={12}
+                className={`absolute right-2 top-[10px] transform transition-transform duration-300 ${
+                  dropdown ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </button>
+
+            {dropdown && (
+              <div className="absolute flex flex-col top-10 items-center w-full p-2 border rounded-lg backdrop-blur-sm bg-black/15">
+                <span
+                  onClick={() => handleFilterChange("all")}
+                  className={`cursor-pointer bg-white px-4 py-2 rounded-lg shadow-md w-full text-center text-xs font-bold mb-1`}
+                >
+                  Semua
+                </span>
+                <span
+                  onClick={() => handleFilterChange("lunas")}
+                  className={`cursor-pointer bg-white px-4 py-2 rounded-lg shadow-md w-full text-center text-xs font-bold text-green-500 mb-1`}
+                >
+                  Lunas
+                </span>
+                <span
+                  onClick={() => handleFilterChange("belum_lunas")}
+                  className={`cursor-pointer bg-white px-4 py-2 rounded-lg shadow-md w-full text-center text-xs font-bold text-red-500`}
+                >
+                  Belum lunas
+                </span>
+              </div>
+            )}
           </div>
           <ActionButton onClick={openModal}>
             <GrAddCircle className="mr-[6px]" size={16} />
@@ -177,6 +224,9 @@ export default function Bills({ handleBillSelect }) {
           headers={tableHeaders}
           data={currentBills}
           onRowClick={handleRowClick}
+          onSort={handleSortBills}
+          sortOrder={sortOrder}
+          sortColumns={"Tanggal"}
         />
       )}
       <p className="text-xs text-end lg:absolute lg:bottom-[3rem] lg:right-[2.3rem]">
