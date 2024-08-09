@@ -221,13 +221,21 @@ export default function Hotel({ handleHotelSelect }) {
           <p className="text-gray-500 mt-4">Belum ada data hotel</p>
         </div>
       ) : (
-        <TableWithActions
-          headers={tableHeaders3}
-          data={currentHotel}
-          onUpdate={handleEdit}
-          onDelete={handleDelete}
-          onRowClick={handleRowClick}
-        />
+        <>
+          <div className="grid w-[40%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
+            <p>Total Tagihan Lunas</p>
+            <p>: Rp. 0.000.0000</p>
+            <p>Total Tagihan Belum Lunas</p>
+            <p>: Rp. 0.000.0000</p>
+          </div>
+          <TableWithActions
+            headers={tableHeaders3}
+            data={currentHotel}
+            onUpdate={handleEdit}
+            onDelete={handleDelete}
+            onRowClick={handleRowClick}
+          />
+        </>
       )}
       <p className="text-xs text-end absolute bottom-[3rem] right-[2.3rem] ">
         Menampilkan {startIndex} - {endIndex} dari total{" "}

@@ -235,22 +235,16 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
               </ActionButton>
             </div>
           </div>
-          <div className="grid grid-cols-2 w-[35%] text-xs text-slate-900 mb-5 ms-12">
+          <div className="grid gap-y-2 grid-cols-2 w-[35%] text-xs text-slate-900 mb-5 ms-12">
             <p>Total Tagihan</p>
             <p>
-              :{" "}
-              {totalTagihan.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-              })}
+              : Rp. {" "}
+              {totalTagihan.toLocaleString()}
             </p>
             <p>Sisa Tagihan</p>
             <p>
-              :{" "}
-              {sisa.toLocaleString("id-ID", {
-                style: "currency",
-                currency: "IDR",
-              })}
+              : Rp. {" "}
+              {sisa.toLocaleString()}
             </p>
           </div>
 

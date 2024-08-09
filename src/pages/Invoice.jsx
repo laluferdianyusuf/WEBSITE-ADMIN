@@ -57,6 +57,7 @@ const InvoiceExport = () => {
   };
 
   const date = new Date().toLocaleDateString();
+  const currentYear = new Date().getFullYear().toString().slice(-2);
 
   const { totalAmount, totalPaid, totalBalance } = calculateTotals();
   console.log(hotel);
@@ -65,20 +66,27 @@ const InvoiceExport = () => {
     <div>
       <div ref={componentRef} className="p-4 bg-white rounded-md">
         <div className="mb-7">
-          <div className="flex justify-between text-slate-900 mb-1 font-semibold">
-            <h3 className="text-[26px]">UD TIMUR JAYA RAYA</h3>
-            <h4 className="text-xl">INVOICE</h4>
-          </div>
-          <div className="flex justify-between text-slate-900 mt-2">
+          <div className="flex justify-between text-slate-9000 mt-2">
             <div className="flex flex-col gap-[6px]">
-              <p>Alamat: Jl. Contoh No.123, Kota ABC</p>
-              <p>No HP: 081234567890</p>
-              <p>Fax: 021-987654</p>
+              <h3 className="text-[26px] font-semibold">UD TIMUR JAYA RAYA</h3>
+              <p>Jl. Gareng No. 28 Cakranegara</p>
+              <p>HP. 081907647590</p>
+              <p>Fax. 0370-633668</p>
             </div>
             <div className="flex flex-col gap-[6px]">
-              <p>Invoice No: </p>
-              <p>Tanggal: {date}</p>
-              <p>Kepada: {hotel.nama_hotel}</p>
+              <h4 className="text-xl font-semibold">INVOICE</h4>
+              <div className="grid grid-cols-2">
+                <p>Invoice No</p>
+                <p>: ..../..../{currentYear}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Tanggal</p>
+                <p>: {date}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Kepada</p>
+                <p>: {hotel.nama_hotel}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -109,16 +117,10 @@ const InvoiceExport = () => {
                       <td className="px-8 py-4">{order.nama_produk}</td>
                       <td className="px-8 py-4">{order.qty}</td>
                       <td className="px-8 py-4">
-                        {order.harga_produk.toLocaleString("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                        })}
+                        Rp. {order.harga_produk.toLocaleString()}
                       </td>
                       <td className="px-8 py-4">
-                        {order.total_harga.toLocaleString("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                        })}
+                        Rp. {order.total_harga.toLocaleString()}
                       </td>
                       <td className="px-8 py-4">-</td>
                       <td className="px-8 py-4">-</td>
@@ -127,25 +129,16 @@ const InvoiceExport = () => {
                   <tr className="border-y border-gray-300">
                     <td colSpan={4} className="px-8 py-4"></td>
                     <td className="px-8 py-4 bg-custom-white-2">
-                      {bill.total_pesanan.toLocaleString("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                      })}
+                      Rp. {bill.total_pesanan.toLocaleString()}
                     </td>
                     <td className="px-8 py-4 bg-custom-white-2">
-                      {bill.total_dibayar.toLocaleString("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                      })}
+                      Rp. {bill.total_dibayar.toLocaleString()}
                     </td>
                     <td className="px-8 py-4 bg-custom-white-2">
-                      {(bill.total_pesanan - bill.total_dibayar).toLocaleString(
-                        "id-ID",
-                        {
-                          style: "currency",
-                          currency: "IDR",
-                        }
-                      )}
+                      Rp.{" "}
+                      {(
+                        bill.total_pesanan - bill.total_dibayar
+                      ).toLocaleString()}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -158,22 +151,13 @@ const InvoiceExport = () => {
                   Total
                 </td>
                 <td className="px-8 py-4 bg-custom-white-2 font-semibold">
-                  {totalAmount.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
+                  Rp. {totalAmount.toLocaleString()}
                 </td>
                 <td className="px-8 py-4 bg-custom-white-2 font-semibold">
-                  {totalPaid.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
+                  Rp. {totalPaid.toLocaleString()}
                 </td>
                 <td className="px-8 py-4 bg-custom-white-2 font-semibold">
-                  {totalBalance.toLocaleString("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  })}
+                  Rp. {totalBalance.toLocaleString()}
                 </td>
               </tr>
             </tbody>
