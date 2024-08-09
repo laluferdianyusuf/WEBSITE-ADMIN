@@ -6,6 +6,8 @@ export default function TableCell({ children, isHeader = false, index, data }) {
     return number ? `Rp. ${number.toLocaleString()}` : "-";
   };
 
+  console.log(children);
+
   return isHeader ? (
     <th
       className={`p-4 text-left text-slate-900 text-xs relative ${
@@ -17,12 +19,12 @@ export default function TableCell({ children, isHeader = false, index, data }) {
   ) : (
     <td
       className={`text-xs p-4 ${
-        children === "Belum Lunas" ? "text-red-500" : ""
-      } ${children === "Lunas" ? "text-green-500" : ""}`}
+        children[0] === "Belum Lunas" ? "text-red-500" : ""
+      } ${children[0] === "Lunas" ? "text-green-500" : ""}`}
     >
-      {typeof children === "number" && index !== 0
-        ? formatNumber(children)
-        : children || "-"}
+      {typeof children[0] === "number" && index !== 0
+        ? formatNumber(children[0])
+        : children[0] || "-"}
     </td>
   );
 }

@@ -186,7 +186,7 @@ export default function Bills({ handleBillSelect }) {
             </button>
 
             {dropdown && (
-              <div className="absolute flex flex-col top-10 items-center w-full p-2 border rounded-lg backdrop-blur-sm bg-black/15">
+              <div className="absolute flex flex-col top-10 items-center w-full p-2 border rounded-lg backdrop-blur-sm bg-black/15 z-50">
                 <span
                   onClick={() => handleFilterChange("all")}
                   className={`cursor-pointer bg-white px-4 py-2 rounded-lg shadow-md w-full text-center text-xs font-bold mb-1`}

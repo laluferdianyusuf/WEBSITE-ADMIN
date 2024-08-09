@@ -45,6 +45,8 @@ const ExportBill = () => {
     0
   );
 
+  console.log(tableData2);
+
   return (
     <div className="h-full bg-white mb-10">
       <div ref={componentRef} className="flex flex-col mt-8 mx-12">
