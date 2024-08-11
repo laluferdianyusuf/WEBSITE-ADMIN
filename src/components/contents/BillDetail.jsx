@@ -40,6 +40,7 @@ export default function BillDetail({ onBack, bill }) {
   const [selectedBill, setSelectedBill] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
   const [success, setSuccess] = useState("");
+  const [errorBill, setErrorBill] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +53,7 @@ export default function BillDetail({ onBack, bill }) {
     };
 
     fetchData();
-  }, [dispatch, bill.id]);
+  }, [dispatch, bill.id, isEditModalOpen]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading bill details.</p>;
@@ -70,6 +71,10 @@ export default function BillDetail({ onBack, bill }) {
     Quantity: order.quantity,
     "Harga / Unit": order.productPrice,
     "Jumlah Harga": parseFloat(order.total),
+  }));
+
+  const tableInitialData = orders.map((order, index) => ({
+    ...order,
   }));
 
   const handleCloseEditModal = () => {
@@ -113,12 +118,16 @@ export default function BillDetail({ onBack, bill }) {
   };
 
   const initialData = {
+    id: bill.id,
     namaHotel: bill["Nama Hotel"],
-    pesanan: tableData2.map((item) => ({
-      item: item.Item,
-      quantity: item.Quantity,
-      harga_unit: item["Harga / Unit"],
-      total_harga: item["Jumlah Harga"],
+    hotelId: bill.hotelId,
+    date: bill.Tanggal,
+    pesanan: tableInitialData.map((item) => ({
+      id: item.id,
+      item: item.productName,
+      quantity: item.quantity,
+      harga_unit: item.productPrice,
+      total_harga: item.total,
     })),
   };
 
@@ -126,6 +135,7 @@ export default function BillDetail({ onBack, bill }) {
     const state = {
       bill,
       tableData2,
+      invoiceNumber: dataBill.number,
     };
     const stateString = encodeURIComponent(JSON.stringify(state));
     window.open(
@@ -146,7 +156,7 @@ export default function BillDetail({ onBack, bill }) {
           <ul className="flex gap-2">
             <li>
               <button
-                className="text-blue-500 hover:underline"
+                className="text-custom-green-1 hover:underline"
                 onClick={onBack}
               >
                 Manajemen Nota
@@ -187,6 +197,12 @@ export default function BillDetail({ onBack, bill }) {
         closeModal={handleCloseEditModal}
         initialData={initialData}
         isEdit={true}
+        onSuccess={() => {
+          setSuccess("Nota berhasil diperbarui");
+        }}
+        onError={() => {
+          setErrorBill("Gagal perbarui nota");
+        }}
       />
       <ModalCrud
         isOpen={isDeleteModalOpen}
@@ -203,6 +219,7 @@ export default function BillDetail({ onBack, bill }) {
         inputLabel="Nama Hotel"
         isDisabled={true}
       />
+      {errorBill && <WarningNotification text={errorBill} />}
       {deleteError && <WarningNotification text={deleteError} />}
       {success && <SuccessNotification text={success} />}
     </div>

@@ -77,6 +77,7 @@ export default function Bills({ handleBillSelect }) {
     "Total Tagihan": bill.total,
     "Status Tagihan": bill.total === bill.paid ? "Lunas" : "Belum Lunas",
     id: bill.billId,
+    hotelId: bill.hotelId,
     orders: bill.orders.map((order) => ({
       name: order.productName,
       price: order.productPrice,
@@ -217,7 +218,14 @@ export default function Bills({ handleBillSelect }) {
       {currentBills.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
           <img src={NoBillData} alt="Tidak ada hotel" width={250} />
-          <p className="text-gray-500 mt-2">Belum ada data nota</p>
+          <p className="text-gray-500 mt-2">
+            Belum ada data{" "}
+            {filter === "all"
+              ? "nota"
+              : filter === "lunas"
+              ? "yang sudah lunas"
+              : "yang belum lunas"}
+          </p>
         </div>
       ) : (
         <Table

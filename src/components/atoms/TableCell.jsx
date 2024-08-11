@@ -6,8 +6,6 @@ export default function TableCell({ children, isHeader = false, index, data }) {
     return number ? `Rp. ${number.toLocaleString()}` : "-";
   };
 
-  console.log(children);
-
   return isHeader ? (
     <th
       className={`p-4 text-left text-slate-900 text-xs relative ${

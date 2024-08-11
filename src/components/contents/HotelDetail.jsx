@@ -147,7 +147,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       total_bill: totalBill || 0,
       bills: unpaidBills.map((bill) => ({
         id: bill.id,
-        tanggal_nota: formatDate2(bill.createdAt) || 0,
+        tanggal_nota: formatDate2(bill.date) || 0,
         total_dibayar: bill.totalPaid || 0,
         total_pesanan: bill.ordersTotal || 0,
         orders: bill.orders.map((order) => ({
@@ -169,7 +169,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
 
   const tableDataHotel = hotelsBill.map((bill) => ({
     ...bill,
-    Tanggal: formatDate(bill.createdAt),
+    Tanggal: formatDate(bill.date),
     "Total Tagihan": parseInt(bill.ordersTotal),
     "Total Dibayarkan": parseInt(bill.totalPaid),
   }));
@@ -188,7 +188,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
           <ul className="flex gap-2">
             <li>
               <button
-                className="text-blue-500 hover:underline"
+                className="text-custom-green-1 hover:underline"
                 onClick={onBack}
               >
                 Manajemen Hotel
@@ -237,15 +237,9 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
           </div>
           <div className="grid gap-y-2 grid-cols-2 w-[35%] text-xs text-slate-900 mb-5 ms-12">
             <p>Total Tagihan</p>
-            <p>
-              : Rp. {" "}
-              {totalTagihan.toLocaleString()}
-            </p>
+            <p>: Rp. {totalTagihan.toLocaleString()}</p>
             <p>Sisa Tagihan</p>
-            <p>
-              : Rp. {" "}
-              {sisa.toLocaleString()}
-            </p>
+            <p>: Rp. {sisa.toLocaleString()}</p>
           </div>
 
           {isPaying && (

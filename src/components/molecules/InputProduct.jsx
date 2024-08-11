@@ -5,7 +5,12 @@ import { FiMinusCircle } from "react-icons/fi";
 import Button from "../atoms/Button";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { addBills, listBills } from "../../redux/slices/billSlice";
+import {
+  addBills,
+  listBills,
+  updateBills,
+  getDetailBill,
+} from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import { getProducts } from "../../redux/slices/productSlice";
 import Select from "react-select";
@@ -16,6 +21,8 @@ export default function InputProduct({
   isOpen,
   initialData,
   isEdit,
+  onSuccess,
+  onError,
 }) {
   const dispatch = useDispatch();
   const { hotels } = useSelector((state) => state.hotel);
@@ -26,15 +33,37 @@ export default function InputProduct({
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [selectedDate, setSelectedDate] = useState();
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     dispatch(getHotels());
     dispatch(getProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isEdit && initialData) {
+      setSelectedHotel({
+        value: initialData.hotelId,
+        label: initialData.namaHotel,
+      });
+
+      // const initialDate = new Date(initialData.date)
+      //   .toISOString()
+      //   .split("T")[0];
+
+      setSelectedDate(initialData.date);
+
+      const formattedInputs = initialData.pesanan.map((item) => ({
+        item: item.id ? { value: item.id, label: item.item } : null,
+        quantity: item.quantity || "",
+        harga_unit: item.harga_unit ? item.harga_unit.toString() : "",
+        total_harga: item.total_harga ? item.total_harga.toString() : "",
+      }));
+
+      setInputs(formattedInputs);
+    }
+  }, [isEdit, initialData]);
 
   const handleAddInput = (event) => {
     event.preventDefault();
@@ -167,35 +196,54 @@ export default function InputProduct({
       return;
     }
 
-    const products = inputs.map((input) => ({
-      productName: input.item?.label || "",
-      quantity: input.quantity,
-      productPrice: parseFloat(input.harga_unit),
-      total: parseFloat(input.total_harga),
-    }));
+    const products = inputs.map((input, index) => {
+      const orderId = isEdit ? initialData.pesanan[index]?.id : null;
+
+      return {
+        orderId: orderId || null,
+        productName: input.item?.label || "",
+        quantity: input.quantity,
+        productPrice: parseFloat(input.harga_unit),
+        total: parseFloat(input.total_harga),
+      };
+    });
 
     const billData = {
       hotelId: selectedHotel.value,
+      date: selectedDate,
       billData: products,
     };
 
     try {
-      await dispatch(addBills(billData))
-        .unwrap()
-        .then(() => {
-          setIsSuccess(true);
-          dispatch(listBills());
-          setTimeout(() => {
-            setIsSuccess(false);
+      if (isEdit) {
+        const updatedBillData = {
+          hotelId: selectedHotel.value,
+          date: selectedDate,
+          billData: products,
+        };
+
+        await dispatch(
+          updateBills({ id: initialData.id, billData: updatedBillData })
+        )
+          .unwrap()
+          .then(() => {
+            setIsSuccess(true);
+            dispatch(getDetailBill(initialData.id));
+            onSuccess();
             closeModal();
-          }, 3000);
-          setInputs([
-            { item: "", quantity: "", harga_unit: "", total_harga: "" },
-          ]);
-          setSelectedHotel(null);
-          setSelectedDate(new Date().toISOString().split("T")[0]);
-        })
-        .catch((error) => validateForm());
+          })
+          .catch((error) => onError());
+      } else {
+        await dispatch(addBills(billData))
+          .unwrap()
+          .then(() => {
+            setIsSuccess(true);
+            dispatch(listBills());
+            onSuccess();
+            closeModal();
+          })
+          .catch((error) => validateForm());
+      }
     } catch (error) {
       console.error("Error creating bill:", error);
     }

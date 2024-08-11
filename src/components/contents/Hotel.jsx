@@ -144,6 +144,20 @@ export default function Hotel({ handleHotelSelect }) {
     Status: hotel.totalBills === hotel.totalPaid ? "Lunas" : "Belum Lunas",
   }));
 
+  const totalLunas = hotelsArray.reduce((total, hotel) => {
+    if (hotel.totalBills === hotel.totalPaid) {
+      return total + hotel.totalPaid;
+    }
+    return total;
+  }, 0);
+
+  const totalBelumLunas = hotelsArray.reduce((total, hotel) => {
+    if (hotel.totalBills > hotel.totalPaid) {
+      return total + (hotel.totalBills - hotel.totalPaid);
+    }
+    return total;
+  }, 0);
+
   const getLastUpdateTime = (data) => {
     if (!data || data.length === 0) return null;
 
@@ -215,6 +229,13 @@ export default function Hotel({ handleHotelSelect }) {
         </ActionButton>
       </div>
 
+      <div className="grid w-[40%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
+        <p>Total Tagihan Lunas</p>
+        <p>: Rp. {totalLunas.toLocaleString("id-ID")}</p>
+        <p>Total Tagihan Belum Lunas</p>
+        <p>: Rp. {totalBelumLunas.toLocaleString("id-ID")}</p>
+      </div>
+
       {currentHotel.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
           <img src={NoHotelData} alt="Tidak ada hotel" width={250} />
@@ -222,12 +243,6 @@ export default function Hotel({ handleHotelSelect }) {
         </div>
       ) : (
         <>
-          <div className="grid w-[40%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
-            <p>Total Tagihan Lunas</p>
-            <p>: Rp. 0.000.0000</p>
-            <p>Total Tagihan Belum Lunas</p>
-            <p>: Rp. 0.000.0000</p>
-          </div>
           <TableWithActions
             headers={tableHeaders3}
             data={currentHotel}

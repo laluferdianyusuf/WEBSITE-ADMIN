@@ -61,7 +61,6 @@ export const listBills = createAsyncThunk(
           "Access-Control-Allow-Credentials": true,
         },
       });
-      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -96,7 +95,7 @@ export const updateBills = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `${uri}/api/v3/hotels/paid/${id}`,
+        `${uri}/api/v2/bills/update/${id}`,
         billData,
         {
           headers: {
@@ -104,6 +103,7 @@ export const updateBills = createAsyncThunk(
           },
         }
       );
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -191,9 +191,12 @@ const billsSlice = createSlice({
       .addCase(updateBills.fulfilled, (state, action) => {
         state.loading = false;
         const updatedBill = action.payload.data;
-        state.bills = state.bills.bill.map((bill) =>
-          bill.id === updatedBill.id ? updatedBill : bill
-        );
+
+        if (Array.isArray(state.bills.data)) {
+          state.bills.data = state.bills.data.map((bill) =>
+            bill.id === updatedBill.id ? updatedBill : bill
+          );
+        }
       })
       .addCase(updateBills.rejected, (state, action) => {
         state.loading = false;

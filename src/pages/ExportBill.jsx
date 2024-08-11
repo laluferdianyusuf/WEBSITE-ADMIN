@@ -16,8 +16,8 @@ const ExportBill = () => {
   const location = useLocation();
   const [bill, setBill] = useState(null);
   const [tableData2, setTableData2] = useState(null);
+  const [invoiceNumber, setInvoiceNumber] = useState(null);
   const componentRef = useRef();
-  console.log(tableData2);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -26,6 +26,7 @@ const ExportBill = () => {
       const state = JSON.parse(decodeURIComponent(stateString));
       setBill(state.bill);
       setTableData2(state.tableData2);
+      setInvoiceNumber(state.invoiceNumber);
     }
   }, [location.search]);
 
@@ -63,7 +64,7 @@ const ExportBill = () => {
             <div className="flex flex-col gap-[6px]">
               <div className="grid grid-cols-2 gap-2">
                 <p>Nomor</p>
-                <p className="text-red-500 font-bold">: TJR-TEST</p>
+                <p className="text-red-500 font-bold">: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
                 <p>: {bill["Tanggal"]}</p>
                 <p>Nama Hotel</p>
