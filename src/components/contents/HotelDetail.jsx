@@ -54,7 +54,6 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   if (error) return <p>Error loading hotel details.</p>;
 
   const hotelsBill = dataHotel?.bills || [];
-  console.log(hotelsBill);
 
   const handlePaying = () => {
     setIsPaying(true);
@@ -86,7 +85,6 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       } else {
         setShowSuccess(false);
         setShowWarning(true);
-        console.log(response.payload);
       }
       const result = await dispatch(getDetailHotels(hotel.id));
       const hotelData = result.payload?.data?.hotel;

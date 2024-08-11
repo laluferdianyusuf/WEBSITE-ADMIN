@@ -23,13 +23,13 @@ export default function TableRow({
     if (column === sortColumns) {
       return (
         <>
-          <HiArrowLongUp
+          <HiArrowLongDown
             size={15}
             className={`${
               sortOrder === "asc" ? "text-custom-green-1" : "text-gray-400/50"
             } absolute right-[0.3rem] `}
           />
-          <HiArrowLongDown
+          <HiArrowLongUp
             size={15}
             className={`${
               sortOrder === "desc" ? "text-custom-green-1" : "text-gray-400/50"
