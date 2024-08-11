@@ -64,7 +64,7 @@ const ExportBill = () => {
             <div className="flex flex-col gap-[6px]">
               <div className="grid grid-cols-2 gap-2">
                 <p>Nomor</p>
-                <p className="text-red-500 font-bold">: {invoiceNumber}</p>
+                <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
                 <p>: {bill["Tanggal"]}</p>
                 <p>Nama Hotel</p>
@@ -74,7 +74,7 @@ const ExportBill = () => {
           </div>
         </div>
         <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
-        <div className="mt-8 flex flex-col justify-between w-1/6 h-20">
+        <div className="mt-8 flex flex-col justify-between w-1/6 h-32">
           <p>Yang menerima</p>
           <div className="border-b border-slate-900 w-full" />
         </div>
