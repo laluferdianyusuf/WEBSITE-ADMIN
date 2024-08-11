@@ -28,7 +28,6 @@ export default function Bills({ handleBillSelect }) {
   const itemsPerPage = 6;
   const [filter, setFilter] = useState("all");
   const [dropdown, setDropdown] = useState(false);
-
   const [sortOrder, setSortOrder] = useState("asc");
   const [success, setSuccess] = useState("");
 
@@ -256,6 +255,9 @@ export default function Bills({ handleBillSelect }) {
         closeModal={closeModal}
         onSuccess={() => {
           setSuccess("Berhasil membuat nota");
+        }}
+        onResetSuccess={() => {
+          setSuccess("");
         }}
       />
       {success && <SuccessNotification text={success} />}

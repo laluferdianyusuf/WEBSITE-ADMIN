@@ -23,6 +23,7 @@ export default function InputProduct({
   isEdit,
   onSuccess,
   onError,
+  onResetSuccess,
 }) {
   const dispatch = useDispatch();
   const { hotels } = useSelector((state) => state.hotel);
@@ -33,7 +34,9 @@ export default function InputProduct({
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
@@ -48,11 +51,11 @@ export default function InputProduct({
         label: initialData.namaHotel,
       });
 
-      // const initialDate = new Date(initialData.date)
-      //   .toISOString()
-      //   .split("T")[0];
+      const initialDate = new Date(initialData.date)
+        .toISOString()
+        .split("T")[0];
 
-      setSelectedDate(initialData.date);
+      setSelectedDate(initialDate);
 
       const formattedInputs = initialData.pesanan.map((item) => ({
         item: item.id ? { value: item.id, label: item.item } : null,
@@ -77,7 +80,7 @@ export default function InputProduct({
     closeModal();
     setInputs([{ item: null, quantity: "", harga_unit: "", total_harga: "" }]);
     setSelectedHotel(null);
-    setSelectedDate(new Date().toISOString().split("T")[0]);
+    setSelectedDate("");
   };
 
   const handleDateChange = (event) => {
@@ -227,13 +230,13 @@ export default function InputProduct({
         )
           .unwrap()
           .then(() => {
-            // setIsSuccess(true);
             dispatch(getDetailBill(initialData.id));
             onSuccess();
             closeModal();
           })
           .catch((error) => onError());
       } else {
+        onResetSuccess();
         await dispatch(addBills(billData))
           .unwrap()
           .then(() => {
@@ -243,6 +246,8 @@ export default function InputProduct({
             setInputs([
               { item: null, quantity: "", harga_unit: "", total_harga: "" },
             ]);
+            setSelectedHotel(null);
+            setSelectedDate("");
           })
           .catch((error) => validateForm());
       }
