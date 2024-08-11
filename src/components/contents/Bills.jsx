@@ -10,6 +10,7 @@ import Pagination from "../molecules/Pagination";
 import NoBillData from "/icons/belum-ada-nota.svg";
 import { listBills } from "../../redux/slices/billSlice";
 import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
+import SuccessNotification from "../atoms/SuccessNotification";
 
 const tableHeaders = [
   "Tanggal",
@@ -27,11 +28,13 @@ export default function Bills({ handleBillSelect }) {
   const itemsPerPage = 6;
   const [filter, setFilter] = useState("all");
   const [dropdown, setDropdown] = useState(false);
+
   const [sortOrder, setSortOrder] = useState("asc");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     dispatch(listBills());
-  }, [dispatch]);
+  }, [dispatch, isOpen]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -248,7 +251,14 @@ export default function Bills({ handleBillSelect }) {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
-      <InputProduct isOpen={isOpen} closeModal={closeModal} />
+      <InputProduct
+        isOpen={isOpen}
+        closeModal={closeModal}
+        onSuccess={() => {
+          setSuccess("Berhasil membuat nota");
+        }}
+      />
+      {success && <SuccessNotification text={success} />}
     </div>
   );
 }

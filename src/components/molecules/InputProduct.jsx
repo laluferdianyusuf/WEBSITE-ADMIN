@@ -227,7 +227,7 @@ export default function InputProduct({
         )
           .unwrap()
           .then(() => {
-            setIsSuccess(true);
+            // setIsSuccess(true);
             dispatch(getDetailBill(initialData.id));
             onSuccess();
             closeModal();
@@ -237,10 +237,12 @@ export default function InputProduct({
         await dispatch(addBills(billData))
           .unwrap()
           .then(() => {
-            setIsSuccess(true);
             dispatch(listBills());
             onSuccess();
             closeModal();
+            setInputs([
+              { item: null, quantity: "", harga_unit: "", total_harga: "" },
+            ]);
           })
           .catch((error) => validateForm());
       }
@@ -456,7 +458,7 @@ export default function InputProduct({
           </div>
         </form>
       </div>
-      {isSuccess && <SuccessNotification text="Nota Berhasil Dibuat" />}
+      {/* {isSuccess && <SuccessNotification text="Nota Berhasil Dibuat" />} */}
     </div>
   ) : null;
 }
