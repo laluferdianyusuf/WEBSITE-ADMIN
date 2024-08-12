@@ -163,6 +163,33 @@ const InvoiceExport = () => {
             </tbody>
           </table>
         </div>
+        <div className="mt-8 text-slate-900 text-xs flex justify-between">
+          <div>
+            <p>Pembayaran dapat dilakukan melalui rekening :</p>
+            <div className="grid grid-cols-2 mt-2 gap-y-2">
+              <p>Bank</p>
+              <p>: BCA</p>
+              <p>No. Rekening</p>
+              <p>: 2028388999</p>
+              <p>Atas Nama</p>
+              <p>: LIEFIA</p>
+            </div>
+            <p className="mt-4">
+              Demikian, atas perhatiannya disampaikan terimakasih
+            </p>
+          </div>
+          <div className="h-32 text-xs text-slate-900 flex flex-col justify-between items-center">
+            <div className="flex flex-col items-center">
+              <p>Hormat Kami</p>
+              <p>UD TIMUR JAYA</p>
+            </div>
+            <p>( LIFIA )</p>
+          </div>
+        </div>
+        <div className="mt-8 text-slate-900 flex flex-col justify-between w-1/5 h-32 mx-2 text-xs">
+          <p>Penerima</p>
+          <div className="border-b border-slate-900 w-full" />
+        </div>
       </div>
       <div className="flex justify-start my-6 mx-4">
         <button

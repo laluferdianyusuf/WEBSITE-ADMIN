@@ -75,7 +75,7 @@ const ExportBill = () => {
         </div>
         <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
         <div className="mt-8 flex flex-col justify-between w-1/6 h-32">
-          <p>Yang menerima</p>
+          <p>Penerima</p>
           <div className="border-b border-slate-900 w-full" />
         </div>
       </div>
