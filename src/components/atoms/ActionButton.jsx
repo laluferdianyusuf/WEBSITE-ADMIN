@@ -11,7 +11,7 @@ export default function ActionButton({
     <button
       className={`border w-fit px-2 py-2 rounded-lg ${backgroundColor} flex items-center justify-center ${
         isDisabled
-          ? "cursor-not-allowed border-slate-400 text-slate-400"
+          ? "cursor-not-allowed border-slate-400 text-slate-400 hover:bg-slate-50 hover:border-slate-400 "
           : "cursor-pointer border-slate-900 text-slate-900"
       }
         ${

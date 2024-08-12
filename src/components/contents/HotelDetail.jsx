@@ -219,7 +219,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
               )}
             </div>
             <div className="flex gap-[18px]">
-              <ActionButton onClick={handlePaying}>
+              <ActionButton onClick={handlePaying} isDisabled={sisa === 0}>
                 <PiHandCoinsLight className="mr-[6px]" size={16} />
                 <p className="text-slate-900 font-semibold text-xs">
                   Bayar Tagihan

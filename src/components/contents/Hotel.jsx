@@ -144,18 +144,12 @@ export default function Hotel({ handleHotelSelect }) {
     Status: hotel.totalBills === hotel.totalPaid ? "Lunas" : "Belum Lunas",
   }));
 
-  const totalLunas = hotelsArray.reduce((total, hotel) => {
-    if (hotel.totalBills === hotel.totalPaid) {
-      return total + hotel.totalPaid;
-    }
-    return total;
+  const totalPaid = hotelsArray.reduce((total, hotel) => {
+    return total + hotel.totalPaid;
   }, 0);
 
-  const totalBelumLunas = hotelsArray.reduce((total, hotel) => {
-    if (hotel.totalBills > hotel.totalPaid) {
-      return total + (hotel.totalBills - hotel.totalPaid);
-    }
-    return total;
+  const totalNotPaidYet = hotelsArray.reduce((total, hotel) => {
+    return total + (hotel.totalBills - hotel.totalPaid);
   }, 0);
 
   const getLastUpdateTime = (data) => {
@@ -231,9 +225,9 @@ export default function Hotel({ handleHotelSelect }) {
 
       <div className="grid w-[40%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
         <p>Total Tagihan Lunas</p>
-        <p>: Rp. {totalLunas.toLocaleString("id-ID")}</p>
+        <p>: Rp. {totalPaid.toLocaleString("id-ID")}</p>
         <p>Total Tagihan Belum Lunas</p>
-        <p>: Rp. {totalBelumLunas.toLocaleString("id-ID")}</p>
+        <p>: Rp. {totalNotPaidYet.toLocaleString("id-ID")}</p>
       </div>
 
       {currentHotel.length === 0 ? (
