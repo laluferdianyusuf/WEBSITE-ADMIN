@@ -51,11 +51,11 @@ export default function InputProduct({
         label: initialData.namaHotel,
       });
 
-      const initialDate = new Date(initialData.date)
-        .toISOString()
-        .split("T")[0];
+      // const initialDate = new Date(initialData.date)
+      //   .toISOString()
+      //   .split("T")[0];
 
-      setSelectedDate(initialDate);
+      setSelectedDate(initialData.date);
 
       const formattedInputs = initialData.pesanan.map((item) => ({
         item: item.id ? { value: item.id, label: item.item } : null,

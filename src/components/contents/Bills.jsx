@@ -53,6 +53,10 @@ export default function Bills({ handleBillSelect }) {
 
   const billsArray = Array.isArray(bills.bills) ? bills.bills : [];
 
+  const convertToISOFormat = (dateString) => {
+    const [day, month, year] = dateString.split("/");
+    return `${year}-${month}-${day}`;
+  };
   const filteredBills = billsArray
     .filter((bill) => {
       const matchesSearchQuery =
@@ -68,8 +72,13 @@ export default function Bills({ handleBillSelect }) {
       return matchesSearchQuery && matchesFilter;
     })
     .sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
+      const dateA = new Date(convertToISOFormat(a.date));
+      const dateB = new Date(convertToISOFormat(b.date));
+
+      if (dateA.getTime() === dateB.getTime()) {
+        return sortOrder === "asc" ? a.billId - b.billId : b.billId - a.billId;
+      }
+
       return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
     });
 
