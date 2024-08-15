@@ -242,7 +242,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
 
           {isPaying && (
             <div className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-              <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-[40%] max-h-[90vh] overflow-y-auto">
+              <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-1/2 xl:w-[40%] max-h-[90vh] overflow-y-auto">
                 <div className="font-semibold text-center">
                   <h4 className="text-slate-300 text-[10px] mb-1">
                     UD TIMUR JAYA RAYA
@@ -255,7 +255,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
                   label="Jumlah Setoran"
                   name="jumlahSetoran"
                   type="number"
-                  placeholder="Rp. 1.000.000"
+                  placeholder="1.000.000"
                   value={totalBayar}
                   onChange={onChangeInput}
                   isModal={true}

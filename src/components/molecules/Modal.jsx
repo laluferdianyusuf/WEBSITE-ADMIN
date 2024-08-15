@@ -38,7 +38,7 @@ function Modal({
       className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40"
       onClick={handleClickOutside}
     >
-      <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-[40%] max-h-[90vh] overflow-y-auto">
+      <div className="bg-custom-white-1 rounded-lg flex flex-col gap-5 py-6 px-14 relative w-1/2 xl:w-[40%] max-h-[90vh] overflow-y-auto">
         <div className="font-semibold text-center">
           <h4 className="text-slate-300 text-[10px] mb-1">{headText}</h4>
           <h3 className="text-slate-900 text-lg">{title}</h3>

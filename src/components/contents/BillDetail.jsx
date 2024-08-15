@@ -55,7 +55,13 @@ export default function BillDetail({ onBack, bill }) {
     fetchData();
   }, [dispatch, bill.id, isEditModalOpen]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex flex-col gap-4 min-h-screen justify-center items-center">
+        <div className="h-24 w-24 rounded-full animate-spin border-r-2 border-custom-green-1"></div>
+        <p className="text-xs text-custom-green-1">Loading...</p>
+      </div>
+    );
   if (error) return <p>Error loading bill details.</p>;
 
   const orders = dataBill?.orders || [];
