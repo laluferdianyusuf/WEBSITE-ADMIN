@@ -56,7 +56,9 @@ export default function LoginForm({ onLoginSuccess, onLoginFailure }) {
         onClick={handleFormSubmit}
         disabled={loading}
       />
-      {error && <p className="text-red-500">Error: {error.message}</p>}
+      {error && (
+        <p className="text-red-500 text-xs font-bold">{error.message}</p>
+      )}
     </form>
   );
 }
