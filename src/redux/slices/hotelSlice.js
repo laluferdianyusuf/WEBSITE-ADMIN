@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const uri = "http://localhost:2500";
+const uri = "https://api.timurjayaraya.com";
 
 // Create hotel
 export const createHotel = createAsyncThunk(

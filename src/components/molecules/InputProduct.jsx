@@ -37,12 +37,16 @@ export default function InputProduct({
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
-  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     dispatch(getHotels());
     dispatch(getProducts());
   }, [dispatch]);
+
+  const convertToISOFormat = (dateString) => {
+    const [day, month, year] = dateString.split("/");
+    return `${year}-${month}-${day}`;
+  };
 
   useEffect(() => {
     if (isEdit && initialData) {
@@ -51,11 +55,7 @@ export default function InputProduct({
         label: initialData.namaHotel,
       });
 
-      // const initialDate = new Date(initialData.date)
-      //   .toISOString()
-      //   .split("T")[0];
-
-      setSelectedDate(initialData.date);
+      setSelectedDate(convertToISOFormat(initialData.date));
 
       const formattedInputs = initialData.pesanan.map((item) => ({
         item: item.id ? { value: item.id, label: item.item } : null,
