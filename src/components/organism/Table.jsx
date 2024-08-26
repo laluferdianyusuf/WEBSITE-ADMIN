@@ -13,20 +13,27 @@ export default function Table({
   onSort,
   sortOrder,
   sortColumns,
+  isExport = false,
 }) {
   return (
-    <div className="overflow-auto no-scrollbar rounded-lg shadow-sm border w-full">
+    <div
+      className={`overflow-auto no-scrollbar ${
+        isExport ? "" : "rounded-lg"
+      } shadow-sm border w-full`}
+    >
       <table className="w-full">
         <TableHeader
           headers={headers}
           onSort={onSort}
           sortOrder={sortOrder}
           sortColumns={sortColumns}
+          isExport={isExport}
         />
         <TableBody
           data={data}
           columns={headers}
           onRowClick={onRowClick ? onRowClick : null}
+          isExport={isExport}
         />
         {(total !== undefined || totalDibayarkan !== undefined) && (
           <TableFooter
@@ -34,6 +41,7 @@ export default function Table({
             colSpan={headers.length}
             totalDibayarkan={totalDibayarkan}
             isHotelDetail={isHotelDetail}
+            isExport={isExport}
           />
         )}
       </table>

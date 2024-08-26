@@ -6,6 +6,7 @@ export default function TableHeader({
   onSort,
   sortOrder,
   sortColumns,
+  isExport
 }) {
   return (
     <thead className="bg-gray-200">
@@ -15,6 +16,7 @@ export default function TableHeader({
         onSort={onSort}
         sortOrder={sortOrder}
         sortColumns={sortColumns}
+        isExport={isExport}
       />
     </thead>
   );

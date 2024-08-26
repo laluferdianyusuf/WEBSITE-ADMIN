@@ -8,6 +8,7 @@ export default function TableRow({
   index,
   onRowClick,
   onSort,
+  isExport = false,
   sortOrder,
   sortColumns,
 }) {
@@ -45,7 +46,9 @@ export default function TableRow({
     <tr
       className={`${rowClass} ${
         onRowClick ? "cursor-pointer hover:bg-gray-200" : ""
-      } ${isHeader ? "cursor-text" : "cursor-pointer"}`}
+      } ${isHeader ? "cursor-text" : "cursor-pointer"}
+       ${isExport ? "border-2 border-slate-900" : ""}
+       `}
       onClick={onRowClick}
     >
       {rowData.map((data, cellIndex) => (
@@ -54,6 +57,7 @@ export default function TableRow({
           isHeader={isHeader}
           index={cellIndex}
           data={data}
+          isExport={isExport}
         >
           {data}
           {isHeader && data === "Tanggal" && (

@@ -246,17 +246,18 @@ export default function Hotel({ handleHotelSelect }) {
           />
         </>
       )}
-      <p className="text-xs text-end absolute bottom-[3rem] right-[2.3rem] ">
-        Menampilkan {startIndex} - {endIndex} dari total{" "}
-        {dataFilteredHotel.length} data
-      </p>
-
-      <Pagination
-        totalItems={dataFilteredHotel.length}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+      <div>
+        <p className="text-xs text-end">
+          Menampilkan {startIndex} - {endIndex} dari total{" "}
+          {dataFilteredHotel.length} data
+        </p>
+        <Pagination
+          totalItems={dataFilteredHotel.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      </div>
       <ModalCrud
         title="Tambah Hotel"
         isOpen={isAdding}

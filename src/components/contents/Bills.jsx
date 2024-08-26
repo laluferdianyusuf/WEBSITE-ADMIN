@@ -248,17 +248,19 @@ export default function Bills({ handleBillSelect }) {
           sortColumns={"Tanggal"}
         />
       )}
-      <p className="text-xs text-end lg:absolute lg:bottom-[3rem] lg:right-[2.3rem]">
-        Menampilkan {startIndex} - {endIndex} dari total {filteredBills.length}{" "}
-        data
-      </p>
 
-      <Pagination
-        totalItems={filteredBills.length}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+      <div>
+        <p className="text-xs text-end">
+          Menampilkan {startIndex} - {endIndex} dari total{" "}
+          {filteredBills.length} data
+        </p>
+        <Pagination
+          totalItems={filteredBills.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      </div>
       <InputProduct
         isOpen={isOpen}
         closeModal={closeModal}

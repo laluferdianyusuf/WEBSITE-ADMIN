@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import TableRow from "../atoms/TableRow";
 
-export default function TableBody({ data, columns, onRowClick }) {
+export default function TableBody({ data, columns, onRowClick, isExport }) {
   return (
     <tbody>
       {data.map((row, index) => (
@@ -9,6 +9,7 @@ export default function TableBody({ data, columns, onRowClick }) {
           key={index}
           rowData={columns.map((column) => row[column])}
           index={index}
+          isExport={isExport}
           onRowClick={() => (onRowClick ? onRowClick(row) : null)}
         />
       ))}

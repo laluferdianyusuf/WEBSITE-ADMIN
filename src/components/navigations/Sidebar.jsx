@@ -25,11 +25,11 @@ export default function Sidebar({
       },
     },
     {
-      name: "Hotel",
+      name: "Customer",
       icon: <FaHotel />,
       handler: () => {
         handleMenuToggle();
-        handleMenuClick("Hotel");
+        handleMenuClick("Customer");
       },
     },
     {

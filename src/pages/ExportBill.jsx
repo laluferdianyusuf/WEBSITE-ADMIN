@@ -50,19 +50,19 @@ const ExportBill = () => {
 
   return (
     <div className="h-full bg-white mb-10">
-      <div ref={componentRef} className="flex flex-col mt-8 mx-12">
-        <div className="mb-7">
-          <h3 className="font-semibold text-[26px] mb-1 text-slate-900">
+      <div ref={componentRef} className="flex flex-col mt-4 mx-6">
+        <div className="mb-2">
+          <h3 className="font-extrabold mb-1 text-slate-900">
             UD TIMUR JAYA RAYA
           </h3>
           <div className="flex justify-between text-slate-900 mt-2">
-            <div className="flex flex-col gap-[6px]">
+            <div className="flex flex-col gap-[3px] text-sm font-bold">
               <p>Jl. Gareng No. 28 Cakranegara</p>
               <p>No HP. 081907647590</p>
               <p>Fax. 0370-633668</p>
             </div>
-            <div className="flex flex-col gap-[6px]">
-              <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col">
+              <div className="grid grid-cols-2 gap-[3px] text-sm font-bold">
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
@@ -73,15 +73,15 @@ const ExportBill = () => {
             </div>
           </div>
         </div>
-        <Table headers={tableHeaders2} data={tableData2} total={totalHarga} />
-        <div className="mt-8 flex flex-col justify-between w-1/6 h-32">
+        <Table isExport={true} headers={tableHeaders2} data={tableData2} total={totalHarga} />
+        <div className="mt-4 flex flex-col justify-between w-1/6 h-24 font-bold">
           <p>Penerima</p>
-          <div className="border-b border-slate-900 w-full" />
+          <div className="border-b-2 border-slate-900 w-full" />
         </div>
       </div>
       <button
         onClick={handlePrint}
-        className="mt-4 mx-12 bg-white text-slate-900 px-4 py-2 rounded-md flex items-center justify-center border border-slate-400"
+        className="mt-4 mx-12 bg-white text-slate-900 px-2 py-1 rounded-md flex items-center justify-center border-2 border-slate-900 font-bold"
       >
         <GoDownload className="mr-2" size={16} />
         Unduh Nota

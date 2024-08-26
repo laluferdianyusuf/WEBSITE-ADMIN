@@ -65,39 +65,39 @@ const InvoiceExport = () => {
   return (
     <div>
       <div ref={componentRef} className="p-4 bg-white rounded-md">
-        <div className="mb-7">
+        <div className="mb-2">
           <div className="flex justify-between text-slate-9000 mt-2">
-            <div className="flex flex-col gap-[6px]">
-              <h3 className="text-[26px] font-semibold">UD TIMUR JAYA RAYA</h3>
-              <p>Jl. Gareng No. 28 Cakranegara</p>
-              <p>HP. 081907647590</p>
-              <p>Fax. 0370-633668</p>
+            <div className="flex flex-col gap-[2px]">
+              <h3 className="font-extrabold">UD TIMUR JAYA RAYA</h3>
+              <p className="text-sm font-bold">Jl. Gareng No. 28 Cakranegara</p>
+              <p className="text-sm font-bold">HP. 081907647590</p>
+              <p className="text-sm font-bold">Fax. 0370-633668</p>
             </div>
-            <div className="flex flex-col gap-[6px]">
-              <h4 className="text-xl font-semibold">INVOICE</h4>
+            <div className="flex flex-col gap-[2px]">
+              <h4 className="font-bold text-sm">INVOICE</h4>
               <div className="grid grid-cols-2">
-                <p>Invoice No</p>
-                <p>: ..../..../{currentYear}</p>
+                <p className="text-sm font-bold">Invoice No</p>
+                <p className="text-sm font-bold">: ..../..../{currentYear}</p>
               </div>
               <div className="grid grid-cols-2">
-                <p>Tanggal</p>
-                <p>: {date}</p>
+                <p className="text-sm font-bold">Tanggal</p>
+                <p className="text-sm font-bold">: {date}</p>
               </div>
               <div className="grid grid-cols-2">
-                <p>Kepada</p>
-                <p>: {hotel.nama_hotel}</p>
+                <p className="text-sm font-bold">Kepada</p>
+                <p className="text-sm font-bold">: {hotel.nama_hotel}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="overflow-hidden rounded-md border border-custom-white-2 shadow-sm">
+        <div className="overflow-hidden rounded-md border-2 border-slate-900 shadow-sm">
           <table className="min-w-full text-xs">
             <thead>
-              <tr>
+              <tr className="border-b-2 border-slate-900">
                 {tableHeaders.map((header) => (
                   <th
                     key={header}
-                    className="bg-custom-blue-1 px-8 py-4 text-left"
+                    className="bg-custom-blue-1 px-2 py-1 text-left font-extrabold"
                   >
                     {header}
                   </th>
@@ -110,31 +110,31 @@ const InvoiceExport = () => {
                   {bill.orders.map((order, index) => (
                     <tr key={index}>
                       {index === 0 && (
-                        <td rowSpan={bill.orders.length} className="px-8 py-4">
+                        <td rowSpan={bill.orders.length} className="px-2 py-1 font-bold">
                           {bill.tanggal_nota}
                         </td>
                       )}
-                      <td className="px-8 py-4">{order.nama_produk}</td>
-                      <td className="px-8 py-4">{order.qty}</td>
-                      <td className="px-8 py-4">
+                      <td className="px-2 py-1 font-bold">{order.nama_produk}</td>
+                      <td className="px-2 py-1 font-bold">{order.qty}</td>
+                      <td className="px-2 py-1 font-bold">
                         Rp. {order.harga_produk.toLocaleString()}
                       </td>
-                      <td className="px-8 py-4">
+                      <td className="px-2 py-1 font-bold">
                         Rp. {order.total_harga.toLocaleString()}
                       </td>
-                      <td className="px-8 py-4">-</td>
-                      <td className="px-8 py-4">-</td>
+                      <td className="px-2 py-1 font-bold">-</td>
+                      <td className="px-2 py-1 font-bold">-</td>
                     </tr>
                   ))}
-                  <tr className="border-y border-gray-300">
-                    <td colSpan={4} className="px-8 py-4"></td>
-                    <td className="px-8 py-4 bg-custom-white-2">
+                  <tr className="border-y-2 border-slate-900">
+                    <td colSpan={4} className="px-2 py-1font-bold"></td>
+                    <td className="px-2 py-1 bg-custom-white-2 font-bold">
                       Rp. {bill.total_pesanan.toLocaleString()}
                     </td>
-                    <td className="px-8 py-4 bg-custom-white-2">
+                    <td className="px-2 py-1 bg-custom-white-2 font-bold">
                       Rp. {bill.total_dibayar.toLocaleString()}
                     </td>
-                    <td className="px-8 py-4 bg-custom-white-2">
+                    <td className="px-2 py-1 bg-custom-white-2 font-bold">
                       Rp.{" "}
                       {(
                         bill.total_pesanan - bill.total_dibayar
@@ -146,27 +146,27 @@ const InvoiceExport = () => {
               <tr>
                 <td
                   colSpan={4}
-                  className="px-8 py-4 font-semibold text-left bg-custom-white-2"
+                  className="px-2 py-1 font-extrabold text-left bg-custom-white-2"
                 >
                   Total
                 </td>
-                <td className="px-8 py-4 bg-custom-white-2 font-semibold">
+                <td className="px-2 py-1 bg-custom-white-2 font-extrabold">
                   Rp. {totalAmount.toLocaleString()}
                 </td>
-                <td className="px-8 py-4 bg-custom-white-2 font-semibold">
+                <td className="px-2 py-1 bg-custom-white-2 font-extrabold">
                   Rp. {totalPaid.toLocaleString()}
                 </td>
-                <td className="px-8 py-4 bg-custom-white-2 font-semibold">
+                <td className="px-2 py-1 bg-custom-white-2 font-extrabold">
                   Rp. {totalBalance.toLocaleString()}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div className="mt-8 text-slate-900 text-xs flex justify-between">
+        <div className="mt-2 text-slate-900 text-xs flex justify-between">
           <div>
-            <p>Pembayaran dapat dilakukan melalui rekening :</p>
-            <div className="grid grid-cols-2 mt-2 gap-y-2">
+            <p className="font-bold">Pembayaran dapat dilakukan melalui rekening :</p>
+            <div className="grid grid-cols-2 mt-2 gap-y-1 font-bold">
               <p>Bank</p>
               <p>: BCA</p>
               <p>No. Rekening</p>
@@ -174,11 +174,11 @@ const InvoiceExport = () => {
               <p>Atas Nama</p>
               <p>: LIEFIA</p>
             </div>
-            <p className="mt-4">
+            <p className="mt-2 font-bold">
               Demikian, atas perhatiannya disampaikan terimakasih
             </p>
           </div>
-          <div className="h-32 text-xs text-slate-900 flex flex-col justify-between items-center">
+          <div className="h-24 text-xs text-slate-900 flex flex-col justify-between items-center font-bold">
             <div className="flex flex-col items-center">
               <p>Hormat Kami</p>
               <p>UD TIMUR JAYA</p>
@@ -186,17 +186,17 @@ const InvoiceExport = () => {
             <p>( LIFIA )</p>
           </div>
         </div>
-        <div className="mt-8 text-slate-900 flex flex-col justify-between w-1/5 h-32 mx-2 text-xs">
+        <div className="mt-4 text-slate-900 flex flex-col justify-between w-1/5 h-24 mx-2 text-xs font-bold">
           <p>Penerima</p>
-          <div className="border-b border-slate-900 w-full" />
+          <div className="border-b-2 border-slate-900 w-full" />
         </div>
       </div>
-      <div className="flex justify-start my-6 mx-4">
+      <div className="flex justify-start my-3 mx-4 font-bold">
         <button
           onClick={handlePrint}
-          className="bg-white text-slate-900 px-4 py-2 rounded-md flex items-center justify-center border border-slate-400"
+          className="bg-white text-slate-900 px-2 py-1 rounded-md flex items-center justify-center border-2 border-slate-900"
         >
-          <GoDownload className="mr-2" />
+          <GoDownload className="mr-2 font-bold" />
           Download Invoice
         </button>
       </div>

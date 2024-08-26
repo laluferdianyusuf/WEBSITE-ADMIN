@@ -62,7 +62,7 @@ export default function Admin() {
   const handleHotelSelect = (index) => {
     setPreviousMenu(activeMenu);
     setSelectedHotel(index);
-    setActiveMenu("HotelDetail");
+    setActiveMenu("CustomerDetail");
   };
 
   const handleLogin = () => {
@@ -106,11 +106,11 @@ export default function Admin() {
         return <Bills handleBillSelect={handleBillSelect} />;
       case "Produk":
         return <Product />;
-      case "Hotel":
+      case "Customer":
         return <Hotel handleHotelSelect={handleHotelSelect} />;
       case "NotaDetail":
         return <BillDetail bill={selectedBill} onBack={handleBack} />;
-      case "HotelDetail":
+      case "CustomerDetail":
         return (
           <HotelDetail
             hotel={selectedHotel}

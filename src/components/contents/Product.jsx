@@ -226,18 +226,19 @@ export default function Product() {
           onDelete={handleDelete}
         />
       )}
-      <p className="text-xs text-end absolute bottom-[3rem] right-[2.3rem] ">
-        Menampilkan {startIndex} - {endIndex} dari total{" "}
-        {filteredProducts.length} data
-      </p>
 
-      <Pagination
-        totalItems={filteredProducts.length}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
-
+      <div>
+        <p className="text-xs text-end">
+          Menampilkan {startIndex} - {endIndex} dari total{" "}
+          {filteredProducts.length} data
+        </p>
+        <Pagination
+          totalItems={filteredProducts.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      </div>
       <ModalCrud
         title="Tambah Produk"
         isOpen={isAdding}
