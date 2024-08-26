@@ -195,7 +195,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
                 className="text-custom-green-1 hover:underline"
                 onClick={onBack}
               >
-                Manajemen Hotel
+                Manajemen Customer
               </button>
             </li>
             <li>

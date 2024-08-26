@@ -204,7 +204,7 @@ export default function Hotel({ handleHotelSelect }) {
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-5 relative">
       <div>
-        <h3 className="font-semibold text-xl mb-1">Manajemen Hotel</h3>
+        <h3 className="font-semibold text-xl mb-1">Manajemen Customer</h3>
         <p className="text-xs text-slate-500">
           Terakhir di Update {timeSinceUpdate}
         </p>
