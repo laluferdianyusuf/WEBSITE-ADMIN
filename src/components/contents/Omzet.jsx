@@ -4,8 +4,12 @@ import { GoDownload } from "react-icons/go";
 import NoOmzetData from "/icons/tidak-ditemukan-data.svg";
 import Table from "../organism/Table";
 import Pagination from "../molecules/Pagination";
+import { useState } from "react";
 
 export default function Omzet() {
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const tableHeaders = [
     "Nomor",
     "Customer",
@@ -64,6 +68,10 @@ export default function Omzet() {
 
   const { totalJumlah, totalTerbayarkan } = calculateTotals(tableData);
 
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-5 relative">
       <div>
@@ -79,12 +87,27 @@ export default function Omzet() {
             placeholder={`Cari dari total 61723 data`}
           />
         </div>
-        <ActionButton onClick={() => {}}>
-          <GoDownload className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">
-            Download Rincian Penjualan
-          </p>
-        </ActionButton>
+        <div className="flex gap-5">
+          <input
+            type="date"
+            className="px-[10px] py-[7px] border rounded-lg border-slate-900 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-900 font-medium h-9 text-xs"
+            max={new Date().toISOString().split("T")[0]}
+            value={selectedDate}
+            onChange={handleDateChange}
+            required
+          />
+          {/* {validationErrors.tanggalNota && (
+              <span className="text-red-500 text-xs">
+                {validationErrors.tanggalNota}
+              </span>
+            )} */}
+          <ActionButton onClick={() => {}}>
+            <GoDownload className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">
+              Download Rincian Penjualan
+            </p>
+          </ActionButton>
+        </div>
       </div>
       {tableData.length > 0 ? (
         <Table
@@ -102,7 +125,8 @@ export default function Omzet() {
       )}
       <div>
         <p className="text-xs text-end">
-          Menampilkan {tableData.length} - {tableData.length} dari total {tableData.length} data
+          Menampilkan {tableData.length} - {tableData.length} dari total{" "}
+          {tableData.length} data
         </p>
         <Pagination
           totalItems={tableData.length}

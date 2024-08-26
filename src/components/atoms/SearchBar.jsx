@@ -17,7 +17,7 @@ export default function SearchBar({ onSearch, placeholder = "Cari..." }) {
   };
 
   return (
-    <div className="relative flex items-center text-xs">
+    <div className="relative flex items-center text-xs shadow-sm">
       <FaSearch className="absolute left-3 text-gray-600" />
       <input
         type="text"
