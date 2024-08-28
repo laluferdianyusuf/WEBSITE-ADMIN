@@ -47,7 +47,7 @@ export default function TableRow({
       className={`${rowClass} ${
         onRowClick ? "cursor-pointer hover:bg-gray-200" : ""
       } ${isHeader ? "cursor-text" : "cursor-pointer"}
-       ${isExport ? "border-2 border-slate-900" : ""}
+       ${isExport ? "" : ""}
        `}
       onClick={onRowClick}
     >

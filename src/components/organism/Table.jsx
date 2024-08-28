@@ -18,7 +18,7 @@ export default function Table({
   return (
     <div
       className={`overflow-auto no-scrollbar ${
-        isExport ? "" : "rounded-lg"
+        isExport ? "rounded-md" : "rounded-lg"
       } shadow-sm border w-full`}
     >
       <table className="w-full">

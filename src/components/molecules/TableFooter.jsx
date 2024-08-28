@@ -11,14 +11,12 @@ export default function TableFooter({
     <tfoot>
       <tr
         className={`bg-custom-white-2 text-slate-900 text-left text-xs ${
-          isExport
-            ? "font-extrabold border-2 border-slate-900"
-            : "font-semibold"
+          isExport ? "font-extrabold" : "font-semibold"
         }`}
       >
         <td
           colSpan={1}
-          className={`border-t-0 ${isExport ? "px-2 py-1" : "px-4 py-4"}`}
+          className={`border-t-0 ${isExport ? "px-2" : "px-4 py-4"}`}
         >
           Total
         </td>
@@ -26,11 +24,11 @@ export default function TableFooter({
           <>
             <td
               colSpan={colSpan - 2}
-              className={`border-t-0 ${isExport ? "px-2 py-1" : "px-4 py-4"}`}
+              className={`border-t-0 ${isExport ? "px-2" : "px-4 py-4"}`}
             ></td>
             <td
               colSpan={1}
-              className={`border-t-0${isExport ? "px-2 py-1" : "px-4 py-4"}`}
+              className={`border-t-0${isExport ? "px-2" : "px-4 py-4"}`}
             >
               Rp. {total.toLocaleString()}
             </td>
@@ -40,13 +38,13 @@ export default function TableFooter({
           <>
             <td
               colSpan={1}
-              className={`border-t-0 ${isExport ? "px-2 py-1" : "px-4 py-4"}`}
+              className={`border-t-0 ${isExport ? "px-2" : "px-4 py-4"}`}
             >
               Rp. {total.toLocaleString()}
             </td>
             <td
               colSpan={1}
-              className={`border-t-0 ${isExport ? "px-2 py-1" : "px-4 py-4"}`}
+              className={`border-t-0 ${isExport ? "px-2" : "px-4 py-4"}`}
             >
               {totalDibayarkan !== undefined
                 ? `Rp. ${totalDibayarkan.toLocaleString()}`

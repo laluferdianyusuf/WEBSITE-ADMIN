@@ -1,6 +1,12 @@
 import PropTypes from "prop-types";
 
-export default function TableCell({ children, isHeader = false, index, data, isExport = false }) {
+export default function TableCell({
+  children,
+  isHeader = false,
+  index,
+  data,
+  isExport = false,
+}) {
   const formatNumber = (number) => {
     if (number === 0) return "Rp. 0";
     return number ? `Rp. ${number.toLocaleString()}` : "-";
@@ -21,7 +27,7 @@ export default function TableCell({ children, isHeader = false, index, data, isE
       className={`text-xs ${
         children[0] === "Belum Lunas" ? "text-red-500" : ""
       } ${children[0] === "Lunas" ? "text-green-500" : ""}
-        ${isExport ? "font-bold px-2 py-1" : "p-4"}`}
+        ${isExport ? "font-bold px-2" : "p-4"}`}
     >
       {typeof children[0] === "number" && index !== 0
         ? formatNumber(children[0])
