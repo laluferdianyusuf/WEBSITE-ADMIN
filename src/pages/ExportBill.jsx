@@ -37,16 +37,22 @@ const ExportBill = () => {
       : "Nota.pdf",
     pageStyle: `
       @page {
-        size: 9.5in 5.5in;
+        size: 5.5in 9.5in;
         margin: 0.2in;
       }
       @media print {
         * {
-          font-size: 10px;
+          font-size: 12px;
+          font-family: "Calibri", sans-serif;
+          letter-spacing: 0.5px;
+          color: black; /* Mengubah warna font menjadi hitam */
         }
         body {
-          font-size: 10px;
+          font-size: 12px;
           margin: 0.2in !important;
+        }
+        h3, p, .header-text {
+          line-height: 1.5; /* Menambahkan jarak antar baris */
         }
         table {
           width: 100% !important;
@@ -55,14 +61,8 @@ const ExportBill = () => {
         th, td {
           padding: 4px !important;
           text-align: left;
-          font-size: 10px !important;
-        }
-        th {
-          background-color: #f2f2f2;
-          font-weight: bold;
-        }
-        .page-break {
-          page-break-before: always !important;
+          font-size: 12px !important;
+          border: 1px solid black !important;
         }
       }
     `,
@@ -93,9 +93,11 @@ const ExportBill = () => {
     <div className="h-full bg-white mb-10">
       <div ref={componentRef} className="flex flex-col mt-4 mx-6">
         <div className="mb-2">
-          <h3 className="font-extrabold text-slate-900">UD TIMUR JAYA RAYA</h3>
+          <h3 className="font-extrabold text-slate-900 header-text">
+            UD TIMUR JAYA RAYA
+          </h3>
           <div className="flex justify-between text-slate-900 mt-2">
-            <div className="flex flex-col text-xs font-bold">
+            <div className="flex flex-col text-xs font-bold header-text">
               <p>Jl. Gareng No. 28 Cakranegara</p>
               <p>No HP. 081907647590</p>
               <p>Fax. 0370-633668</p>
