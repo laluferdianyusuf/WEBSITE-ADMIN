@@ -36,36 +36,43 @@ const ExportBill = () => {
       ? `${bill["Nama Hotel"]}_Nota_${new Date().toLocaleDateString()}.pdf`
       : "Nota.pdf",
     pageStyle: `
-      @page {
-        size: 5.5in 9.5in;
-        margin: 0.2in;
+    @page {
+      size: 9.5in 11in;
+      margin: 0.2in;
+    }
+    @media print {
+      * {
+        font-size: 12px;
+        font-family: "Calibri", sans-serif;
+        letter-spacing: 0.5px;
+        color: black;
+        box-shadow: none !important; /* Menghapus shadow */
+        text-shadow: none !important; /* Menghapus text shadow */
       }
-      @media print {
-        * {
-          font-size: 12px;
-          font-family: "Calibri", sans-serif;
-          letter-spacing: 0.5px;
-          color: black; /* Mengubah warna font menjadi hitam */
-        }
-        body {
-          font-size: 12px;
-          margin: 0.2in !important;
-        }
-        h3, p, .header-text {
-          line-height: 1.5; /* Menambahkan jarak antar baris */
-        }
-        table {
-          width: 100% !important;
-          border-collapse: collapse;
-        }
-        th, td {
-          padding: 4px !important;
-          text-align: left;
-          font-size: 12px !important;
-          border: 1px solid black !important;
-        }
+      body {
+        font-size: 12px;
+        margin: 0.2in !important;
+        margin-right: 0.4in !important;
       }
-    `,
+      h3, p, .header-text {
+        line-height: 1.5;
+      }
+      table {
+        width: 100% !important;
+        margin: 0 auto !important; /* Menempatkan tabel di tengah halaman */
+        border-collapse: collapse; /* Memastikan tidak ada spasi antar border */
+      }
+      th, td {
+        padding: 4px !important;
+        text-align: left;
+        font-size: 12px !important;
+        border: 2px solid black !important;
+      }
+      .page-break {
+        page-break-before: always !important;
+      }
+    }
+  `,
   });
 
   if (!bill || !tableData2) {
@@ -90,8 +97,8 @@ const ExportBill = () => {
   const pages = paginateData(tableData2, itemsPerPage);
 
   return (
-    <div className="h-full bg-white mb-10">
-      <div ref={componentRef} className="flex flex-col mt-4 mx-6">
+    <div className="h-full bg-white mb-10 w-[800px] max-w-[800px] flex flex-col items-center">
+      <div ref={componentRef} className="flex flex-col mt-4 mx-6 w-full">
         <div className="mb-2">
           <h3 className="font-extrabold text-slate-900 header-text">
             UD TIMUR JAYA RAYA
@@ -108,7 +115,7 @@ const ExportBill = () => {
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
                 <p>: {bill["Tanggal"]}</p>
-                <p>Nama Hotel</p>
+                <p>Nama Customer</p>
                 <p>: {bill["Nama Hotel"]}</p>
               </div>
             </div>
