@@ -67,6 +67,23 @@ export default function Omzet() {
   };
 
   const { totalJumlah, totalTerbayarkan } = calculateTotals(tableData);
+  
+  const handleExportClick = () => {
+    const state = {
+      tableData,
+      totalJumlah,
+      totalTerbayarkan,
+      selectedDate
+    };
+    const stateString = encodeURIComponent(JSON.stringify(state));
+    window.open(
+      `/#/omzetexport?state=${stateString}`,
+      "_blank",
+      `noopener,noreferrer`
+    );
+    console.log(stateString)
+  };
+
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -83,7 +100,7 @@ export default function Omzet() {
       <div className="flex justify-between items-center">
         <div className="w-1/3">
           <SearchBar
-            onSearch={() => {}}
+            onSearch={()=>{}}
             placeholder={`Cari dari total 61723 data`}
           />
         </div>
@@ -101,7 +118,7 @@ export default function Omzet() {
                 {validationErrors.tanggalNota}
               </span>
             )} */}
-          <ActionButton onClick={() => {}}>
+          <ActionButton onClick={handleExportClick}>
             <GoDownload className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">
               Download Rincian Penjualan

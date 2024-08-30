@@ -7,6 +7,7 @@ export default function TableFooter({
   isHotelDetail = false,
   isExport = false,
 }) {
+  console.log(totalDibayarkan);
   return (
     <tfoot>
       <tr

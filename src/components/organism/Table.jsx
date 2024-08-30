@@ -15,6 +15,8 @@ export default function Table({
   sortColumns,
   isExport = false,
 }) {
+  console.log(totalDibayarkan)
+  console.log(total)
   return (
     <div
       className={`overflow-auto no-scrollbar ${
