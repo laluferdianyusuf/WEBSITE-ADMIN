@@ -22,7 +22,6 @@ export const adminLogin = createAsyncThunk(
   async (admin, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${uri}/api/v1/user/login`, admin);
-      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

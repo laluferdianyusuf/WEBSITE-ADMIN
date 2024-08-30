@@ -160,10 +160,6 @@ const handleDelete = (row) => {
   alert(`Delete clicked for: ${row[1]}`);
 };
 
-const handleSearch = (query) => {
-  console.log("Search query:", query);
-};
-
 export default function Slicing() {
   const [inputProduk, setInputProduk] = useState("Hand Sanitizer");
   const [inputHotel, setInputHotel] = useState("Hotel Aston");

@@ -32,7 +32,7 @@ export default function Hotel({ handleHotelSelect }) {
   const itemsPerPage = 6;
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
+  
   useEffect(() => {
     dispatch(getHotels());
   }, [dispatch]);

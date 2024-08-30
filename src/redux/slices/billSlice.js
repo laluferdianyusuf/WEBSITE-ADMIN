@@ -41,7 +41,6 @@ export const getDetailBill = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -80,7 +79,6 @@ export const deleteBill = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

@@ -7,6 +7,7 @@ import { store } from "./redux/app/store.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import ExportBill from "./pages/ExportBill.jsx";
 import InvoiceExport from "./pages/Invoice.jsx";
+import ExportOmzet from "./pages/ExportOmzet.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/billexport" element={<ExportBill />} />
           <Route path="/invoiceexport" element={<InvoiceExport />} />
+          <Route path="/omzetexport" element={<ExportOmzet />} />
         </Routes>
       </Router>
     </Provider>

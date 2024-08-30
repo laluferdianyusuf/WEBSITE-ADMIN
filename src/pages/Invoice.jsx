@@ -40,8 +40,6 @@ const InvoiceExport = () => {
     (bill) => bill.total_dibayar <= bill.total_pesanan
   );
 
-  console.log(unpaidBills);
-
   const calculateTotals = () => {
     let totalAmount = 0;
     let totalPaid = 0;
@@ -60,7 +58,6 @@ const InvoiceExport = () => {
   const currentYear = new Date().getFullYear().toString().slice(-2);
 
   const { totalAmount, totalPaid, totalBalance } = calculateTotals();
-  console.log(hotel);
 
   return (
     <div>

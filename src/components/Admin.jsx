@@ -10,7 +10,8 @@ import HotelDetail from "./contents/HotelDetail";
 import Login from "./contents/Login";
 import ModalConfirmation from "./molecules/ModalConfirmation";
 import animation from "/icons/login-animation.svg";
-import { IoClose, IoMenu } from "react-icons/io5";
+import { IoMenu } from "react-icons/io5";
+import Omzet from "./contents/Omzet";
 
 export default function Admin() {
   const [activeMenu, setActiveMenu] = useState("Nota");
@@ -108,6 +109,8 @@ export default function Admin() {
         return <Product />;
       case "Customer":
         return <Hotel handleHotelSelect={handleHotelSelect} />;
+      case "Omzet":
+        return <Omzet />;
       case "NotaDetail":
         return <BillDetail bill={selectedBill} onBack={handleBack} />;
       case "CustomerDetail":
