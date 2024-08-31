@@ -36,50 +36,50 @@ const ExportBill = () => {
       ? `${bill["Nama Hotel"]}_Nota_${new Date().toLocaleDateString()}.pdf`
       : "Nota.pdf",
     pageStyle: `
-      @page {
-        size: 9.0in 11in;
-        margin: 0.2in;
+    @page {
+      size: 9.0in 11in;
+      margin: 0.2in;
+    }
+    @media print {
+      * {
+        font-size: 12px;
+        font-family: "Calibri", sans-serif;
+        letter-spacing: 0.5px;
+        color: black;
+        box-shadow: none !important; /* Menghapus shadow */
+        text-shadow: none !important; /* Menghapus text shadow */
       }
-      @media print {
-        * {
-          font-size: 12px;
-          font-family: "Calibri", sans-serif;
-          color: black;
-          box-shadow: none !important;
-          text-shadow: none !important;
-        }
-        body {
-          font-size: 12px;
-        }
-        h3, p, .header-text {
-          line-height: 1.5;
-        }
-        table {
-          width: 99% !important;
-          margin-left: 0 !important; /* Menempelkan tabel ke sisi kiri */
-          border-collapse: collapse;
-        }
-        th, td {
-          padding: 2px !important;
-          font-size: 12px !important;
-          border: 2px solid black !important;
-          text-align: left !important; /* Default left alignment */
-        }
-        /* Center text for specific headers and columns */
-        th:nth-child(4),
-        th:nth-child(3),
-        td:nth-child(3),
-        th:nth-child(5),
-        td:nth-child(4),
-        td:nth-child(5)
-        {
-          text-align: center !important;
-        }
-        .page-break {
-          page-break-before: always !important;
-        }
+      body {
+        font-size: 12px;
+        margin: 0.2in !important;
       }
-    `,
+      h3, p, .header-text {
+        line-height: 1.5;
+      }
+      table {
+        width: 100% !important;
+        margin: 0 auto !important; /* Menempatkan tabel di tengah halaman */
+        border-collapse: collapse; /* Memastikan tidak ada spasi antar border */
+      }
+      th, td {
+        padding: 4px !important;
+        text-align: left;
+        font-size: 12px !important;
+        border: 2px solid black !important;
+      } 
+      th:nth-child(3),
+      th:nth-child(4),
+      th:nth-child(5),
+      td:nth-child(3),
+      td:nth-child(4),
+      td:nth-child(5) {
+        text-align: center !important;
+      }
+      .page-break {
+        page-break-before: always !important;
+      }
+    }
+  `,
   });
 
   if (!bill || !tableData2) {
