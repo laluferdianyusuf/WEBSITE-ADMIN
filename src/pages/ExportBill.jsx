@@ -36,43 +36,52 @@ const ExportBill = () => {
       ? `${bill["Nama Hotel"]}_Nota_${new Date().toLocaleDateString()}.pdf`
       : "Nota.pdf",
     pageStyle: `
-    @page {
-      size: 9.5in 11in;
-      margin: 0.2in;
-    }
-    @media print {
-      * {
-        font-size: 12px;
-        font-family: "Calibri", sans-serif;
-        letter-spacing: 0.5px;
-        color: black;
-        box-shadow: none !important; /* Menghapus shadow */
-        text-shadow: none !important; /* Menghapus text shadow */
+      @page {
+        size: 9.0in 11in;
+        margin: 0.2in;
       }
+      @media print {
+        * {
+          font-size: 12px;
+          font-family: "Calibri", sans-serif;
+          color: black;
+        }
       body {
         font-size: 12px;
-        margin: 0.2in !important;
-        margin-right: 0.4in !important;
+        margin-top: 0.2in !important; /* Margin vertikal atas */
+        margin-bottom: 0.2in !important; /* Margin vertikal bawah */
+        margin-left: 0.4in !important; /* Margin horizontal kiri */
+        margin-right: 0.4in !important; /* Margin horizontal kanan */
       }
-      h3, p, .header-text {
-        line-height: 1.5;
+        h3, p, .header-text {
+          line-height: 1.5;
+        }
+        table {
+          width: 99% !important;
+          margin-left: 0 !important; /* Menempelkan tabel ke sisi kiri */
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 2px !important;
+          font-size: 12px !important;
+          border: 2px solid black !important;
+          text-align: left !important; /* Default left alignment */
+        }
+        /* Center text for specific headers and columns */
+        th:nth-child(4),
+        th:nth-child(3),
+        td:nth-child(3),
+        th:nth-child(5),
+        td:nth-child(4),
+        td:nth-child(5)
+        {
+          text-align: center !important;
+        }
+        .page-break {
+          page-break-before: always !important;
+        }
       }
-      table {
-        width: 100% !important;
-        margin: 0 auto !important; /* Menempatkan tabel di tengah halaman */
-        border-collapse: collapse; /* Memastikan tidak ada spasi antar border */
-      }
-      th, td {
-        padding: 4px !important;
-        text-align: left;
-        font-size: 12px !important;
-        border: 2px solid black !important;
-      }
-      .page-break {
-        page-break-before: always !important;
-      }
-    }
-  `,
+    `,
   });
 
   if (!bill || !tableData2) {
@@ -98,19 +107,19 @@ const ExportBill = () => {
 
   return (
     <div className="h-full bg-white mb-10 w-[800px] max-w-[800px] flex flex-col items-center">
-      <div ref={componentRef} className="flex flex-col mt-4 mx-6 w-full">
+      <div ref={componentRef} className="flex flex-col mt-4 mx-1 w-full">
         <div className="mb-2">
           <h3 className="font-extrabold text-slate-900 header-text">
             UD TIMUR JAYA RAYA
           </h3>
           <div className="flex justify-between text-slate-900 mt-2">
-            <div className="flex flex-col text-xs font-bold header-text">
+            <div className="flex flex-col text-xs font-semibold header-text">
               <p>Jl. Gareng No. 28 Cakranegara</p>
               <p>No HP. 081907647590</p>
               <p>Fax. 0370-633668</p>
             </div>
             <div className="flex flex-col text-xs">
-              <div className="grid grid-cols-2 font-bold">
+              <div className="grid grid-cols-2 font-semibold">
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
@@ -132,14 +141,14 @@ const ExportBill = () => {
             {pageIndex < pages.length - 1 && <div className="page-break"></div>}
           </div>
         ))}
-        <div className="mt-4 flex flex-col justify-between w-1/6 h-24 font-bold text-xs">
+        <div className="mt-4 flex flex-col justify-between w-1/6 h-24 font-semibold text-xs">
           <p>Penerima</p>
           <div className="border-b border-slate-900 w-full" />
         </div>
       </div>
       <button
         onClick={handlePrint}
-        className="mt-4 mx-6 bg-white text-slate-900 px-2 py-1 rounded-md flex items-center justify-center border border-slate-900 font-bold text-xs"
+        className="mt-4 mx-6 bg-white text-slate-900 px-2 py-1 rounded-md flex items-center justify-center border border-slate-900 font-semibold text-xs"
       >
         <GoDownload className="mr-2" size={16} />
         Unduh Nota
