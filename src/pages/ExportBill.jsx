@@ -37,7 +37,7 @@ const ExportBill = () => {
       : "Nota.pdf",
     pageStyle: `
     @page {
-      size: 9.5in 11in;
+      size: 9.0in 11in;
       margin: 0.2in;
     }
     @media print {
@@ -98,7 +98,7 @@ const ExportBill = () => {
 
   return (
     <div className="h-full bg-white mb-10 w-[800px] max-w-[800px] flex flex-col items-center">
-      <div ref={componentRef} className="flex flex-col mt-4 mx-6 w-full">
+      <div ref={componentRef} className="flex flex-col mt-4 mx-1 w-full">
         <div className="mb-2">
           <h3 className="font-extrabold text-slate-900 header-text">
             UD TIMUR JAYA RAYA
