@@ -12,7 +12,7 @@ export default function TableFooter({
     <tfoot>
       <tr
         className={`bg-custom-white-2 text-slate-900 text-left text-xs ${
-          isExport ? "font-extrabold" : "font-semibold"
+          isExport ? "font-semibold" : "font-medium"
         }`}
       >
         <td

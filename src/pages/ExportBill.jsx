@@ -104,13 +104,13 @@ const ExportBill = () => {
             UD TIMUR JAYA RAYA
           </h3>
           <div className="flex justify-between text-slate-900 mt-2">
-            <div className="flex flex-col text-xs font-bold header-text">
+            <div className="flex flex-col text-xs font-semibold header-text">
               <p>Jl. Gareng No. 28 Cakranegara</p>
               <p>No HP. 081907647590</p>
               <p>Fax. 0370-633668</p>
             </div>
             <div className="flex flex-col text-xs">
-              <div className="grid grid-cols-2 font-bold">
+              <div className="grid grid-cols-2 font-semibold">
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
@@ -132,14 +132,14 @@ const ExportBill = () => {
             {pageIndex < pages.length - 1 && <div className="page-break"></div>}
           </div>
         ))}
-        <div className="mt-4 flex flex-col justify-between w-1/6 h-24 font-bold text-xs">
+        <div className="mt-4 flex flex-col justify-between w-1/6 h-24 font-semibold text-xs">
           <p>Penerima</p>
           <div className="border-b border-slate-900 w-full" />
         </div>
       </div>
       <button
         onClick={handlePrint}
-        className="mt-4 mx-6 bg-white text-slate-900 px-2 py-1 rounded-md flex items-center justify-center border border-slate-900 font-bold text-xs"
+        className="mt-4 mx-6 bg-white text-slate-900 px-2 py-1 rounded-md flex items-center justify-center border border-slate-900 font-semibold text-xs"
       >
         <GoDownload className="mr-2" size={16} />
         Unduh Nota

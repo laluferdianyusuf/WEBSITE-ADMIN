@@ -17,7 +17,7 @@ export default function TableCell({
       className={`text-left text-slate-900 text-xs relative ${
         data === "Tanggal" ? "flex items-center justify-between" : ""
       }
-        ${isExport ? "font-extrabold px-2 py-1" : "p-4"}
+        ${isExport ? "font-semibold px-2 py-1" : "p-4"}
         `}
     >
       {children || "-"}
@@ -27,7 +27,7 @@ export default function TableCell({
       className={`text-xs ${
         children[0] === "Belum Lunas" ? "text-red-500" : ""
       } ${children[0] === "Lunas" ? "text-green-500" : ""}
-        ${isExport ? "font-bold px-2" : "p-4"}`}
+        ${isExport ? "font-medium px-2" : "p-4"}`}
     >
       {typeof children[0] === "number" && index !== 0
         ? formatNumber(children[0])
