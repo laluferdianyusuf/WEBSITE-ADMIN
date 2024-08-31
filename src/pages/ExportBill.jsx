@@ -52,7 +52,6 @@ const ExportBill = () => {
       body {
         font-size: 12px;
         margin: 0.2in !important;
-        margin-right: 0.4in !important;
       }
       h3, p, .header-text {
         line-height: 1.5;
@@ -67,6 +66,14 @@ const ExportBill = () => {
         text-align: left;
         font-size: 12px !important;
         border: 2px solid black !important;
+      } 
+      th:nth-child(3),
+      th:nth-child(4),
+      th:nth-child(5),
+      td:nth-child(3),
+      td:nth-child(4),
+      td:nth-child(5) {
+        text-align: center !important;
       }
       .page-break {
         page-break-before: always !important;
