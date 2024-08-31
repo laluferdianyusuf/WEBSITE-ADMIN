@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const uri = "https://api.timurjayaraya.com";
+const uri = "http://localhost:2500";
 
 // Create Product
 export const createProduct = createAsyncThunk(

@@ -58,6 +58,7 @@ export default function TableRow({
           index={cellIndex}
           data={data}
           isExport={isExport}
+          rowData={rowData}
         >
           {data}
           {isHeader && data === "Tanggal" && (

@@ -15,8 +15,6 @@ export default function Table({
   sortColumns,
   isExport = false,
 }) {
-  console.log(totalDibayarkan)
-  console.log(total)
   return (
     <div
       className={`overflow-auto no-scrollbar ${
@@ -41,7 +39,9 @@ export default function Table({
           <TableFooter
             total={total}
             colSpan={`${
-              totalDibayarkan !== undefined ? headers.length - 2 : headers.length
+              totalDibayarkan !== undefined
+                ? headers.length - 2
+                : headers.length
             }`}
             totalDibayarkan={totalDibayarkan}
             isHotelDetail={isHotelDetail}

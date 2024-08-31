@@ -4,12 +4,73 @@ import { GoDownload } from "react-icons/go";
 import NoOmzetData from "/icons/tidak-ditemukan-data.svg";
 import Table from "../organism/Table";
 import Pagination from "../molecules/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getBillByDate } from "../../redux/slices/billSlice";
+import { format } from "date-fns";
 
 export default function Omzet() {
+  const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const [billsData, setBillsData] = useState([]);
+  const [filteredBillsData, setFilteredBillsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleFetchBill = () => {
+    setLoading(true);
+    dispatch(getBillByDate({ date: selectedDate }))
+      .unwrap()
+      .then((res) => {
+        const bills = res.data.bill;
+
+        // Grouping and adding order number for "Nota Ke-"
+        const groupedBills = bills.reduce((acc, bill) => {
+          if (!acc[bill.hotelId]) acc[bill.hotelId] = [];
+          acc[bill.hotelId].push(bill);
+          return acc;
+        }, {});
+
+        const billsWithOrder = [];
+        for (const hotelId in groupedBills) {
+          groupedBills[hotelId].forEach((bill, index) => {
+            billsWithOrder.push({
+              ...bill,
+              notaKe: index,
+            });
+          });
+        }
+
+        setBillsData(billsWithOrder);
+        setFilteredBillsData(billsWithOrder);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching bills:", error);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    handleFetchBill();
+  }, [selectedDate]);
+
+  useEffect(() => {
+    handleSearch(searchQuery);
+  }, [searchQuery, billsData]);
+
+  const handleSearch = (query) => {
+    const lowercasedQuery = query.toLowerCase();
+    const filteredData = billsData.filter(
+      (bill) =>
+        bill.number.toLowerCase().includes(lowercasedQuery) ||
+        bill.hotel?.hotelName.toLowerCase().includes(lowercasedQuery)
+    );
+    setFilteredBillsData(filteredData);
+  };
+
   const tableHeaders = [
     "Nomor",
     "Customer",
@@ -20,35 +81,16 @@ export default function Omzet() {
     "Terbayarkan",
   ];
 
-  const tableData = [
-    {
-      Nomor: 1,
-      Customer: "PT ABC",
-      "No. Nota": "INV001",
-      "Nota Ke-": "1",
-      Keterangan: "Pembelian Barang A",
-      Jumlah: 1000000,
-      Terbayarkan: 800000,
-    },
-    {
-      Nomor: 2,
-      Customer: "CV XYZ",
-      "No. Nota": "INV002",
-      "Nota Ke-": "1",
-      Keterangan: "Pembelian Barang B",
-      Jumlah: 2000000,
-      Terbayarkan: 2000000,
-    },
-    {
-      Nomor: 3,
-      Customer: "PT MNO",
-      "No. Nota": "INV003",
-      "Nota Ke-": "1",
-      Keterangan: "Pembelian Barang C",
-      Jumlah: 1500000,
-      Terbayarkan: 1500000,
-    },
-  ];
+  const tableData = filteredBillsData.map((bill, index) => ({
+    Nomor: index + 1,
+    Customer: bill?.hotel?.hotelName,
+    "No. Nota": bill.number,
+    "Nota Ke-": String(bill.notaKe),
+    Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
+    Keterangan: " ",
+    Jumlah: bill?.hotel?.totalBills,
+    Terbayarkan: bill?.hotel?.totalPaid,
+  }));
 
   const calculateTotals = (data) => {
     if (data.length > 0) {
@@ -67,13 +109,13 @@ export default function Omzet() {
   };
 
   const { totalJumlah, totalTerbayarkan } = calculateTotals(tableData);
-  
+
   const handleExportClick = () => {
     const state = {
-      tableData,
+      tableData: tableData,
       totalJumlah,
       totalTerbayarkan,
-      selectedDate
+      selectedDate,
     };
     const stateString = encodeURIComponent(JSON.stringify(state));
     window.open(
@@ -81,9 +123,8 @@ export default function Omzet() {
       "_blank",
       `noopener,noreferrer`
     );
-    console.log(stateString)
+    console.log(stateString);
   };
-
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -100,8 +141,10 @@ export default function Omzet() {
       <div className="flex justify-between items-center">
         <div className="w-1/3">
           <SearchBar
-            onSearch={()=>{}}
-            placeholder={`Cari dari total 61723 data`}
+            onSearch={(query) => {
+              setSearchQuery(query);
+            }}
+            placeholder={`Cari dari total ${billsData.length} data`}
           />
         </div>
         <div className="flex gap-5">
@@ -113,11 +156,6 @@ export default function Omzet() {
             onChange={handleDateChange}
             required
           />
-          {/* {validationErrors.tanggalNota && (
-              <span className="text-red-500 text-xs">
-                {validationErrors.tanggalNota}
-              </span>
-            )} */}
           <ActionButton onClick={handleExportClick}>
             <GoDownload className="mr-[6px]" size={16} />
             <p className="text-slate-900 font-semibold text-xs">
@@ -126,7 +164,9 @@ export default function Omzet() {
           </ActionButton>
         </div>
       </div>
-      {tableData.length > 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : filteredBillsData.length > 0 ? (
         <Table
           data={tableData}
           headers={tableHeaders}
@@ -142,12 +182,12 @@ export default function Omzet() {
       )}
       <div>
         <p className="text-xs text-end">
-          Menampilkan {tableData.length} - {tableData.length} dari total{" "}
-          {tableData.length} data
+          Menampilkan {filteredBillsData.length} - {filteredBillsData.length}{" "}
+          dari total {filteredBillsData.length} data
         </p>
         <Pagination
-          totalItems={tableData.length}
-          itemsPerPage={tableData.length}
+          totalItems={filteredBillsData.length}
+          itemsPerPage={filteredBillsData.length}
           currentPage={1}
           onPageChange={() => {}}
         />

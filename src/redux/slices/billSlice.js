@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const uri = "https://api.timurjayaraya.com";
+const uri = "http://localhost:2500";
 
 // bills registration
 export const addBills = createAsyncThunk(
@@ -109,6 +109,25 @@ export const updateBills = createAsyncThunk(
   }
 );
 
+// bills date
+export const getBillByDate = createAsyncThunk(
+  "bills/by-date",
+  async ({ date }, { rejectWithValue }) => {
+    try {
+      // const token = localStorage.getItem("token");
+      const response = await axios.get(`${uri}/api/v2/bills/date/${date}`, {
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          "Access-Control-Allow-Credentials": true,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   bills: {},
   loading: false,
@@ -197,6 +216,20 @@ const billsSlice = createSlice({
         }
       })
       .addCase(updateBills.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // list bills states
+      .addCase(getBillByDate.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBillByDate.fulfilled, (state, action) => {
+        state.loading = false;
+        state.bills = action.payload.data;
+      })
+      .addCase(getBillByDate.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
