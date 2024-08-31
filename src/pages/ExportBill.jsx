@@ -38,7 +38,6 @@ const ExportBill = () => {
     pageStyle: `
     @page {
       size: 9.0in 11in;
-      margin: 0.2in;
     }
     @media print {
       * {
@@ -51,7 +50,7 @@ const ExportBill = () => {
       }
       body {
         font-size: 12px;
-        margin: 0.2in !important;
+        margin: 0.2in 0.4in 0.2in 0.4in !important;
       }
       h3, p, .header-text {
         line-height: 1.5;
