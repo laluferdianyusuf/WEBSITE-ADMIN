@@ -52,7 +52,6 @@ const ExportBill = () => {
       body {
         font-size: 12px;
         margin: 0.2in !important;
-        margin-right: 0.4in !important;
       }
       h3, p, .header-text {
         line-height: 1.5;
