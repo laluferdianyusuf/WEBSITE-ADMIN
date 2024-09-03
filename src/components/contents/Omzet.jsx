@@ -18,6 +18,8 @@ export default function Omzet() {
   const [filteredBillsData, setFilteredBillsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const handleFetchBill = () => {
     setLoading(true);
@@ -26,7 +28,6 @@ export default function Omzet() {
       .then((res) => {
         const bills = res.data.bill;
 
-        // Grouping and adding order number for "Nota Ke-"
         const groupedBills = bills.reduce((acc, bill) => {
           if (!acc[bill.hotelId]) acc[bill.hotelId] = [];
           acc[bill.hotelId].push(bill);
@@ -69,6 +70,7 @@ export default function Omzet() {
         bill.hotel?.hotelName.toLowerCase().includes(lowercasedQuery)
     );
     setFilteredBillsData(filteredData);
+    setCurrentPage(1);
   };
 
   const tableHeaders = [
@@ -81,16 +83,18 @@ export default function Omzet() {
     "Terbayarkan",
   ];
 
-  const tableData = filteredBillsData.map((bill, index) => ({
-    Nomor: index + 1,
-    Customer: bill?.hotel?.hotelName,
-    "No. Nota": bill.number,
-    "Nota Ke-": String(bill.notaKe),
-    Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
-    Keterangan: " ",
-    Jumlah: bill?.hotel?.totalBills,
-    Terbayarkan: bill?.hotel?.totalPaid,
-  }));
+  const tableData = filteredBillsData
+    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    .map((bill, index) => ({
+      Nomor: (currentPage - 1) * itemsPerPage + index + 1,
+      Customer: bill?.hotel?.hotelName,
+      "No. Nota": bill.number,
+      "Nota Ke-": String(bill.notaKe),
+      Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
+      Keterangan: " ",
+      Jumlah: bill?.hotel?.totalBills,
+      Terbayarkan: bill?.hotel?.totalPaid,
+    }));
 
   const calculateTotals = (data) => {
     if (data.length > 0) {
@@ -128,6 +132,10 @@ export default function Omzet() {
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -182,14 +190,15 @@ export default function Omzet() {
       )}
       <div>
         <p className="text-xs text-end">
-          Menampilkan {filteredBillsData.length} - {filteredBillsData.length}{" "}
-          dari total {filteredBillsData.length} data
+          Menampilkan {(currentPage - 1) * itemsPerPage + 1} -{" "}
+          {Math.min(currentPage * itemsPerPage, filteredBillsData.length)} dari
+          total {filteredBillsData.length} data
         </p>
         <Pagination
           totalItems={filteredBillsData.length}
-          itemsPerPage={filteredBillsData.length}
-          currentPage={1}
-          onPageChange={() => {}}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>
