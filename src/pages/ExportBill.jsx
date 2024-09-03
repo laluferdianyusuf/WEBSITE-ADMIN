@@ -46,36 +46,53 @@ const ExportBill = () => {
           font-family: "Calibri", sans-serif;
           color: black;
         }
-      body {
-        font-size: 12px;
-        margin-top: 0.2in !important; /* Margin vertikal atas */
-        margin-bottom: 0.2in !important; /* Margin vertikal bawah */
-        margin-left: 0.4in !important; /* Margin horizontal kiri */
-        margin-right: 0.4in !important; /* Margin horizontal kanan */
-      }
+        body {
+          font-size: 12px;
+          margin-top: 0.2in !important;
+          margin-bottom: 0.2in !important;
+          margin-left: 0.4in !important;
+          margin-right: 0.4in !important;
+        }
         h3, p, .header-text {
           line-height: 1.5;
         }
+        h3 {
+          font-size: 20px !important;
+        }
         table {
           width: 99% !important;
-          margin-left: 0 !important; /* Menempelkan tabel ke sisi kiri */
+          margin-left: 0 !important;
           border-collapse: collapse;
         }
         th, td {
           padding: 2px !important;
           font-size: 12px !important;
           border: 2px solid black !important;
-          text-align: left !important; /* Default left alignment */
         }
-        /* Center text for specific headers and columns */
-        th:nth-child(4),
+        th:nth-child(1),
+        td:nth-child(1),
+        th:nth-child(2),
+        td:nth-child(2),
         th:nth-child(3),
-        td:nth-child(3),
-        th:nth-child(5),
-        td:nth-child(4),
-        td:nth-child(5)
-        {
+        td:nth-child(3) {
           text-align: center !important;
+        }
+        th:nth-child(4),
+        th:nth-child(5) {
+          text-align: center !important;
+        }
+        td:nth-child(4),
+        td:nth-child(5) {
+          text-align: right !important;
+        }
+        tfoot td:nth-child(4),
+        tfoot td:nth-child(5) {
+          text-align: right !important;
+        }
+        tfoot td:nth-child(3) {
+          text-align: right !important;
+          font-weight: bold !important;
+          background-color: lightgray !important;
         }
         .page-break {
           page-break-before: always !important;

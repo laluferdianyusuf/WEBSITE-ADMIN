@@ -25,11 +25,11 @@ export default function TableFooter({
           <>
             <td
               colSpan={colSpan - 2}
-              className={`border-t-0 ${isExport ? "px-2" : "px-4 py-4"}`}
+              className={`border-t-0 custom-footer-total ${isExport ? "px-2" : "px-4 py-4"}`}
             ></td>
             <td
               colSpan={1}
-              className={`border-t-0 ${isExport ? "px-2 py-1" : "px-4 py-4"}`}
+              className={`border-t-0 custom-footer-total ${isExport ? "px-2 py-1" : "px-4 py-4"}`}
             >
               Rp. {total.toLocaleString()}
             </td>
