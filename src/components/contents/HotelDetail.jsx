@@ -241,9 +241,9 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
           </div>
           <div className="grid gap-y-2 grid-cols-2 w-[35%] text-xs text-slate-900 mb-5 ms-12">
             <p>Total Tagihan</p>
-            <p>: Rp. {totalTagihan.toLocaleString()}</p>
+            <p>: {totalTagihan.toLocaleString()}</p>
             <p>Sisa Tagihan</p>
-            <p>: Rp. {sisa.toLocaleString()}</p>
+            <p>: {sisa.toLocaleString()}</p>
           </div>
 
           {isPaying && (

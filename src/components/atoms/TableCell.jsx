@@ -8,8 +8,8 @@ export default function TableCell({
   isExport = false,
 }) {
   const formatNumber = (number) => {
-    if (number === 0) return "Rp. 0";
-    return number ? `Rp. ${number.toLocaleString()}` : "-";
+    if (number === 0) return "0";
+    return number ? `${number.toLocaleString()}` : "-";
   };
 
   return isHeader ? (

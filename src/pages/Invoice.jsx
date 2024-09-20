@@ -114,10 +114,10 @@ const InvoiceExport = () => {
                       <td className="px-2 py-1">{order.nama_produk}</td>
                       <td className="px-2 py-1 text-center">{order.qty}</td>
                       <td className="px-2 py-1 text-center">
-                        Rp. {order.harga_produk.toLocaleString()}
+                        {order.harga_produk.toLocaleString()}
                       </td>
                       <td className="px-2 py-1 text-center">
-                        Rp. {order.total_harga.toLocaleString()}
+                        {order.total_harga.toLocaleString()}
                       </td>
                       <td className="px-2 py-1 text-center">-</td>
                       <td className="px-2 py-1 text-center">-</td>
@@ -126,13 +126,12 @@ const InvoiceExport = () => {
                   <tr className="border-y-2 border-slate-900 font-semibold">
                     <td colSpan={4} className="px-2 py-1"></td>
                     <td className="px-2 py-1 bg-custom-white-2 text-center">
-                      Rp. {bill.total_pesanan.toLocaleString()}
+                      {bill.total_pesanan.toLocaleString()}
                     </td>
                     <td className="px-2 py-1 bg-custom-white-2 text-center">
-                      Rp. {bill.total_dibayar.toLocaleString()}
+                      {bill.total_dibayar.toLocaleString()}
                     </td>
                     <td className="px-2 py-1 bg-custom-white-2 text-center">
-                      Rp.{" "}
                       {(
                         bill.total_pesanan - bill.total_dibayar
                       ).toLocaleString()}
@@ -148,13 +147,13 @@ const InvoiceExport = () => {
                   Total
                 </td>
                 <td className="px-2 py-1 bg-custom-white-2 font-semibold text-center">
-                  Rp. {totalAmount.toLocaleString()}
+                  {totalAmount.toLocaleString()}
                 </td>
                 <td className="px-2 py-1 bg-custom-white-2 font-semibold text-center">
-                  Rp. {totalPaid.toLocaleString()}
+                  {totalPaid.toLocaleString()}
                 </td>
                 <td className="px-2 py-1 bg-custom-white-2 font-semibold text-center">
-                  Rp. {totalBalance.toLocaleString()}
+                  {totalBalance.toLocaleString()}
                 </td>
               </tr>
             </tbody>

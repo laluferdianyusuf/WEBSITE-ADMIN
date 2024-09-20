@@ -42,12 +42,12 @@ const ExportBill = () => {
       }
       @media print {
         * {
-          font-size: 12px;
+          font-size: 14px;
           font-family: "Calibri", sans-serif;
           color: black;
         }
         body {
-          font-size: 12px;
+          font-size: 14px;
           margin-top: 0.2in !important;
           margin-bottom: 0.2in !important;
           margin-left: 0.4in !important;
@@ -66,16 +66,18 @@ const ExportBill = () => {
         }
         th, td {
           padding: 2px !important;
-          font-size: 12px !important;
+          font-size: 14px !important;
           border: 2px solid black !important;
         }
         th:nth-child(1),
         td:nth-child(1),
-        th:nth-child(2),
-        td:nth-child(2),
         th:nth-child(3),
         td:nth-child(3) {
           text-align: center !important;
+        }
+        th:nth-child(2),
+        td:nth-child(2) {
+          text-align: left !important;
         }
         th:nth-child(4),
         th:nth-child(5) {
@@ -110,7 +112,7 @@ const ExportBill = () => {
     0
   );
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   const paginateData = (data, itemsPerPage) => {
     const pages = [];
