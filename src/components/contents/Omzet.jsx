@@ -91,7 +91,7 @@ export default function Omzet() {
       "No. Nota": bill.number,
       "Nota Ke-": String(bill.notaKe),
       Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
-      Keterangan: " ",
+      Keterangan: "-",
       Jumlah: bill?.hotel?.totalBills,
       Terbayarkan: bill?.hotel?.totalPaid,
     }));

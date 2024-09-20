@@ -14,20 +14,20 @@ export default function TableCell({
 
   return isHeader ? (
     <th
-      className={`text-left text-slate-900 text-xs relative ${
+      className={`text-left text-slate-900 text-[10px] lg:text-xs relative ${
         data === "Tanggal" ? "flex items-center justify-between" : ""
       }
-        ${isExport ? "font-semibold px-2 py-1" : "p-4"}
+        ${isExport ? "font-semibold px-2 py-1" : "px-2 py-4 lg:px-4 lg:py-4"}
         `}
     >
       {children || "-"}
     </th>
   ) : (
     <td
-      className={`text-xs ${
+      className={`text-[10px] lg:text-xs ${
         children[0] === "Belum Lunas" ? "text-red-500" : ""
       } ${children[0] === "Lunas" ? "text-green-500" : ""}
-        ${isExport ? "font-medium px-2" : "p-4"}`}
+        ${isExport ? "font-medium px-2" : "px-2 py-4 lg:px-4 lg:py-4"}`}
     >
       {typeof children[0] === "number" && index !== 0
         ? formatNumber(children[0])

@@ -223,7 +223,7 @@ export default function Hotel({ handleHotelSelect }) {
         </ActionButton>
       </div>
 
-      <div className="grid w-[40%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
+      <div className="grid w-[50%] lg:w-[40%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
         <p>Total Tagihan Lunas</p>
         <p>: Rp. {totalPaid.toLocaleString("id-ID")}</p>
         <p>Total Tagihan Belum Lunas</p>
