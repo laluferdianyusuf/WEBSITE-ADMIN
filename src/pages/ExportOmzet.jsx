@@ -41,7 +41,7 @@ export default function ExportOmzet() {
   });
 
   if (!omzet) {
-    return <div>Data hotel tidak tersedia</div>;
+    return <div>Data customers tidak tersedia</div>;
   }
 
   return (

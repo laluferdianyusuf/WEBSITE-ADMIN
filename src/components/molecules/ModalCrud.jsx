@@ -15,7 +15,15 @@ export default function ModalCrud({
   inputType,
   inputLabel,
   isOpen,
-  isDisabled
+  isDisabled,
+  isCustomer,
+  inputValue2,
+  onChange2,
+  inputName2,
+  inputPlaceholder2,
+  inputType2,
+  inputLabel2,
+  isDisabled2,
 }) {
   return (
     <Modal
@@ -36,6 +44,18 @@ export default function ModalCrud({
         isModal={true}
         isDisabled={isDisabled}
       />
+      {isCustomer && (
+        <InputField
+          value={inputValue2}
+          onChange={onChange2}
+          name={inputName2}
+          placeholder={inputPlaceholder2}
+          type={inputType2}
+          label={inputLabel2}
+          isModal={true}
+          isDisabled={isDisabled2}
+        />
+      )}
     </Modal>
   );
 }
@@ -53,5 +73,5 @@ ModalCrud.propTypes = {
   inputPlaceholder: PropTypes.string,
   inputType: PropTypes.string,
   inputLabel: PropTypes.string,
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
 };

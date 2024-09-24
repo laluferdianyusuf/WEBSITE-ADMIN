@@ -16,8 +16,19 @@ import {
 } from "../../redux/slices/hotelSlice";
 import WarningNotification from "../atoms/WarningNotification";
 import SuccessNotification from "../atoms/SuccessNotification";
+import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
+import { GoDownload } from "react-icons/go";
 
-const tableHeaders3 = ["ID", "Nama Hotel", "Status", "Actions"];
+const tableHeaders3 = [
+  "ID",
+  "Nama Customer",
+  "Alamat",
+  "Total Tagihan",
+  "Total Terbayarkan",
+  "Sisa Tagihan",
+  "Status",
+  "Actions",
+];
 
 export default function Hotel({ handleHotelSelect }) {
   const dispatch = useDispatch();
@@ -32,7 +43,14 @@ export default function Hotel({ handleHotelSelect }) {
   const itemsPerPage = 6;
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  
+  const [dropdown, setDropdown] = useState(false);
+  const [filter, setFilter] = useState("all");
+  const [alamat, setAlamat] = useState("");
+
+  useEffect(() => {
+    console.log("hotels : ", hotels);
+  }, [hotels]);
+
   useEffect(() => {
     dispatch(getHotels());
   }, [dispatch]);
@@ -46,19 +64,23 @@ export default function Hotel({ handleHotelSelect }) {
     setInputHotel(e.target.value);
   };
 
+  const handleAlamatChange = (e) => {
+    setAlamat(e.target.value);
+  };
+
   const handleCloseAdd = () => setIsAdding(false);
   const handleCloseEdit = () => setIsEditing(false);
   const handleCloseDelete = () => setIsDeleting(false);
 
   const handleEdit = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(index["Nama Hotel"]);
+    setInputHotel(index["Nama Customer"]);
     setIsEditing(true);
   };
 
   const handleDelete = (index) => {
     setCurrentHotelIndex(index);
-    setInputHotel(index["Nama Hotel"]);
+    setInputHotel(index["Nama Customer"]);
     setIsDeleting(true);
   };
 
@@ -140,9 +162,17 @@ export default function Hotel({ handleHotelSelect }) {
 
   const dataFilteredHotel = filteredHotels.map((hotel, index) => ({
     id: hotel.id,
-    "Nama Hotel": hotel.hotelName,
+    "Nama Customer": hotel.hotelName,
+    Alamat: "Testing",
+    "Total Tagihan": hotel.totalBills,
+    "Total Terbayarkan": hotel.totalPaid,
+    "Sisa Tagihan": hotel.totalBills - hotel.totalPaid,
     Status: hotel.totalBills === hotel.totalPaid ? "Lunas" : "Belum Lunas",
   }));
+
+  const totalBills = hotelsArray.reduce((total, hotel) => {
+    return total + hotel.totalBills;
+  }, 0);
 
   const totalPaid = hotelsArray.reduce((total, hotel) => {
     return total + hotel.totalPaid;
@@ -201,6 +231,72 @@ export default function Hotel({ handleHotelSelect }) {
     dataFilteredHotel.length
   );
 
+  const handleFilterChange = (e) => {
+    setFilter(e);
+    setDropdown(false);
+  };
+
+  const exampleCustomers = [
+    {
+      "Nama Customer": "Hotel Arianz",
+      Alamat: "Jl. Merdeka No. 10, Jakarta",
+      "Total Tagihan": 5000000,
+      "Total Terbayarkan": 3000000,
+      "Sisa Tagihan": 2000000,
+      Status: "Belum Lunas",
+    },
+    {
+      "Nama Customer": "Hotel Santika",
+      Alamat: "Jl. Sudirman No. 50, Bandung",
+      "Total Tagihan": 7000000,
+      "Total Terbayarkan": 7000000,
+      "Sisa Tagihan": 0,
+      Status: "Lunas",
+    },
+    {
+      "Nama Customer": "Hotel Hilton",
+      Alamat: "Jl. Malioboro No. 12, Yogyakarta",
+      "Total Tagihan": 8000000,
+      "Total Terbayarkan": 5000000,
+      "Sisa Tagihan": 3000000,
+      Status: "Belum Lunas",
+    },
+    {
+      "Nama Customer": "Hotel Indonesia",
+      Alamat: "Jl. Pemuda No. 20, Surabaya",
+      "Total Tagihan": 6000000,
+      "Total Terbayarkan": 6000000,
+      "Sisa Tagihan": 0,
+      Status: "Lunas",
+    },
+  ];
+
+  let totalSemuaTagihan = 0;
+  let totalSemuaTerbayarkan = 0;
+  let totalSisaTagihan = 0;
+
+  exampleCustomers.forEach((customer) => {
+    totalSemuaTagihan += customer["Total Tagihan"];
+    totalSemuaTerbayarkan += customer["Total Terbayarkan"];
+    totalSisaTagihan += customer["Sisa Tagihan"];
+  });
+
+  const handleExportClick = () => {
+    const state = {
+      customers: exampleCustomers,
+      totalSemuaTagihan,
+      totalSemuaTerbayarkan,
+      totalSisaTagihan,
+    };
+    const stateString = encodeURIComponent(JSON.stringify(state));
+    window.open(
+      `/#/customerexport?state=${stateString}`,
+      "_blank",
+      `noopener,noreferrer`
+    );
+    console.log(stateString);
+  };
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-5 relative">
       <div>
@@ -217,23 +313,87 @@ export default function Hotel({ handleHotelSelect }) {
             placeholder={`Cari dari total ${hotelsArray.length} data...`}
           />
         </div>
-        <ActionButton onClick={handleAdd}>
-          <GrAddCircle className="mr-[6px]" size={16} />
-          <p className="text-slate-900 font-semibold text-xs">Tambah Hotel</p>
-        </ActionButton>
+        <div className="flex items-center gap-[18px]">
+          <div className="relative flex flex-col items-center w-[130px] rounded-lg">
+            <button
+              onClick={() => setDropdown((prev) => !prev)}
+              onChange={handleFilterChange}
+              className={`bg-white px-4 py-2 w-full items-center flex justify-center text-xs border-slate-700 border rounded-lg ${
+                filter === "all"
+                  ? "text-slate-900 border  border-slate-900"
+                  : ""
+              } ${
+                filter === "lunas"
+                  ? "text-green-500 border border-green-500"
+                  : ""
+              } ${
+                filter === "belum_lunas" ? "text-red-500 border-red-500" : ""
+              } tracking-wider duration-300 font-bold justify-between items-center`}
+            >
+              {filter === "all"
+                ? "Semua"
+                : filter === "lunas"
+                ? "Lunas"
+                : "Belum Lunas"}
+              <AiOutlineCaretDown
+                size={12}
+                className={`absolute right-2 top-[10px] transform transition-transform duration-300 ${
+                  dropdown ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </button>
+
+            {dropdown && (
+              <div className="absolute flex flex-col top-10 items-center w-full p-2 border rounded-lg backdrop-blur-sm bg-black/15 z-50">
+                <span
+                  onClick={() => handleFilterChange("all")}
+                  className={`cursor-pointer bg-white px-4 py-2 rounded-lg shadow-md w-full text-center text-xs font-bold mb-1`}
+                >
+                  Semua
+                </span>
+                <span
+                  onClick={() => handleFilterChange("lunas")}
+                  className={`cursor-pointer bg-white px-4 py-2 rounded-lg shadow-md w-full text-center text-xs font-bold text-green-500 mb-1`}
+                >
+                  Lunas
+                </span>
+                <span
+                  onClick={() => handleFilterChange("belum_lunas")}
+                  className={`cursor-pointer bg-white px-4 py-2 rounded-lg shadow-md w-full text-center text-xs font-bold text-red-500`}
+                >
+                  Belum lunas
+                </span>
+              </div>
+            )}
+          </div>
+          <ActionButton onClick={handleAdd}>
+            <GrAddCircle className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">
+              Tambah Customer
+            </p>
+          </ActionButton>
+          <ActionButton onClick={handleExportClick}>
+            <GoDownload className="mr-[6px]" size={16} />
+            <p className="text-slate-900 font-semibold text-xs">
+              Export Customer
+            </p>
+          </ActionButton>
+        </div>
       </div>
 
-      <div className="grid w-[50%] lg:w-[40%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
-        <p>Total Tagihan Lunas</p>
+      <div className="grid w-[100%] lg:w-[60%] gap-y-2 grid-cols-2 text-slate-900 text-xs">
+        <p>Total Seluruh Tagihan</p>
+        <p>: {totalBills.toLocaleString("id-ID")}</p>
+        <p>Total Tagihan Lunas Semua Customer</p>
         <p>: {totalPaid.toLocaleString("id-ID")}</p>
-        <p>Total Tagihan Belum Lunas</p>
+        <p>Sisa Tagihan Belum Lunas Semua Customer</p>
         <p>: {totalNotPaidYet.toLocaleString("id-ID")}</p>
       </div>
 
       {currentHotel.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full">
           <img src={NoHotelData} alt="Tidak ada hotel" width={250} />
-          <p className="text-gray-500 mt-4">Belum ada data hotel</p>
+          <p className="text-gray-500 mt-4">Belum ada data Customer</p>
         </div>
       ) : (
         <>
@@ -259,10 +419,10 @@ export default function Hotel({ handleHotelSelect }) {
         />
       </div>
       <ModalCrud
-        title="Tambah Hotel"
+        title="Tambah Customer"
         isOpen={isAdding}
-        inputLabel="Nama Hotel"
-        inputPlaceholder="Masukkan nama hotel"
+        inputLabel="Nama Customer"
+        inputPlaceholder="Masukkan nama customer"
         inputName="hotelName"
         inputValue={inputHotel}
         onChange={handleChangeHotel}
@@ -271,12 +431,19 @@ export default function Hotel({ handleHotelSelect }) {
         inputType="text"
         functionCancel={handleCloseAdd}
         functionOk={handleSaveAdd}
+        inputLabel2="Alamat"
+        inputName2="hotelAddress"
+        inputPlaceholder2="Masukkan alamat"
+        inputType2="text"
+        inputValue2={alamat}
+        isCustomer={true}
+        onChange2={handleAlamatChange}
       />
       <ModalCrud
-        title="Edit Hotel"
+        title="Edit Customer"
         isOpen={isEditing}
-        inputLabel="Edit Hotel"
-        inputPlaceholder="Masukkan nama hotel"
+        inputLabel="Edit Customer"
+        inputPlaceholder="Masukkan nama customer"
         inputName="hotelName"
         inputValue={inputHotel}
         onChange={handleChangeHotel}
@@ -285,17 +452,32 @@ export default function Hotel({ handleHotelSelect }) {
         inputType="text"
         functionCancel={handleCloseEdit}
         functionOk={handleSaveEdit}
+        inputLabel2="Alamat"
+        inputName2="hotelAddress"
+        inputPlaceholder2="Masukkan alamat"
+        inputType2="text"
+        inputValue2={alamat}
+        isCustomer={true}
+        onChange2={handleAlamatChange}
       />
       <ModalCrud
-        title="Hapus Hotel"
+        title="Hapus Customer"
         isOpen={isDeleting}
-        inputLabel="Hapus Hotel"
+        inputLabel="Hapus Customer"
         isDisabled={true}
         inputName="hotelName"
         inputValue={inputHotel}
         textOk="Hapus"
         textCancel="Batal"
         inputType="text"
+        inputLabel2="Alamat"
+        inputName2="hotelAddress"
+        inputPlaceholder2="Masukkan alamat"
+        inputType2="text"
+        inputValue2={alamat}
+        isCustomer={true}
+        onChange2={handleAlamatChange}
+        isDisabled2={true}
         functionCancel={handleCloseDelete}
         functionOk={handleSaveDelete}
       />

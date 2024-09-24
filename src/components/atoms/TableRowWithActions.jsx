@@ -11,6 +11,10 @@ export default function TableRowWithAction({
   onRowClick = null,
 }) {
   const rowClass = index % 2 === 0 ? " bg-white" : "bg-custom-blue-1";
+  const formatNumber = (number) => {
+    if (number === 0) return "0";
+    return number ? `${number.toLocaleString()}` : "-";
+  };
   return (
     <tr className={`${rowClass}`}>
       {Object.values(data).map((item, idx) => (
@@ -23,7 +27,7 @@ export default function TableRowWithAction({
             ${item === "Lunas" ? "text-green-500" : ""}`}
           onClick={onRowClick ? onRowClick : null}
         >
-          {item}
+          {typeof item === "number" ? formatNumber(item) : item}
         </td>
       ))}
       <td className="px-4 py-2">

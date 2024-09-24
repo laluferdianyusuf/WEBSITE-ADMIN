@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import ExportBill from "./pages/ExportBill.jsx";
 import InvoiceExport from "./pages/Invoice.jsx";
 import ExportOmzet from "./pages/ExportOmzet.jsx";
+import ExportCustomer from "./pages/ExportCustomer.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/billexport" element={<ExportBill />} />
           <Route path="/invoiceexport" element={<InvoiceExport />} />
           <Route path="/omzetexport" element={<ExportOmzet />} />
+          <Route path="/customerexport" element={<ExportCustomer />} />
         </Routes>
       </Router>
     </Provider>

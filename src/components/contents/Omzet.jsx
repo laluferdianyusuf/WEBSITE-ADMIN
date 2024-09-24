@@ -11,7 +11,10 @@ import { format } from "date-fns";
 
 export default function Omzet() {
   const dispatch = useDispatch();
-  const [selectedDate, setSelectedDate] = useState(
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [endDate, setEndDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [billsData, setBillsData] = useState([]);
@@ -23,7 +26,7 @@ export default function Omzet() {
 
   const handleFetchBill = () => {
     setLoading(true);
-    dispatch(getBillByDate({ date: selectedDate }))
+    dispatch(getBillByDate({ date: startDate }))
       .unwrap()
       .then((res) => {
         const bills = res.data.bill;
@@ -56,7 +59,7 @@ export default function Omzet() {
 
   useEffect(() => {
     handleFetchBill();
-  }, [selectedDate]);
+  }, [startDate]);
 
   useEffect(() => {
     handleSearch(searchQuery);
@@ -119,7 +122,7 @@ export default function Omzet() {
       tableData: tableData,
       totalJumlah,
       totalTerbayarkan,
-      selectedDate,
+      selectedDate: startDate,
     };
     const stateString = encodeURIComponent(JSON.stringify(state));
     window.open(
@@ -130,8 +133,11 @@ export default function Omzet() {
     console.log(stateString);
   };
 
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
   };
 
   const handlePageChange = (page) => {
@@ -155,13 +161,22 @@ export default function Omzet() {
             placeholder={`Cari dari total ${billsData.length} data`}
           />
         </div>
-        <div className="flex gap-5">
+        <div className="flex gap-5 items-center">
           <input
             type="date"
             className="px-[10px] py-[7px] border rounded-lg border-slate-900 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-900 font-medium h-9 text-xs"
             max={new Date().toISOString().split("T")[0]}
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={startDate}
+            onChange={handleStartDateChange}
+            required
+          />
+          <p className="text-slate-900">s/d</p>
+          <input
+            type="date"
+            className="px-[10px] py-[7px] border rounded-lg border-slate-900 focus:outline-none focus:ring-2 focus:ring-custom-green-1 text-slate-900 font-medium h-9 text-xs"
+            max={new Date().toISOString().split("T")[0]}
+            value={endDate}
+            onChange={handleEndDateChange}
             required
           />
           <ActionButton onClick={handleExportClick}>

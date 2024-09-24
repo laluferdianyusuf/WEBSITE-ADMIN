@@ -186,7 +186,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       <div className="mb-6">
         <h3 className="font-semibold text-xl mb-1 flex items-center gap-3">
           <BackButton onClick={onBack} />
-          {hotel["Nama Hotel"]}
+          {hotel["Nama Customer"]}
         </h3>
         <div className="breadcrumbs text-sm ms-12">
           <ul className="flex gap-2">
@@ -199,7 +199,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
               </button>
             </li>
             <li>
-              <span className="text-gray-700">{hotel["Nama Hotel"]}</span>
+              <span className="text-gray-700">{hotel["Nama Customer"]}</span>
             </li>
           </ul>
         </div>
@@ -254,14 +254,14 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
                     UD TIMUR JAYA RAYA
                   </h4>
                   <h3 className="text-slate-900 text-lg">
-                    Bayar Tagihan {hotel["Nama Hotel"]}
+                    Bayar Tagihan {hotel["Nama Customer"]}
                   </h3>
                 </div>
                 <InputNotaField
                   label="Jumlah Setoran"
                   name="jumlahSetoran"
                   type="number"
-                  placeholder="1.000.000"
+                  placeholder="Ex. 1.000.000"
                   value={totalBayar}
                   onChange={onChangeInput}
                   isModal={true}
