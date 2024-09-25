@@ -109,7 +109,9 @@ export default function Hotel({ handleHotelSelect }) {
     setError("");
     try {
       const hotelId = currentHotelIndex.id;
-      await dispatch(updateHotel({ hotelName: inputHotel, id: hotelId }))
+      await dispatch(
+        updateHotel({ hotelName: inputHotel, address: alamat, id: hotelId })
+      )
         .unwrap()
         .then(() => {
           setSuccess("Berhasil update hotel");
@@ -128,7 +130,7 @@ export default function Hotel({ handleHotelSelect }) {
     setError("");
     setSuccess("");
     try {
-      await dispatch(createHotel({ hotelName: inputHotel }))
+      await dispatch(createHotel({ hotelName: inputHotel, address: alamat }))
         .unwrap()
         .then(() => {
           setSuccess("Berhasil menambah hotel");
@@ -163,7 +165,7 @@ export default function Hotel({ handleHotelSelect }) {
   const dataFilteredHotel = filteredHotels.map((hotel, index) => ({
     id: hotel.id,
     "Nama Customer": hotel.hotelName,
-    Alamat: "Testing",
+    Alamat: hotel.address || "-",
     "Total Tagihan": hotel.totalBills,
     "Total Terbayarkan": hotel.totalPaid,
     "Sisa Tagihan": hotel.totalBills - hotel.totalPaid,

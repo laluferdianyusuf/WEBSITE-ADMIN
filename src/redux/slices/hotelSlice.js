@@ -6,12 +6,12 @@ const uri = "https://api.timurjayaraya.com";
 // Create hotel
 export const createHotel = createAsyncThunk(
   "hotel/create",
-  async ({ hotelName }, { rejectWithValue }) => {
+  async ({ hotelName, address }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${uri}/api/v3/hotels/create`,
-        { hotelName },
+        { hotelName, address },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -28,12 +28,12 @@ export const createHotel = createAsyncThunk(
 // Update hotel
 export const updateHotel = createAsyncThunk(
   "hotel/update",
-  async ({ hotelName, id }, { rejectWithValue }) => {
+  async ({ hotelName, address, id }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
         `${uri}/api/v3/hotels/update/${id}`,
-        { hotelName },
+        { hotelName, address },
         {
           headers: {
             Authorization: `Bearer ${token}`,
