@@ -16,7 +16,7 @@ import {
 } from "../../redux/slices/hotelSlice";
 import WarningNotification from "../atoms/WarningNotification";
 import SuccessNotification from "../atoms/SuccessNotification";
-import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
+import { AiOutlineCaretDown } from "react-icons/ai";
 import { GoDownload } from "react-icons/go";
 
 const tableHeaders3 = [
@@ -52,7 +52,7 @@ export default function Hotel({ handleHotelSelect }) {
   }, [hotels]);
 
   useEffect(() => {
-    dispatch(getHotels());
+    dispatch(getHotels()).unwrap();
   }, [dispatch]);
 
   const handleAdd = () => {
@@ -156,11 +156,18 @@ export default function Hotel({ handleHotelSelect }) {
 
   const hotelsArray = Array.isArray(hotels.hotel) ? hotels.hotel : [];
 
-  const filteredHotels = hotelsArray.filter((hotel) =>
-    hotel.hotelName
+  const filteredHotels = hotelsArray.filter((hotel) => {
+    const matchSearchQuery = hotel.hotelName
       ? hotel.hotelName.toLowerCase().includes(searchQuery.toLowerCase())
-      : false
-  );
+      : false;
+
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "lunas" && hotel.totalBills === hotel.totalPaid) ||
+      (filter === "belum_lunas" && hotel.totalBills !== hotel.totalPaid);
+
+    return matchSearchQuery && matchesFilter;
+  });
 
   const dataFilteredHotel = filteredHotels.map((hotel, index) => ({
     id: hotel.id,
@@ -238,46 +245,22 @@ export default function Hotel({ handleHotelSelect }) {
     setDropdown(false);
   };
 
-  const exampleCustomers = [
-    {
-      "Nama Customer": "Hotel Arianz",
-      Alamat: "Jl. Merdeka No. 10, Jakarta",
-      "Total Tagihan": 5000000,
-      "Total Terbayarkan": 3000000,
-      "Sisa Tagihan": 2000000,
-      Status: "Belum Lunas",
-    },
-    {
-      "Nama Customer": "Hotel Santika",
-      Alamat: "Jl. Sudirman No. 50, Bandung",
-      "Total Tagihan": 7000000,
-      "Total Terbayarkan": 7000000,
-      "Sisa Tagihan": 0,
-      Status: "Lunas",
-    },
-    {
-      "Nama Customer": "Hotel Hilton",
-      Alamat: "Jl. Malioboro No. 12, Yogyakarta",
-      "Total Tagihan": 8000000,
-      "Total Terbayarkan": 5000000,
-      "Sisa Tagihan": 3000000,
-      Status: "Belum Lunas",
-    },
-    {
-      "Nama Customer": "Hotel Indonesia",
-      Alamat: "Jl. Pemuda No. 20, Surabaya",
-      "Total Tagihan": 6000000,
-      "Total Terbayarkan": 6000000,
-      "Sisa Tagihan": 0,
-      Status: "Lunas",
-    },
-  ];
+  const dataExportHotel =
+    Array.isArray(dataFilteredHotel) &&
+    dataFilteredHotel.map((hotel) => ({
+      "Nama Customer": hotel["Nama Customer"],
+      Alamat: hotel.Alamat,
+      "Total Tagihan": hotel["Total Tagihan"],
+      "Total Terbayarkan": hotel["Total Terbayarkan"],
+      "Sisa Tagihan": hotel["Sisa Tagihan"],
+      Status: hotel.Status,
+    }));
 
   let totalSemuaTagihan = 0;
   let totalSemuaTerbayarkan = 0;
   let totalSisaTagihan = 0;
 
-  exampleCustomers.forEach((customer) => {
+  dataExportHotel.forEach((customer) => {
     totalSemuaTagihan += customer["Total Tagihan"];
     totalSemuaTerbayarkan += customer["Total Terbayarkan"];
     totalSisaTagihan += customer["Sisa Tagihan"];
@@ -285,7 +268,7 @@ export default function Hotel({ handleHotelSelect }) {
 
   const handleExportClick = () => {
     const state = {
-      customers: exampleCustomers,
+      customers: dataExportHotel,
       totalSemuaTagihan,
       totalSemuaTerbayarkan,
       totalSisaTagihan,

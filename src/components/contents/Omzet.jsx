@@ -26,7 +26,7 @@ export default function Omzet() {
 
   const handleFetchBill = () => {
     setLoading(true);
-    dispatch(getBillByDate({ date: startDate }))
+    dispatch(getBillByDate({ startDate: startDate, endDate: endDate }))
       .unwrap()
       .then((res) => {
         const bills = res.data.bill;

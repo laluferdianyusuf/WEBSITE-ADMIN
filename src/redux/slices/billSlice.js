@@ -112,15 +112,18 @@ export const updateBills = createAsyncThunk(
 // bills date
 export const getBillByDate = createAsyncThunk(
   "bills/by-date",
-  async ({ date }, { rejectWithValue }) => {
+  async ({ startDate, endDate }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${uri}/api/v2/bills/date/${date}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Access-Control-Allow-Credentials": true,
-        },
-      });
+      const response = await axios.get(
+        `${uri}/api/v2/bills/date/${startDate}/${endDate}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Access-Control-Allow-Credentials": true,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
