@@ -145,6 +145,8 @@ const ExportBill = () => {
                 <p>: {bill["Tanggal"]}</p>
                 <p>Nama Customer</p>
                 <p>: {bill["Nama Hotel"]}</p>
+                <p>Alamat</p>
+                <p>: </p>
               </div>
             </div>
           </div>

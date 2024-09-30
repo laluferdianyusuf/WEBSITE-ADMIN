@@ -21,8 +21,8 @@ export default function Omzet() {
   const [filteredBillsData, setFilteredBillsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 6;
 
   const handleFetchBill = () => {
     setLoading(true);
@@ -73,7 +73,7 @@ export default function Omzet() {
         bill.hotel?.hotelName.toLowerCase().includes(lowercasedQuery)
     );
     setFilteredBillsData(filteredData);
-    setCurrentPage(1);
+    // setCurrentPage(1);
   };
 
   const tableHeaders = [
@@ -87,9 +87,8 @@ export default function Omzet() {
   ];
 
   const tableData = filteredBillsData
-    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
     .map((bill, index) => ({
-      Nomor: (currentPage - 1) * itemsPerPage + index + 1,
+      Nomor: index + 1,
       Customer: bill?.hotel?.hotelName,
       "No. Nota": bill.number,
       "Nota Ke-": String(bill.notaKe),
@@ -122,7 +121,8 @@ export default function Omzet() {
       tableData: tableData,
       totalJumlah,
       totalTerbayarkan,
-      selectedDate: startDate,
+      startDate: startDate,
+      endDate: endDate,
     };
     const stateString = encodeURIComponent(JSON.stringify(state));
     window.open(
@@ -140,9 +140,9 @@ export default function Omzet() {
     setEndDate(event.target.value);
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-5 relative">
@@ -203,7 +203,7 @@ export default function Omzet() {
           <p className="text-gray-500 mt-4">Tidak ada ditemukan data</p>
         </div>
       )}
-      <div>
+      {/* <div>
         <p className="text-xs text-end">
           Menampilkan {(currentPage - 1) * itemsPerPage + 1} -{" "}
           {Math.min(currentPage * itemsPerPage, filteredBillsData.length)} dari
@@ -215,7 +215,7 @@ export default function Omzet() {
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

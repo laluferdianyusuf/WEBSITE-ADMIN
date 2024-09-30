@@ -147,6 +147,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
     const data = {
       id: dataHotel.id,
       nama_hotel: dataHotel.hotelName,
+      address: dataHotel.address || "-",
       total_bayar: totalPayment || 0,
       total_bill: totalBill || 0,
       bills: unpaidBills.map((bill) => ({

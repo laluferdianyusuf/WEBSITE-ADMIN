@@ -18,7 +18,8 @@ export default function ExportOmzet() {
   const componentRef = useRef();
   const location = useLocation();
   const [omzet, setOmzet] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [totalTerbayarkan, setTotalTerbayarkan] = useState(0);
   const [totalJumlah, setTotalJumlah] = useState(0);
 
@@ -29,7 +30,8 @@ export default function ExportOmzet() {
       const state = JSON.parse(decodeURIComponent(stateString));
       console.log(state);
       setOmzet(state.tableData);
-      setSelectedDate(state.selectedDate);
+      setStartDate(state.startDate);
+      setEndDate(state.endDate);
       setTotalJumlah(state.totalJumlah);
       setTotalTerbayarkan(state.totalTerbayarkan);
     }
@@ -54,7 +56,7 @@ export default function ExportOmzet() {
             <p className="text-sm">HP. 081907647590</p>
             <div className="w-full flex justify-between">
               <p className="text-sm">Fax. 0370-633668</p>
-              <h4 className="font-semibold">Periode: {selectedDate}</h4>
+              <h4 className="font-semibold">Periode: {startDate} s/d {endDate}</h4>
             </div>
           </div>
         </div>

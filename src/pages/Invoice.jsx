@@ -84,6 +84,10 @@ const InvoiceExport = () => {
                 <p className="text-sm">Kepada</p>
                 <p className="text-sm">: {hotel.nama_hotel}</p>
               </div>
+              <div className="grid grid-cols-2">
+                <p className="text-sm">Alamat</p>
+                <p className="text-sm">: {hotel.address}</p>
+              </div>
             </div>
           </div>
         </div>

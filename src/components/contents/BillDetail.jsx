@@ -47,6 +47,7 @@ export default function BillDetail({ onBack, bill }) {
       try {
         const result = await dispatch(getDetailBill(bill.id));
         setDataBill(result.payload.data.bill);
+        console.log("Data bill:", result.payload.data.bill);
       } catch (err) {
         console.error("Failed to fetch bill details:", err);
       }
