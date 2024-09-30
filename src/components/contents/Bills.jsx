@@ -250,7 +250,7 @@ export default function Bills({ handleBillSelect }) {
       )}
 
       <div>
-        <p className="text-xs text-end">
+        <p className="text-xs text-end mb-1">
           Menampilkan {startIndex} - {endIndex} dari total{" "}
           {filteredBills.length} data
         </p>

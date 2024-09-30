@@ -228,7 +228,7 @@ export default function Product() {
       )}
 
       <div>
-        <p className="text-xs text-end">
+        <p className="text-xs text-end mb-1">
           Menampilkan {startIndex} - {endIndex} dari total{" "}
           {filteredProducts.length} data
         </p>

@@ -392,7 +392,7 @@ export default function Hotel({ handleHotelSelect }) {
         </>
       )}
       <div>
-        <p className="text-xs text-end">
+        <p className="text-xs text-end mb-1">
           Menampilkan {startIndex} - {endIndex} dari total{" "}
           {dataFilteredHotel.length} data
         </p>
