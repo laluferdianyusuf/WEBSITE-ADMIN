@@ -52,7 +52,7 @@ const ExportBill = () => {
           color: black;
         }
         body {
-          font-size: 14px;
+          font-size: 13px;
           margin-top: 0.2in !important;
           margin-bottom: 0.2in !important;
           margin-left: 0.4in !important;
@@ -70,8 +70,8 @@ const ExportBill = () => {
           border-collapse: collapse;
         }
         th, td {
-          padding: 2px !important;
-          font-size: 14px !important;
+          padding: 1px 2px !important;
+          font-size: 12px !important;
           border: 2px solid black !important;
         }
         th:nth-child(1),
@@ -117,7 +117,7 @@ const ExportBill = () => {
     0
   );
 
-  const itemsPerPage = 12;
+  const itemsPerPage = 10;
 
   const paginateData = (data, itemsPerPage) => {
     const pages = [];
