@@ -144,7 +144,7 @@ const ExportBill = () => {
             </div>
             <div className="flex flex-col text-xs">
               <div
-                className={`grid ${name.length > 23 ? "grid-cols-[1fr_2fr]" : "grid-cols-2"} font-semibold`}
+                className={`grid grid-cols-[1fr_2fr] font-semibold`}
               >
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
