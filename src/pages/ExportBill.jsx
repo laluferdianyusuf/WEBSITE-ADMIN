@@ -127,7 +127,7 @@ const ExportBill = () => {
   return (
     <div className="h-full bg-white mb-10 w-[800px] max-w-[800px] flex flex-col items-center">
       <div ref={componentRef} className="flex flex-col mt-4 mx-1 w-full">
-        <div className="mb-2">
+        <div className="mb-2 w-[98%]">
           <h3 className="font-extrabold text-slate-900 header-text">
             UD TIMUR JAYA RAYA
           </h3>
@@ -138,7 +138,7 @@ const ExportBill = () => {
               <p>Fax. 0370-633668</p>
             </div>
             <div className="flex flex-col text-xs">
-              <div className="grid grid-cols-2 font-semibold">
+              <div className={`grid ${bill["Nama Hotel"].length > 23 ? "grid-cols-[1fr_2fr]" : "grid-cols-2"} font-semibold`}>
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
