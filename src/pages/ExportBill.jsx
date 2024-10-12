@@ -74,6 +74,9 @@ const ExportBill = () => {
           font-size: 12px !important;
           border: 2px solid black !important;
         }
+        .credential {
+        margin-right: 0.2in !important;
+        }
         th:nth-child(1),
         td:nth-child(1),
         th:nth-child(3),
@@ -142,7 +145,7 @@ const ExportBill = () => {
               <p>No HP. 081907647590</p>
               <p>Fax. 0370-633668</p>
             </div>
-            <div className="flex flex-col text-xs">
+            <div className="flex flex-col text-xs credential">
               <div
                 className={`grid grid-cols-[1fr_2fr] font-semibold`}
               >
