@@ -66,6 +66,7 @@ export default function BillDetail({ onBack, bill }) {
   if (error) return <p>Error loading bill details.</p>;
 
   const orders = dataBill?.orders || [];
+  console.log(dataBill);
 
   const totalHarga = orders.reduce(
     (sum, order) => sum + parseFloat(order.total),
@@ -141,6 +142,8 @@ export default function BillDetail({ onBack, bill }) {
   const handleExportClick = () => {
     const state = {
       bill,
+      name: dataBill.hotel.hotelName || "-",
+      address: dataBill.hotel.address || "-",
       tableData2,
       invoiceNumber: dataBill.number,
     };

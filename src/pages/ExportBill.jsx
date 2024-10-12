@@ -15,8 +15,10 @@ const tableHeaders2 = [
 const ExportBill = () => {
   const location = useLocation();
   const [bill, setBill] = useState(null);
+  const [name, setName] = useState(null);
   const [tableData2, setTableData2] = useState(null);
   const [invoiceNumber, setInvoiceNumber] = useState(null);
+  const [address, setAddress] = useState("");
   const componentRef = useRef();
 
   useEffect(() => {
@@ -25,6 +27,8 @@ const ExportBill = () => {
     if (stateString) {
       const state = JSON.parse(decodeURIComponent(stateString));
       setBill(state.bill);
+      setName(state.name);
+      setAddress(state.address);
       setTableData2(state.tableData2);
       setInvoiceNumber(state.invoiceNumber);
     }
@@ -33,7 +37,7 @@ const ExportBill = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: bill
-      ? `${bill["Nama Hotel"]}_Nota_${new Date().toLocaleDateString()}.pdf`
+      ? `${name}_Nota_${new Date().toLocaleDateString()}.pdf`
       : "Nota.pdf",
     pageStyle: `
       @page {
@@ -144,9 +148,9 @@ const ExportBill = () => {
                 <p>Tanggal Dibuat</p>
                 <p>: {bill["Tanggal"]}</p>
                 <p>Nama Customer</p>
-                <p>: {bill["Nama Hotel"]}</p>
+                <p>: {name}</p>
                 <p>Alamat</p>
-                <p>: </p>
+                <p>: {address}</p>
               </div>
             </div>
           </div>
