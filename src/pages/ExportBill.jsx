@@ -31,6 +31,7 @@ const ExportBill = () => {
       setAddress(state.address);
       setTableData2(state.tableData2);
       setInvoiceNumber(state.invoiceNumber);
+      console.log("State:", state);
     }
   }, [location.search]);
 
@@ -142,7 +143,9 @@ const ExportBill = () => {
               <p>Fax. 0370-633668</p>
             </div>
             <div className="flex flex-col text-xs">
-              <div className={`grid ${bill["Nama Hotel"].length > 23 ? "grid-cols-[1fr_2fr]" : "grid-cols-2"} font-semibold`}>
+              <div
+                className={`grid ${name.length > 23 ? "grid-cols-[1fr_2fr]" : "grid-cols-2"} font-semibold`}
+              >
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
