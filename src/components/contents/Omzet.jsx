@@ -86,17 +86,21 @@ export default function Omzet() {
     "Terbayarkan",
   ];
 
-  const tableData = filteredBillsData
-    .map((bill, index) => ({
-      Nomor: index + 1,
-      Customer: bill?.hotel?.hotelName,
-      "No. Nota": bill.number,
-      "Nota Ke-": String(bill.notaKe),
-      Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
-      Keterangan: "-",
-      Jumlah: bill?.hotel?.totalBills,
-      Terbayarkan: bill?.hotel?.totalPaid,
-    }));
+  const tableData = filteredBillsData.map(
+    (bill, index) => (
+      console.log(bill),
+      {
+        Nomor: index + 1,
+        Customer: bill?.hotel?.hotelName,
+        "No. Nota": bill.number,
+        "Nota Ke-": String(bill.notaKe),
+        Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
+        Keterangan: "-",
+        Jumlah: bill?.ordersTotal,
+        Terbayarkan: bill?.totalPaid,
+      }
+    )
+  );
 
   const calculateTotals = (data) => {
     if (data.length > 0) {
@@ -143,13 +147,46 @@ export default function Omzet() {
   // const handlePageChange = (page) => {
   //   setCurrentPage(page);
   // };
+  const getLastUpdateTime = (data) => {
+    if (!data || data.length === 0) return null;
+
+    const sortedData = [...data].sort(
+      (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+    );
+
+    return sortedData[0].updatedAt;
+  };
+
+  const lastUpdated = getLastUpdateTime(billsData);
+  const now = new Date();
+  const timeDifference = lastUpdated
+    ? Math.floor((now - new Date(lastUpdated)) / 1000)
+    : null;
+
+  let timeSinceUpdate = "Tidak ada data";
+  if (timeDifference !== null) {
+    const days = Math.floor(timeDifference / 86400);
+    const hours = Math.floor((timeDifference % 86400) / 3600);
+    const minutes = Math.floor((timeDifference % 3600) / 60);
+    const seconds = timeDifference % 60;
+
+    if (days > 0) {
+      timeSinceUpdate = `${days} hari, ${hours} jam yang lalu`;
+    } else if (hours > 0) {
+      timeSinceUpdate = `${hours} jam, ${minutes} menit yang lalu`;
+    } else if (minutes > 0) {
+      timeSinceUpdate = `${minutes} menit yang lalu`;
+    } else {
+      timeSinceUpdate = `${seconds} detik yang lalu`;
+    }
+  }
 
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col gap-5 relative">
       <div>
         <h3 className="font-semibold text-xl mb-1">Manajemen Omzet</h3>
         <p className="text-xs text-slate-500">
-          Terakhir di Update belum dikerjakan
+          Terakhir di Update {timeSinceUpdate}
         </p>
       </div>
       <div className="flex justify-between items-center">
