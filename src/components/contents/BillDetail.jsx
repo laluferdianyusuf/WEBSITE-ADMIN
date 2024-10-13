@@ -46,6 +46,7 @@ export default function BillDetail({ onBack, bill }) {
     const fetchData = async () => {
       try {
         const result = await dispatch(getDetailBill(bill.id));
+        console.log("Result:", result);
         setDataBill(result.payload.data.bill);
         console.log("Data bill:", result.payload.data.bill);
       } catch (err) {
@@ -182,7 +183,7 @@ export default function BillDetail({ onBack, bill }) {
       </div>
       <div className="ms-12 flex justify-between mb-6 items-center">
         <h3 className="font-bold text-slate-700 text-xs">
-          {dataBill && formatDate(dataBill.date)}
+          {dataBill && formatDate(dataBill.date)} - {dataBill && dataBill.number}
         </h3>
         <div className="flex gap-4">
           <ActionButton onClick={handleExportClick}>

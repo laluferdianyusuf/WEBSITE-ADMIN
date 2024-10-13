@@ -18,7 +18,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import NoBillData from "/icons/belum-ada-nota.svg";
 
-const tableHeaders = ["Tanggal", "Total Tagihan", "Total Dibayarkan"];
+const tableHeaders = ["Tanggal", "No. Nota", "Total Tagihan", "Total Dibayarkan"];
 export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   const dispatch = useDispatch();
   const { hotels, loading, error } = useSelector((state) => state.hotel);
@@ -34,6 +34,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       try {
         const result = await dispatch(getDetailHotels(hotel.id));
         const hotelData = result.payload?.data?.hotel;
+        console.log("Data hotel:", hotelData);
         if (hotelData) {
           setDataHotel(hotelData);
           const totalBills = hotelData.totalBills || 0;
@@ -153,6 +154,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       bills: unpaidBills.map((bill) => ({
         id: bill.id,
         tanggal_nota: formatDate2(bill.date) || 0,
+        "No. Nota" : bill.number || "-",
         total_dibayar: bill.totalPaid || 0,
         total_pesanan: bill.ordersTotal || 0,
         orders: bill.orders.map((order) => ({
@@ -175,6 +177,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   const tableDataHotel = hotelsBill.map((bill) => ({
     ...bill,
     Tanggal: formatDate(bill.date),
+    "No. Nota": bill.number,
     "Total Tagihan": parseInt(bill.ordersTotal),
     "Total Dibayarkan": parseInt(bill.totalPaid),
   }));
