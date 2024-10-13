@@ -18,7 +18,12 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import NoBillData from "/icons/belum-ada-nota.svg";
 
-const tableHeaders = ["Tanggal", "No. Nota", "Total Tagihan", "Total Dibayarkan"];
+const tableHeaders = [
+  "Tanggal",
+  "No. Nota",
+  "Total Tagihan",
+  "Total Dibayarkan",
+];
 export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   const dispatch = useDispatch();
   const { hotels, loading, error } = useSelector((state) => state.hotel);
@@ -28,6 +33,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   const [totalBayar, setTotalBayar] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,6 +88,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
     setTotalBayar("");
 
     try {
+      setIsLoading(true);
       const response = await dispatch(
         updateHotelPaidDb({ id: hotel.id, totalPaid: value })
       );
@@ -105,6 +112,8 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       }
     } catch (error) {
       console.error("Failed to update hotel paid amount:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -154,7 +163,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
       bills: unpaidBills.map((bill) => ({
         id: bill.id,
         tanggal_nota: formatDate2(bill.date) || 0,
-        "No. Nota" : bill.number || "-",
+        "No. Nota": bill.number || "-",
         total_dibayar: bill.totalPaid || 0,
         total_pesanan: bill.ordersTotal || 0,
         orders: bill.orders.map((order) => ({
@@ -272,11 +281,13 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
                 />
                 <div className="flex justify-center mt-4 gap-4">
                   <Button
+                    isDisabled={isLoading}
                     backgroundColor="bg-white"
                     text="Batalkan"
                     onClick={handleClosePay}
                   />
                   <Button
+                    isDisabled={isLoading}
                     backgroundColor="bg-custom-green-1"
                     text="Bayar Tagihan"
                     onClick={handleConfirmPay}

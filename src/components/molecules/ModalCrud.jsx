@@ -16,6 +16,7 @@ export default function ModalCrud({
   inputLabel,
   isOpen,
   isDisabled,
+  isLoading,
   isCustomer,
   inputValue2,
   onChange2,
@@ -27,6 +28,7 @@ export default function ModalCrud({
 }) {
   return (
     <Modal
+      isLoading={isLoading}
       isOpen={isOpen}
       title={title}
       functionCancel={functionCancel}

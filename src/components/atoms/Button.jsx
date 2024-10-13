@@ -4,10 +4,12 @@ export default function Button({
   text,
   onClick,
   type = "button",
+  isDisabled = false,
 }) {
   return (
     <button
-      className={`border-slate-400 border w-fit px-8 py-2 rounded-lg ${backgroundColor}`}
+      className={`border-slate-400 border w-fit px-8 py-2 rounded-lg ${backgroundColor} ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+      disabled={isDisabled}
       onClick={onClick}
       type={type}
     >

@@ -46,6 +46,7 @@ export default function Hotel({ handleHotelSelect }) {
   const [dropdown, setDropdown] = useState(false);
   const [filter, setFilter] = useState("all");
   const [alamat, setAlamat] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("hotels : ", hotels);
@@ -85,6 +86,7 @@ export default function Hotel({ handleHotelSelect }) {
   };
 
   const handleSaveDelete = async () => {
+    setIsLoading(true);
     setSuccess("");
     setError("");
     try {
@@ -101,10 +103,13 @@ export default function Hotel({ handleHotelSelect }) {
         });
     } catch (err) {
       console.error("Delete failed:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSaveEdit = async () => {
+    setIsLoading(true);
     setSuccess("");
     setError("");
     try {
@@ -123,10 +128,13 @@ export default function Hotel({ handleHotelSelect }) {
         });
     } catch (err) {
       console.error("Update failed:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSaveAdd = async () => {
+    setIsLoading(true);
     setError("");
     setSuccess("");
     try {
@@ -143,6 +151,8 @@ export default function Hotel({ handleHotelSelect }) {
         });
     } catch (err) {
       console.error("Add failed:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -404,6 +414,7 @@ export default function Hotel({ handleHotelSelect }) {
         />
       </div>
       <ModalCrud
+        isLoading={isLoading}
         title="Tambah Customer"
         isOpen={isAdding}
         inputLabel="Nama Customer"
@@ -425,6 +436,7 @@ export default function Hotel({ handleHotelSelect }) {
         onChange2={handleAlamatChange}
       />
       <ModalCrud
+        isLoading={isLoading}
         title="Edit Customer"
         isOpen={isEditing}
         inputLabel="Edit Customer"
@@ -446,6 +458,7 @@ export default function Hotel({ handleHotelSelect }) {
         onChange2={handleAlamatChange}
       />
       <ModalCrud
+        isLoading={isLoading}
         title="Hapus Customer"
         isOpen={isDeleting}
         inputLabel="Hapus Customer"

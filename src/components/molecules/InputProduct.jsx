@@ -37,6 +37,7 @@ export default function InputProduct({
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getHotels());
@@ -218,6 +219,7 @@ export default function InputProduct({
     };
 
     try {
+      setIsLoading(true);
       if (isEdit) {
         const updatedBillData = {
           hotelId: selectedHotel.value,
@@ -253,6 +255,9 @@ export default function InputProduct({
       }
     } catch (error) {
       console.error("Error creating bill:", error);
+    } finally {
+      setSelectedDate(null);
+      setIsLoading(false);
     }
   };
 
@@ -454,11 +459,18 @@ export default function InputProduct({
             Total tagihan: {totalHarga.toLocaleString()}
           </p>
           <div className="mt-[18px] flex gap-[18px]">
-            <Button onClick={handleBatal} text="Batal" />
+            <Button onClick={handleBatal} text="Batal" isDisabled={isLoading} />
             <Button
               backgroundColor="bg-custom-green-1"
               type="submit"
-              text={isEdit ? "Simpan Perubahan" : "Buat Nota Baru"}
+              text={
+                isLoading
+                  ? "Menyimpan data..."
+                  : isEdit
+                  ? "Simpan Perubahan"
+                  : "Buat Nota Baru"
+              }
+              isDisabled={isLoading}
             />
           </div>
         </form>

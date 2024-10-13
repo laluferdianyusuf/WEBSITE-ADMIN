@@ -27,6 +27,7 @@ export default function Product() {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState("");
@@ -74,6 +75,7 @@ export default function Product() {
     setError("");
     setSuccess("");
     try {
+      setIsLoading(true);
       const productId = currentProductIndex.id;
       dispatch(deleteProduct(productId))
         .unwrap()
@@ -87,6 +89,8 @@ export default function Product() {
         });
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,6 +98,7 @@ export default function Product() {
     setSuccess("");
     setError("");
     try {
+      setIsLoading(true);
       const productId = currentProductIndex.id;
       dispatch(updateProduct({ name: inputProduct, id: productId }))
         .unwrap()
@@ -107,6 +112,8 @@ export default function Product() {
         });
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -114,6 +121,7 @@ export default function Product() {
     setSuccess("");
     setError("");
     try {
+      setIsLoading(true);
       dispatch(createProduct({ name: inputProduct }))
         .unwrap()
         .then(() => {
@@ -126,6 +134,8 @@ export default function Product() {
         });
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -240,6 +250,7 @@ export default function Product() {
         />
       </div>
       <ModalCrud
+        isLoading={isLoading}
         title="Tambah Produk"
         isOpen={isAdding}
         inputLabel="Nama Produk"
@@ -254,6 +265,7 @@ export default function Product() {
         functionOk={handleSaveAdd}
       />
       <ModalCrud
+        isLoading={isLoading}
         title="Edit Produk"
         isOpen={isEditing}
         inputLabel="Nama Produk"
@@ -268,6 +280,7 @@ export default function Product() {
         functionOk={handleSaveEdit}
       />
       <ModalCrud
+        isLoading={isLoading}
         title="Hapus Produk"
         isOpen={isDeleting}
         inputLabel="Hapus Produk"

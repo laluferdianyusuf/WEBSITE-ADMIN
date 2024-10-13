@@ -3,6 +3,7 @@ import Button from "../atoms/Button";
 import { useEffect } from "react";
 
 function Modal({
+  isLoading,
   title,
   children,
   functionCancel,
@@ -49,11 +50,13 @@ function Modal({
           {functionCancel && textCancel && (
             <Button
               backgroundColor="bg-white"
+              isDisabled={isLoading}
               text={textCancel}
               onClick={functionCancel}
             />
           )}
           <Button
+            isDisabled={isLoading}
             backgroundColor="bg-custom-green-1"
             text={textOk}
             onClick={functionOk}

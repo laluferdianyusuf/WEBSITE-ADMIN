@@ -37,6 +37,7 @@ export default function BillDetail({ onBack, bill }) {
   const [dataBill, setDataBill] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
   const [success, setSuccess] = useState("");
@@ -91,6 +92,7 @@ export default function BillDetail({ onBack, bill }) {
   };
 
   const handleEditClick = () => {
+    setSuccess("");
     setEditModalOpen(true);
     setSelectedBill(bill);
   };
@@ -108,6 +110,7 @@ export default function BillDetail({ onBack, bill }) {
 
   const confirmDelete = async () => {
     try {
+      setIsLoading(true);
       await dispatch(deleteBill(selectedBill.id))
         .unwrap()
         .then(() => {
@@ -123,6 +126,8 @@ export default function BillDetail({ onBack, bill }) {
     } catch (err) {
       setDeleteError("Failed to delete the bill. Please try again.");
       console.error("Error deleting bill:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -183,7 +188,8 @@ export default function BillDetail({ onBack, bill }) {
       </div>
       <div className="ms-12 flex justify-between mb-6 items-center">
         <h3 className="font-bold text-slate-700 text-xs">
-          {dataBill && formatDate(dataBill.date)} - {dataBill && dataBill.number}
+          {dataBill && formatDate(dataBill.date)} -{" "}
+          {dataBill && dataBill.number}
         </h3>
         <div className="flex gap-4">
           <ActionButton onClick={handleExportClick}>
@@ -209,13 +215,14 @@ export default function BillDetail({ onBack, bill }) {
         initialData={initialData}
         isEdit={true}
         onSuccess={() => {
-          setSuccess("Nota berhasil diperbarui");
+          setSuccess("Berhasil perbarui nota");
         }}
         onError={() => {
           setErrorBill("Gagal perbarui nota");
         }}
       />
       <ModalCrud
+        isLoading={isLoading}
         isOpen={isDeleteModalOpen}
         title="Hapus Nota"
         functionCancel={handleCloseDeleteModal}
