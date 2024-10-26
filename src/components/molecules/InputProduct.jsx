@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import InputNotaField from "./InputNotaField";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { FiMinusCircle } from "react-icons/fi";
@@ -15,6 +15,9 @@ import { getHotels } from "../../redux/slices/hotelSlice";
 import { getProducts } from "../../redux/slices/productSlice";
 import Select from "react-select";
 import SuccessNotification from "../atoms/SuccessNotification";
+import { GoDownload } from "react-icons/go";
+import { useReactToPrint } from "react-to-print";
+import Table from "../organism/Table";
 
 export default function InputProduct({
   closeModal,
@@ -31,6 +34,7 @@ export default function InputProduct({
   const [inputs, setInputs] = useState([
     { item: null, quantity: "", harga_unit: "", total_harga: "" },
   ]);
+  const [formattedInputs, setFormattedInputs] = useState([]);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [totalHarga, setTotalHarga] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
@@ -38,6 +42,104 @@ export default function InputProduct({
     new Date().toISOString().split("T")[0]
   );
   const [isLoading, setIsLoading] = useState(false);
+  const componentRef = useRef();
+
+  useEffect(() => {
+    console.log(selectedHotel);
+  }, [selectedHotel]);
+
+  const tableHeaders2 = [
+    "No",
+    "Item",
+    "Quantity",
+    "Harga / Unit",
+    "Jumlah Harga",
+  ];
+
+  useEffect(() => {
+    const formatted = inputs.map((input, index) => ({
+      [tableHeaders2[0]]: index + 1,
+      [tableHeaders2[1]]: input.item ? input.item.label : "",
+      [tableHeaders2[2]]: input.quantity ? input.quantity : 0,
+      [tableHeaders2[3]]: input.harga_unit ? Number(input.harga_unit) : 0,
+      [tableHeaders2[4]]: input.total_harga ? Number(input.total_harga) : 0,
+    }));
+
+    setFormattedInputs(formatted);
+  }, [inputs]);
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: selectedHotel
+      ? `_Nota_${new Date().toLocaleDateString()}.pdf`
+      : "Nota.pdf",
+    pageStyle: `
+      @page {
+        size: 9.0in 11in;
+        margin: 0.2in;
+      }
+      @media print {
+        * {
+          font-size: 14px;
+          font-family: "Calibri", sans-serif;
+          color: black;
+        }
+        body {
+          font-size: 13px;
+          margin-top: 0.2in !important;
+          margin-bottom: 0.2in !important;
+          margin-left: 0.4in !important;
+          margin-right: 0.4in !important;
+        }
+        h3, p, .header-text {
+          line-height: 1.5;
+        }
+        h3 {
+          font-size: 20px !important;
+        }
+        table {
+          width: 99% !important;
+          margin-left: 0 !important;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 1px 2px !important;
+          font-size: 12px !important;
+          border: 2px solid black !important;
+        }
+        th:nth-child(1),
+        td:nth-child(1),
+        th:nth-child(3),
+        td:nth-child(3) {
+          text-align: center !important;
+        }
+        th:nth-child(2),
+        td:nth-child(2) {
+          text-align: left !important;
+        }
+        th:nth-child(4),
+        th:nth-child(5) {
+          text-align: center !important;
+        }
+        td:nth-child(4),
+        td:nth-child(5) {
+          text-align: right !important;
+        }
+        tfoot td:nth-child(4),
+        tfoot td:nth-child(5) {
+          text-align: right !important;
+        }
+        tfoot td:nth-child(3) {
+          text-align: right !important;
+          font-weight: bold !important;
+          background-color: lightgray !important;
+        }
+        .page-break {
+          page-break-before: always !important;
+        }
+      }
+    `,
+  });
 
   useEffect(() => {
     dispatch(getHotels());
@@ -54,6 +156,7 @@ export default function InputProduct({
       setSelectedHotel({
         value: initialData.hotelId,
         label: initialData.namaHotel,
+        address: initialData.address,
       });
 
       setSelectedDate(convertToISOFormat(initialData.date));
@@ -301,7 +404,7 @@ export default function InputProduct({
 
   const hotelArray = Array.isArray(hotels.hotel) ? hotels.hotel : [];
   const handleSelectHotel = hotelArray
-    ? hotelArray.map((hotel) => ({ value: hotel.id, label: hotel.hotelName }))
+    ? hotelArray.map((hotel) => ({ value: hotel.id, label: hotel.hotelName, address: hotel.address }))
     : [];
 
   const productArray = Array.isArray(products.product) ? products.product : [];
@@ -458,8 +561,14 @@ export default function InputProduct({
           <p className="text-xs text-slate-900">
             Total tagihan: {totalHarga.toLocaleString()}
           </p>
-          <div className="mt-[18px] flex gap-[18px]">
+          <div className="mt-[18px] flex gap-[18px] items-center">
             <Button onClick={handleBatal} text="Batal" isDisabled={isLoading} />
+            <Button
+              backgroundColor="bg-custom-green-1"
+              onClick={handlePrint}
+              text="Print"
+              isDisabled={isLoading}
+            />
             <Button
               backgroundColor="bg-custom-green-1"
               type="submit"
@@ -474,6 +583,46 @@ export default function InputProduct({
             />
           </div>
         </form>
+      </div>
+      <div className="hidden">
+        <div ref={componentRef} className="flex flex-col mt-4 mx-1 w-full">
+          <div className="mb-2 w-[98%]">
+            <h3 className="font-extrabold text-slate-900 header-text">
+              UD TIMUR JAYA RAYA
+            </h3>
+            <div className="flex justify-between text-slate-900 mt-2">
+              <div className="flex flex-col text-xs font-semibold header-text">
+                <p>Jl. Gareng No. 28 Cakranegara</p>
+                <p>No HP. 081907647590</p>
+                <p>Fax. 0370-633668</p>
+              </div>
+              <div className="flex flex-col text-xs">
+                <div className={`grid grid-cols-[1fr_2fr] font-semibold`}>
+                  <p>Nomor</p>
+                  <p>: {}</p>
+                  <p>Tanggal Dibuat</p>
+                  <p>: {selectedDate}</p>
+                  <p>Nama Customer</p>
+                  <p>: {selectedHotel?.label}</p>
+                  <p>Alamat</p>
+                  <p>: {selectedHotel?.address}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="page">
+            <Table
+              isExport={true}
+              headers={tableHeaders2}
+              data={formattedInputs}
+              total={totalHarga}
+            />
+          </div>
+          <div className="mt-4 flex flex-col justify-between w-1/6 h-24 font-semibold text-xs">
+            <p>Penerima</p>
+            <div className="border-b border-slate-900 w-full" />
+          </div>
+        </div>
       </div>
       {/* {isSuccess && <SuccessNotification text="Nota Berhasil Dibuat" />} */}
     </div>
