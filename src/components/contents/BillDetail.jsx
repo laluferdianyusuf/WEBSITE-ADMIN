@@ -42,6 +42,7 @@ export default function BillDetail({ onBack, bill }) {
   const [deleteError, setDeleteError] = useState(null);
   const [success, setSuccess] = useState("");
   const [errorBill, setErrorBill] = useState("");
+  const [refreshBill, setRefreshBill] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +57,7 @@ export default function BillDetail({ onBack, bill }) {
     };
 
     fetchData();
-  }, [dispatch, bill.id]);
+  }, [dispatch, bill.id, refreshBill]);
 
   if (loading)
     return (
@@ -162,6 +163,11 @@ export default function BillDetail({ onBack, bill }) {
     );
   };
 
+  const onEditSuccess = () => {
+    setSuccess("Berhasil perbarui nota");
+    setRefreshBill((prev) => !prev);
+  };
+
   return (
     <div className="overflow-auto px-9 py-6 h-[93vh] bg-custom-white-1 mt-5 mr-5 ml-5 rounded-lg flex flex-col">
       <div className="mb-2">
@@ -215,9 +221,7 @@ export default function BillDetail({ onBack, bill }) {
         closeModal={handleCloseEditModal}
         initialData={initialData}
         isEdit={true}
-        onSuccess={() => {
-          setSuccess("Berhasil perbarui nota");
-        }}
+        onSuccess={onEditSuccess}
         onError={() => {
           setErrorBill("Gagal perbarui nota");
         }}

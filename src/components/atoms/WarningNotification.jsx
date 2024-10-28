@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import warning from "/icons/warning.svg";
 import PropTypes from "prop-types";
 
-export default function WarningNotification({ text, duration = 3000 }) {
+export default function WarningNotification({ text, duration = 1000 }) {
   const [isVisible, setIsVisible] = useState(true);
   const [animate, setAnimate] = useState("translate-y-[-100px]");
   const notificationRef = useRef(null);

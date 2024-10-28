@@ -69,11 +69,10 @@ export default function Omzet() {
     const lowercasedQuery = query.toLowerCase();
     const filteredData = billsData.filter(
       (bill) =>
-        bill.number.toLowerCase().includes(lowercasedQuery) ||
+        bill.number?.toLowerCase().includes(lowercasedQuery) ||
         bill.hotel?.hotelName.toLowerCase().includes(lowercasedQuery)
     );
     setFilteredBillsData(filteredData);
-    // setCurrentPage(1);
   };
 
   const tableHeaders = [

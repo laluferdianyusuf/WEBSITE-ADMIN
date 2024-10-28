@@ -356,6 +356,11 @@ export default function InputProduct({
             dispatch(getDetailBill(initialData.id));
             onSuccess();
             closeModal();
+            setInputs([
+              { item: null, quantity: "", harga_unit: "", total_harga: "" },
+            ]);
+            setSelectedHotel(null);
+            setSelectedDate("");
           })
           .catch((error) => onError());
       } else {

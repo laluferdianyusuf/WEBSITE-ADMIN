@@ -480,8 +480,8 @@ export default function Hotel({ handleHotelSelect }) {
         functionOk={handleSaveDelete}
       />
 
-      {success && <SuccessNotification text={success} duration={3000} />}
-      {error && <WarningNotification text={error} duration={3000} />}
+      {success && <SuccessNotification text={success} duration={1000} />}
+      {error && <WarningNotification text={error} duration={1000} />}
     </div>
   );
 }

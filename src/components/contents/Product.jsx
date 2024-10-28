@@ -293,8 +293,8 @@ export default function Product() {
         functionCancel={handleCloseDelete}
         functionOk={handleSaveDelete}
       />
-      {success && <SuccessNotification text={success} duration={3000} />}
-      {error && <WarningNotification text={error} duration={3000} />}
+      {success && <SuccessNotification text={success} duration={1000} />}
+      {error && <WarningNotification text={error} duration={1000} />}
     </div>
   );
 }
