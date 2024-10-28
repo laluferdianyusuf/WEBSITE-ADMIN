@@ -37,8 +37,8 @@ export default function Bills({ handleBillSelect }) {
   }, [dispatch, isOpen]);
 
   useEffect(() => {
-   console.log("bills",bills) 
-  },[bills])
+    console.log("bills", bills);
+  }, [bills]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -57,8 +57,6 @@ export default function Bills({ handleBillSelect }) {
   };
 
   const billsArray = Array.isArray(bills.bills) ? bills.bills : [];
-
-  console.log("billsArray:", billsArray);
 
   const convertToISOFormat = (dateString) => {
     const [day, month, year] = dateString.split("/");
@@ -91,7 +89,7 @@ export default function Bills({ handleBillSelect }) {
 
   const dataFiltered = filteredBills.map((bill) => ({
     Tanggal: bill.date,
-    "No. Nota" : bill.number,
+    "No. Nota": bill.number,
     "Nama Hotel": bill.hotelName,
     "Total Tagihan": bill.total,
     "Status Tagihan": bill.total === bill.paid ? "Lunas" : "Belum Lunas",
@@ -270,6 +268,7 @@ export default function Bills({ handleBillSelect }) {
         />
       </div>
       <InputProduct
+        isCreate={true}
         isOpen={isOpen}
         closeModal={closeModal}
         onSuccess={() => {

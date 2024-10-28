@@ -122,7 +122,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   };
 
   const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "2-digit", year: "2-digit" };
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
     return new Date(dateString).toLocaleDateString("id-ID", options);
   };
 
@@ -184,6 +184,7 @@ export default function HotelDetail({ onBack, hotel, onBillSelect }) {
   };
 
   const tableDataHotel = hotelsBill.map((bill) => ({
+    dataHotel,
     ...bill,
     Tanggal: formatDate(bill.date),
     "No. Nota": bill.number,

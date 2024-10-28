@@ -10,6 +10,7 @@ import {
   listBills,
   updateBills,
   getDetailBill,
+  getAllBillByDate,
 } from "../../redux/slices/billSlice";
 import { getHotels } from "../../redux/slices/hotelSlice";
 import { getProducts } from "../../redux/slices/productSlice";
@@ -27,6 +28,7 @@ export default function InputProduct({
   onSuccess,
   onError,
   onResetSuccess,
+  isCreate,
 }) {
   const dispatch = useDispatch();
   const { hotels } = useSelector((state) => state.hotel);
@@ -43,10 +45,7 @@ export default function InputProduct({
   );
   const [isLoading, setIsLoading] = useState(false);
   const componentRef = useRef();
-
-  useEffect(() => {
-    console.log(selectedHotel);
-  }, [selectedHotel]);
+  const [invoiceNumber, setInvoiceNumber] = useState("");
 
   const tableHeaders2 = [
     "No",
@@ -55,6 +54,23 @@ export default function InputProduct({
     "Harga / Unit",
     "Jumlah Harga",
   ];
+
+  const fetchBillByDate = async (date) => {
+    const res = await dispatch(getAllBillByDate({ date: date })).unwrap();
+    return res.data.bill.length;
+  };
+
+  const generateInvoiceNumber = async () => {
+    const countForDate = await fetchBillByDate(selectedDate);
+    const newInvoiceNumber = `TJR-${String(countForDate + 1).padStart(3, "0")}`;
+    setInvoiceNumber(newInvoiceNumber);
+  };
+
+  useEffect(() => {
+    if (isCreate && selectedDate) {
+      generateInvoiceNumber();
+    }
+  }, [isCreate, selectedDate]);
 
   useEffect(() => {
     const formatted = inputs.map((input, index) => ({
@@ -159,7 +175,7 @@ export default function InputProduct({
         address: initialData.address,
       });
 
-      setSelectedDate(convertToISOFormat(initialData.date));
+      setSelectedDate(convertToISOFormat(initialData?.date));
 
       const formattedInputs = initialData.pesanan.map((item) => ({
         item: item.id ? { value: item.id, label: item.item } : null,
@@ -318,6 +334,7 @@ export default function InputProduct({
     const billData = {
       hotelId: selectedHotel.value,
       date: selectedDate,
+      number: invoiceNumber || "",
       billData: products,
     };
 
@@ -404,7 +421,11 @@ export default function InputProduct({
 
   const hotelArray = Array.isArray(hotels.hotel) ? hotels.hotel : [];
   const handleSelectHotel = hotelArray
-    ? hotelArray.map((hotel) => ({ value: hotel.id, label: hotel.hotelName, address: hotel.address }))
+    ? hotelArray.map((hotel) => ({
+        value: hotel.id,
+        label: hotel.hotelName,
+        address: hotel.address,
+      }))
     : [];
 
   const productArray = Array.isArray(products.product) ? products.product : [];
@@ -599,13 +620,13 @@ export default function InputProduct({
               <div className="flex flex-col text-xs">
                 <div className={`grid grid-cols-[1fr_2fr] font-semibold`}>
                   <p>Nomor</p>
-                  <p>: {}</p>
+                  <p>: {invoiceNumber || initialData.number}</p>
                   <p>Tanggal Dibuat</p>
                   <p>: {selectedDate}</p>
                   <p>Nama Customer</p>
-                  <p>: {selectedHotel?.label}</p>
+                  <p>: {selectedHotel?.label || initialData?.namaHotel}</p>
                   <p>Alamat</p>
-                  <p>: {selectedHotel?.address}</p>
+                  <p>: {selectedHotel?.address || initialData?.address}</p>
                 </div>
               </div>
             </div>

@@ -56,7 +56,7 @@ export default function BillDetail({ onBack, bill }) {
     };
 
     fetchData();
-  }, [dispatch, bill.id, isEditModalOpen]);
+  }, [dispatch, bill.id]);
 
   if (loading)
     return (
@@ -68,7 +68,6 @@ export default function BillDetail({ onBack, bill }) {
   if (error) return <p>Error loading bill details.</p>;
 
   const orders = dataBill?.orders || [];
-  console.log(dataBill);
 
   const totalHarga = orders.reduce(
     (sum, order) => sum + parseFloat(order.total),
@@ -118,7 +117,7 @@ export default function BillDetail({ onBack, bill }) {
           setTimeout(() => {
             handleCloseDeleteModal();
             onBack();
-          }, 3000);
+          }, 2000);
         })
         .catch((error) => {
           setDeleteError("Gagal hapus nota");
@@ -133,9 +132,9 @@ export default function BillDetail({ onBack, bill }) {
 
   const initialData = {
     id: bill.id,
-    namaHotel: bill["Nama Hotel"],
-    hotelId: bill.hotelId,
-    date: bill.Tanggal,
+    namaHotel: bill["Nama Hotel"] || bill?.dataHotel?.hotelName || "",
+    hotelId: bill.hotelId || bill?.dataHotel?.id || "",
+    date: bill?.Tanggal,
     pesanan: tableInitialData.map((item) => ({
       id: item.id,
       item: item.productName,
@@ -143,6 +142,8 @@ export default function BillDetail({ onBack, bill }) {
       harga_unit: item.productPrice,
       total_harga: item.total,
     })),
+    number: dataBill?.number || "",
+    address: dataBill?.hotel?.address || "",
   };
 
   const handleExportClick = () => {

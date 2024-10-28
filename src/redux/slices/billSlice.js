@@ -131,6 +131,28 @@ export const getBillByDate = createAsyncThunk(
   }
 );
 
+// all bills date
+export const getAllBillByDate = createAsyncThunk(
+  "all/bills/by-date",
+  async ({ date }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${uri}/api/v2/bills/by-date/${date}`
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //     "Access-Control-Allow-Credentials": true,
+        //   },
+        // }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   bills: {},
   loading: false,
@@ -233,6 +255,20 @@ const billsSlice = createSlice({
         state.bills = action.payload.data;
       })
       .addCase(getBillByDate.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // list all bills states
+      .addCase(getAllBillByDate.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllBillByDate.fulfilled, (state, action) => {
+        state.loading = false;
+        state.bills = action.payload.data;
+      })
+      .addCase(getAllBillByDate.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
