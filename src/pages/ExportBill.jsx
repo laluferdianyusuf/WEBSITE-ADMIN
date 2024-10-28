@@ -150,7 +150,7 @@ const ExportBill = () => {
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
-                <p>: {bill["Tanggal"] ? formatDate(bill["Tanggal"]) : ""}</p>
+                <p>: {bill["Tanggal"]}</p>
                 <p>Nama Customer</p>
                 <p>: {name}</p>
                 <p>Alamat</p>
