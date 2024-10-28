@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import check from "/icons/check.svg";
 import PropTypes from "prop-types";
 
-export default function SuccessNotification({ text, duration = 3000 }) {
+export default function SuccessNotification({ text, duration = 1000 }) {
   const [isVisible, setIsVisible] = useState(true);
   const [animate, setAnimate] = useState("translate-y-[-100px]");
   const notificationRef = useRef(null);
