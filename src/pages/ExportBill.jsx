@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { GoDownload } from "react-icons/go";
 import { useReactToPrint } from "react-to-print";
 import Table from "../components/organism/Table";
+import formatDate from "../utils/formatDate";
 
 const tableHeaders2 = [
   "No",
@@ -149,7 +150,7 @@ const ExportBill = () => {
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
-                <p>: {bill["Tanggal"]}</p>
+                <p>: {bill["Tanggal"] ? formatDate(bill["Tanggal"]) : ""}</p>
                 <p>Nama Customer</p>
                 <p>: {name}</p>
                 <p>Alamat</p>

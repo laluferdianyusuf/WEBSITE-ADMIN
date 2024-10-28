@@ -19,6 +19,7 @@ import SuccessNotification from "../atoms/SuccessNotification";
 import { GoDownload } from "react-icons/go";
 import { useReactToPrint } from "react-to-print";
 import Table from "../organism/Table";
+import formatDate from "../../utils/formatDate";
 
 export default function InputProduct({
   closeModal,
@@ -622,7 +623,9 @@ export default function InputProduct({
                   <p>Nomor</p>
                   <p>: {invoiceNumber || initialData.number}</p>
                   <p>Tanggal Dibuat</p>
-                  <p>: {selectedDate}</p>
+                  <p>
+                    : {selectedDate ? formatDate(selectedDate) : selectedDate}
+                  </p>
                   <p>Nama Customer</p>
                   <p>: {selectedHotel?.label || initialData?.namaHotel}</p>
                   <p>Alamat</p>

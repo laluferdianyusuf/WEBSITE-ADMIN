@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { GoDownload } from "react-icons/go";
+import formatDate from "../utils/formatDate";
 
 const tableHeaders = [
   "Tanggal",
@@ -78,7 +79,7 @@ const InvoiceExport = () => {
               </div>
               <div className="grid grid-cols-2">
                 <p className="text-sm">Tanggal</p>
-                <p className="text-sm">: {date}</p>
+                <p className="text-sm">: {date ? formatDate(date) : ""}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p className="text-sm">Kepada</p>
@@ -98,7 +99,15 @@ const InvoiceExport = () => {
                 {tableHeaders.map((header) => (
                   <th
                     key={header}
-                    className={`bg-custom-blue-1 px-2 py-1 text-left font ${header === "Quantity" || header === "Harga / Unit" || header === "Amount" || header === "Paid" || header === "Balance" ? "text-center" : ""}`}
+                    className={`bg-custom-blue-1 px-2 py-1 text-left font ${
+                      header === "Quantity" ||
+                      header === "Harga / Unit" ||
+                      header === "Amount" ||
+                      header === "Paid" ||
+                      header === "Balance"
+                        ? "text-center"
+                        : ""
+                    }`}
                   >
                     {header}
                   </th>
@@ -112,7 +121,9 @@ const InvoiceExport = () => {
                     <tr key={index}>
                       {index === 0 && (
                         <td rowSpan={bill.orders.length} className="px-2 py-1 ">
-                          {bill.tanggal_nota}
+                          {bill.tanggal_nota
+                            ? formatDate(bill.tanggal_nota)
+                            : ""}
                         </td>
                       )}
                       <td className="px-2 py-1">{order.nama_produk}</td>
