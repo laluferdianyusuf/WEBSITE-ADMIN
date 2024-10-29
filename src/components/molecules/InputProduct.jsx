@@ -67,11 +67,44 @@ export default function InputProduct({
     setInvoiceNumber(newInvoiceNumber);
   };
 
+  const handleAddInput = (event) => {
+    event.preventDefault();
+    setInputs([
+      ...inputs,
+      { item: null, quantity: "", harga_unit: "", total_harga: "" },
+    ]);
+  };
+
+  const handleRemoveInput = (index, event) => {
+    event.preventDefault();
+    const newInputs = [...inputs];
+    newInputs.splice(index, 1);
+    setInputs(newInputs);
+  };
   useEffect(() => {
     if (isCreate && selectedDate) {
       generateInvoiceNumber();
     }
   }, [isCreate, selectedDate]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.shiftKey && event.key === "A") {
+        handleAddInput(event);
+      }
+
+      if (event.shiftKey && event.key === "D") {
+        event.preventDefault();
+        handleRemoveInput(inputs.length - 1, event);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [inputs]);
 
   useEffect(() => {
     const formatted = inputs.map((input, index) => ({
@@ -119,10 +152,19 @@ export default function InputProduct({
           margin-left: 0 !important;
           border-collapse: collapse;
         }
-        th, td {
+        th {
           padding: 1px 2px !important;
           font-size: 12px !important;
-          border: 2px solid black !important;
+          border-bottom: 2px solid black !important; /* Border untuk th */
+          border-top: 2px solid black !important; /* Border untuk th */
+        }
+        td {
+          padding: 1px 2px !important;
+          font-size: 12px !important;
+          border: none !important; /* Hapus border default td */
+        }
+        tr:last-child td {
+          border-bottom: 2px solid black !important; /* Hanya border bawah untuk baris terakhir */
         }
         th:nth-child(1),
         td:nth-child(1),
@@ -189,14 +231,6 @@ export default function InputProduct({
     }
   }, [isEdit, initialData]);
 
-  const handleAddInput = (event) => {
-    event.preventDefault();
-    setInputs([
-      ...inputs,
-      { item: null, quantity: "", harga_unit: "", total_harga: "" },
-    ]);
-  };
-
   const handleBatal = () => {
     closeModal();
     setInputs([{ item: null, quantity: "", harga_unit: "", total_harga: "" }]);
@@ -206,13 +240,6 @@ export default function InputProduct({
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
-  };
-
-  const handleRemoveInput = (index, event) => {
-    event.preventDefault();
-    const newInputs = [...inputs];
-    newInputs.splice(index, 1);
-    setInputs(newInputs);
   };
 
   const extractNumericValue = (input) => {

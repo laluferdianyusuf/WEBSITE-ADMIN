@@ -18,8 +18,8 @@ export default function Table({
   return (
     <div
       className={`overflow-auto no-scrollbar ${
-        isExport ? "rounded-md" : "rounded-lg"
-      } shadow-sm border w-full`}
+        isExport ? "" : "rounded-lg shadow-sm border"
+      } w-full`}
     >
       <table className="w-full">
         <TableHeader

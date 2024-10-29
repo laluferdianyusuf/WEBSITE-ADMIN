@@ -84,22 +84,22 @@ export default function Omzet() {
     "Jumlah",
     "Terbayarkan",
   ];
+  const sortedBillsData = filteredBillsData.sort((a, b) => {
+    const numA = a.number ? parseInt(a.number.split("-")[1]) : Infinity;
+    const numB = b.number ? parseInt(b.number.split("-")[1]) : Infinity;
+    return numA - numB;
+  });
 
-  const tableData = filteredBillsData.map(
-    (bill, index) => (
-      console.log(bill),
-      {
-        Nomor: index + 1,
-        Customer: bill?.hotel?.hotelName,
-        "No. Nota": bill.number,
-        "Nota Ke-": String(bill.notaKe),
-        Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
-        Keterangan: "-",
-        Jumlah: bill?.ordersTotal,
-        Terbayarkan: bill?.totalPaid,
-      }
-    )
-  );
+  const tableData = sortedBillsData.map((bill, index) => ({
+    Nomor: index + 1,
+    Customer: bill?.hotel?.hotelName,
+    "No. Nota": bill.number || "-",
+    "Nota Ke-": String(bill.notaKe),
+    Tanggal: format(new Date(bill.date), "dd-MM-yyyy"),
+    Keterangan: "-",
+    Jumlah: bill?.ordersTotal,
+    Terbayarkan: bill?.totalPaid,
+  }));
 
   const calculateTotals = (data) => {
     if (data.length > 0) {
