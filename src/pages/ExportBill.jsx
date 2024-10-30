@@ -35,7 +35,6 @@ const ExportBill = () => {
       console.log("State:", state);
     }
   }, [location.search]);
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: bill
@@ -70,10 +69,19 @@ const ExportBill = () => {
           margin-left: 0 !important;
           border-collapse: collapse;
         }
-        th, td {
+        th {
           padding: 1px 2px !important;
           font-size: 12px !important;
-          border: 2px solid black !important;
+          border-bottom: 2px solid black !important; /* Border untuk th */
+          border-top: 2px solid black !important; /* Border untuk th */
+        }
+        td {
+          padding: 1px 2px !important;
+          font-size: 12px !important;
+          border: none !important; /* Hapus border default td */
+        }
+        tr:last-child td {
+          border-bottom: 2px solid black !important; /* Hanya border bawah untuk baris terakhir */
         }
         th:nth-child(1),
         td:nth-child(1),
@@ -144,9 +152,7 @@ const ExportBill = () => {
               <p>Fax. 0370-633668</p>
             </div>
             <div className="flex flex-col text-xs">
-              <div
-                className={`grid grid-cols-[1fr_2fr] font-semibold`}
-              >
+              <div className={`grid grid-cols-[1fr_2fr] font-semibold`}>
                 <p>Nomor</p>
                 <p>: {invoiceNumber}</p>
                 <p>Tanggal Dibuat</p>
