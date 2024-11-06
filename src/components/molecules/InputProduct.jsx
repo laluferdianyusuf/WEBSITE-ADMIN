@@ -235,7 +235,7 @@ export default function InputProduct({
     closeModal();
     setInputs([{ item: null, quantity: "", harga_unit: "", total_harga: "" }]);
     setSelectedHotel(null);
-    setSelectedDate("");
+    setSelectedDate(new Date().toISOString().split("T")[0]);
   };
 
   const handleDateChange = (event) => {
@@ -387,7 +387,7 @@ export default function InputProduct({
               { item: null, quantity: "", harga_unit: "", total_harga: "" },
             ]);
             setSelectedHotel(null);
-            setSelectedDate("");
+            setSelectedDate(new Date().toISOString().split("T")[0]);
           })
           .catch((error) => onError());
       } else {
@@ -402,14 +402,14 @@ export default function InputProduct({
               { item: null, quantity: "", harga_unit: "", total_harga: "" },
             ]);
             setSelectedHotel(null);
-            setSelectedDate("");
+            setSelectedDate(new Date().toISOString().split("T")[0]);
           })
           .catch((error) => validateForm());
       }
     } catch (error) {
       console.error("Error creating bill:", error);
     } finally {
-      setSelectedDate(null);
+      setSelectedDate(new Date().toISOString().split("T")[0]);
       setIsLoading(false);
     }
   };
