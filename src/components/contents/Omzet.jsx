@@ -59,7 +59,7 @@ export default function Omzet() {
 
   useEffect(() => {
     handleFetchBill();
-  }, [startDate]);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     handleSearch(searchQuery);
