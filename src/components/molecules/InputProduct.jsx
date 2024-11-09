@@ -58,8 +58,11 @@ export default function InputProduct({
 
   const fetchBillByDate = async (date) => {
     const res = await dispatch(getAllBillByDate({ date: date })).unwrap();
+    console.log(res);
+
     return res.data.bill.length;
   };
+  console.log(selectedDate);
 
   const generateInvoiceNumber = async () => {
     const countForDate = await fetchBillByDate(selectedDate);
@@ -403,6 +406,8 @@ export default function InputProduct({
             ]);
             setSelectedHotel(null);
             setSelectedDate(new Date().toISOString().split("T")[0]);
+            setInvoiceNumber("");
+            generateInvoiceNumber();
           })
           .catch((error) => validateForm());
       }
