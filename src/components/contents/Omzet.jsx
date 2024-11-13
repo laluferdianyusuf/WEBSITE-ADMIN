@@ -124,8 +124,8 @@ export default function Omzet() {
       tableData: tableData,
       totalJumlah,
       totalTerbayarkan,
-      startDate: startDate,
-      endDate: endDate,
+      startDate: format(new Date(startDate), "dd-MM-yyyy"), // Format the startDate,
+      endDate: format(new Date(endDate), "dd-MM-yyyy"),
     };
     const stateString = encodeURIComponent(JSON.stringify(state));
     window.open(
