@@ -52,7 +52,7 @@ const ExportBill = () => {
           color: black;
         }
         body {
-          font-size: 13px;
+          font-size: 14px;
           margin-top: 0.2in !important;
           margin-bottom: 0.2in !important;
           margin-left: 0.4in !important;
