@@ -25,26 +25,26 @@ export default function SuccessNotification({ text, duration = 1000 }) {
     };
   }, [duration]);
 
-  const handleOverlayClick = (event) => {
-    if (
-      notificationRef.current &&
-      !notificationRef.current.contains(event.target)
-    ) {
-      setAnimate("translate-y-[-100px]");
-      setTimeout(() => {
-        setIsVisible(false);
-      }, 300);
-    }
-  };
+  // const handleOverlayClick = (event) => {
+  //   if (
+  //     notificationRef.current &&
+  //     !notificationRef.current.contains(event.target)
+  //   ) {
+  //     setAnimate("translate-y-[-100px]");
+  //     setTimeout(() => {
+  //       setIsVisible(false);
+  //     }, 300);
+  //   }
+  // };
 
   if (!isVisible) return null;
 
   return (
     <>
-      <div
+      {/* <div
         className="fixed inset-0 bg-black bg-opacity-50 z-40"
         onClick={handleOverlayClick}
-      />
+      /> */}
       <div
         ref={notificationRef}
         className={`fixed top-10 left-1/2 transform -translate-x-1/2 z-50 transition-transform duration-300 ease-in-out ${animate}`}

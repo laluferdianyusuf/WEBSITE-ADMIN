@@ -11,6 +11,7 @@ import NoBillData from "/icons/belum-ada-nota.svg";
 import { listBills } from "../../redux/slices/billSlice";
 import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 import SuccessNotification from "../atoms/SuccessNotification";
+import WarningNotification from "../atoms/WarningNotification";
 
 const tableHeaders = [
   "Tanggal",
@@ -31,6 +32,7 @@ export default function Bills({ handleBillSelect }) {
   const [dropdown, setDropdown] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
   const [success, setSuccess] = useState("");
+  const [warning, setWarning] = useState("");
 
   useEffect(() => {
     dispatch(listBills());
@@ -277,8 +279,15 @@ export default function Bills({ handleBillSelect }) {
         onResetSuccess={() => {
           setSuccess("");
         }}
+        onResetError={() => {
+          setWarning("");
+        }}
+        onError={() => {
+          setWarning("Gagal membuat nota");
+        }}
       />
       {success && <SuccessNotification text={success} />}
+      {warning && <WarningNotification text={warning} />}
     </div>
   );
 }

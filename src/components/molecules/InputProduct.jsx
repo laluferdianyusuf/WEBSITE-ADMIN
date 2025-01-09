@@ -28,6 +28,7 @@ export default function InputProduct({
   isEdit,
   onSuccess,
   onError,
+  onResetError,
   onResetSuccess,
   isCreate,
 }) {
@@ -62,7 +63,6 @@ export default function InputProduct({
 
     return res.data.bill.length;
   };
-  console.log(selectedDate);
 
   const generateInvoiceNumber = async () => {
     const countForDate = await fetchBillByDate(selectedDate);
@@ -343,7 +343,7 @@ export default function InputProduct({
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, isCloseModal) => {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -385,7 +385,9 @@ export default function InputProduct({
           .then(() => {
             dispatch(getDetailBill(initialData.id));
             onSuccess();
-            closeModal();
+            if (isCloseModal) {
+              closeModal();
+            }
             setInputs([
               { item: null, quantity: "", harga_unit: "", total_harga: "" },
             ]);
@@ -395,12 +397,15 @@ export default function InputProduct({
           .catch((error) => onError());
       } else {
         onResetSuccess();
+        onResetError();
         await dispatch(addBills(billData))
           .unwrap()
           .then(() => {
             dispatch(listBills());
             onSuccess();
-            closeModal();
+            if (isCloseModal) {
+              closeModal();
+            }
             setInputs([
               { item: null, quantity: "", harga_unit: "", total_harga: "" },
             ]);
@@ -412,6 +417,7 @@ export default function InputProduct({
           .catch((error) => validateForm());
       }
     } catch (error) {
+      onError();
       console.error("Error creating bill:", error);
     } finally {
       setSelectedDate(new Date().toISOString().split("T")[0]);
@@ -488,7 +494,7 @@ export default function InputProduct({
             {isEdit ? "Edit Nota" : "Buat Nota Baru"}
           </h3>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form>
           <div className="w-11/12 mb-3 flex gap-3">
             <div className="w-1/2">
               <label className="block mb-2 text-[10px] lg:text-xs font-medium text-slate-900">
@@ -552,49 +558,55 @@ export default function InputProduct({
                   </span>
                 )}
               </div>
-              <InputNotaField
-                label="Quantity"
-                name="quantity"
-                type="text"
-                placeholder="Jumlah"
-                value={input.quantity}
-                onChange={(e) => handleInputChange(index, e)}
-                isModal={true}
-              />
-              {validationErrors[`quantity-${index}`] && (
-                <span className="text-red-500 text-xs">
-                  {validationErrors[`quantity-${index}`]}
-                </span>
-              )}
-              <InputNotaField
-                label="Harga / Unit"
-                name="harga_unit"
-                type="number"
-                placeholder="Harga"
-                value={input.harga_unit}
-                onChange={(e) => handleInputChange(index, e)}
-                isModal={true}
-              />
-              {validationErrors[`harga_unit-${index}`] && (
-                <span className="text-red-500 text-xs">
-                  {validationErrors[`harga_unit-${index}`]}
-                </span>
-              )}
-              <InputNotaField
-                label="Total Harga Barang"
-                name="total_harga"
-                type="number"
-                placeholder="Total Harga"
-                isReadOnly={true}
-                value={input.total_harga}
-                onChange={(e) => handleInputChange(index, e)}
-                isModal={true}
-              />
-              {validationErrors[`total_harga-${index}`] && (
-                <span className="text-red-500 text-xs">
-                  {validationErrors[`total_harga-${index}`]}
-                </span>
-              )}
+              <div className="col-span-1">
+                <InputNotaField
+                  label="Quantity"
+                  name="quantity"
+                  type="text"
+                  placeholder="Jumlah"
+                  value={input.quantity}
+                  onChange={(e) => handleInputChange(index, e)}
+                  isModal={true}
+                />
+                {validationErrors[`quantity-${index}`] && (
+                  <span className="text-red-500 text-xs">
+                    {validationErrors[`quantity-${index}`]}
+                  </span>
+                )}
+              </div>
+              <div className="col-span-1">
+                <InputNotaField
+                  label="Harga / Unit"
+                  name="harga_unit"
+                  type="number"
+                  placeholder="Harga"
+                  value={input.harga_unit}
+                  onChange={(e) => handleInputChange(index, e)}
+                  isModal={true}
+                />
+                {validationErrors[`harga_unit-${index}`] && (
+                  <span className="text-red-500 text-xs">
+                    {validationErrors[`harga_unit-${index}`]}
+                  </span>
+                )}
+              </div>
+              <div className="col-span-1">
+                <InputNotaField
+                  label="Total Harga Barang"
+                  name="total_harga"
+                  type="number"
+                  placeholder="Total Harga"
+                  isReadOnly={true}
+                  value={input.total_harga}
+                  onChange={(e) => handleInputChange(index, e)}
+                  isModal={true}
+                />
+                {validationErrors[`total_harga-${index}`] && (
+                  <span className="text-red-500 text-xs">
+                    {validationErrors[`total_harga-${index}`]}
+                  </span>
+                )}
+              </div>
               <div className="absolute right-[-3rem] top-[10px] flex justify-center items-center h-full">
                 {inputs.length > 1 && (
                   <button
@@ -608,8 +620,8 @@ export default function InputProduct({
             </div>
           ))}
           <div className="flex justify-center mt-6 mb-6 relative w-11/12">
-            <div className="border-b border-slate-400 absolute left-0 top-6 w-[45%]"></div>
-            <div className="border-b border-slate-400 absolute right-0 top-6 w-[45%]"></div>
+            <div className="border-b border-slate-400 absolute left-0 top-6 w-[45%]" />
+            <div className="border-b border-slate-400 absolute right-0 top-6 w-[45%]" />
             <button
               className="text-custom-green-1 p-2 rounded z-30"
               onClick={handleAddInput}
@@ -625,18 +637,34 @@ export default function InputProduct({
             <Button
               backgroundColor="bg-custom-green-1"
               onClick={handlePrint}
-              text="Print"
+              text="Print Nota"
               isDisabled={isLoading}
             />
+            {!isEdit && (
+              <Button
+                backgroundColor="bg-custom-green-1"
+                type="button"
+                onClick={(event) => handleSubmit(event, false)}
+                text={
+                  isLoading
+                    ? "Menyimpan data..."
+                    : isEdit
+                    ? "Simpan Perubahan"
+                    : "Simpan Nota & Buat Baru"
+                }
+                isDisabled={isLoading}
+              />
+            )}
             <Button
               backgroundColor="bg-custom-green-1"
-              type="submit"
+              type="button"
+              onClick={(event) => handleSubmit(event, true)}
               text={
                 isLoading
                   ? "Menyimpan data..."
                   : isEdit
-                  ? "Simpan Perubahan"
-                  : "Buat Nota Baru"
+                  ? "Simpan Perubahan & Tutup"
+                  : "Simpan Nota & Tutup"
               }
               isDisabled={isLoading}
             />
@@ -658,7 +686,7 @@ export default function InputProduct({
               <div className="flex flex-col text-xs">
                 <div className={`grid grid-cols-[1fr_2fr] font-semibold`}>
                   <p>Nomor</p>
-                  <p>: {invoiceNumber || initialData.number}</p>
+                  <p>: {invoiceNumber || initialData?.number}</p>
                   <p>Tanggal Dibuat</p>
                   <p>
                     : {selectedDate ? formatDate(selectedDate) : selectedDate}
